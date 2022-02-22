@@ -22,6 +22,8 @@ public class EventServiceImpl implements EventService {
 
 	private final static String DATA = "data/events.json";
 
+	private EventRepository eventRepository;
+
 	@Override
 	public long count() {
 		long count = 0;
@@ -51,5 +53,9 @@ public class EventServiceImpl implements EventService {
 		}
 
 		return events;
+	}
+	
+	public Event save() {
+		return eventRepository.save();
 	}
 }
