@@ -16,13 +16,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import uk.ac.man.cs.eventlite.entities.Event;
 
 @Service
-public class EventServiceImpl implements EventService {
+public class EventServiceImpl implements EventService, EventRepository {
 
 	private final static Logger log = LoggerFactory.getLogger(EventServiceImpl.class);
 
 	private final static String DATA = "data/events.json";
-
-	private EventRepository eventRepository;
 
 	@Override
 	public long count() {
@@ -55,7 +53,4 @@ public class EventServiceImpl implements EventService {
 		return events;
 	}
 	
-	public Event save() {
-		return eventRepository.save();
-	}
 }
