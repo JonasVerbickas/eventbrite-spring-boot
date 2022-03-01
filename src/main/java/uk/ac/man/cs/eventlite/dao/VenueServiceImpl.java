@@ -10,18 +10,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Service
+@Transactional
 public class VenueServiceImpl implements VenueService {
-
+	
+	@Autowired
+	private VenueRepository venueRepository;
+	
 	private final static Logger log = LoggerFactory.getLogger(VenueServiceImpl.class);
 
 	private final static String DATA = "data/venues.json";
 
-	@Override
+	/*@Override
 	public long count() {
 		long count = 0;
 		Iterator<Venue> i = findAll().iterator();
@@ -31,9 +39,14 @@ public class VenueServiceImpl implements VenueService {
 		}
 
 		return count;
+	}*/
+	
+	@Override
+	public long count() {
+		return venueRepository.count();
 	}
 
-	@Override
+	/*@Override
 	public Iterable<Venue> findAll() {
 		Iterable<Venue> venues;
 
@@ -49,6 +62,18 @@ public class VenueServiceImpl implements VenueService {
 		}
 
 		return venues;
+	} */
+	
+	@Override
+	public Iterable<Venue> findAll() {
+		return venueRepository.findAll();
 	}
+	
+	@Override
+	public Venue save(Venue venue) {
+		return venueRepository.save(venue);
+	}
+	
+	
 
 }

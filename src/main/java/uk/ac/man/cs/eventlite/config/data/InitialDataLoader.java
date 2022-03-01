@@ -10,12 +10,15 @@ import org.springframework.context.annotation.Profile;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
+import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Configuration
 @Profile("default")
 public class InitialDataLoader {
 
 	private final static Logger log = LoggerFactory.getLogger(InitialDataLoader.class);
+	
+	private final static String[] NAME = { "Engineering Building", "Main Library" };
 
 	@Autowired
 	private EventService eventService;
@@ -30,7 +33,10 @@ public class InitialDataLoader {
 				log.info("Database already populated with venues. Skipping venue initialization.");
 			} else {
 				// Build and save initial venues here.
-			}
+
+				}
+
+			
 
 			if (eventService.count() > 0) {
 				log.info("Database already populated with events. Skipping event initialization.");
