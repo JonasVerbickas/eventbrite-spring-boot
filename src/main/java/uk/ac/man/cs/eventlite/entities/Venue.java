@@ -15,7 +15,9 @@ public class Venue {
 	private int capacity;
 
 	public Venue() {
+		
 	}
+	
 
 	public long getId() {
 		return id;
