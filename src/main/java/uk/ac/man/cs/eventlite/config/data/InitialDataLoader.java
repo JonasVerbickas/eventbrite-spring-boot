@@ -12,7 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.dao.EventService;
+import uk.ac.man.cs.eventlite.dao.EventServiceImpl;
 import uk.ac.man.cs.eventlite.dao.VenueService;
+import uk.ac.man.cs.eventlite.dao.VenueServiceImpl;
 import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Configuration
@@ -20,48 +22,40 @@ import uk.ac.man.cs.eventlite.entities.Venue;
 public class InitialDataLoader {
 
 	private final static Logger log = LoggerFactory.getLogger(InitialDataLoader.class);
-	
 
 	private final static String[] NAME = { "Engineering Building,%s", "Main Library,%s" };
 
-	//@Autowired
-//	private EventService eventService;
-
+	@Autowired
+	private EventServiceImpl eventService;
 
 	@Autowired
-	//private VenueService venueService;
+	private VenueServiceImpl venueService;
 
 	@Bean
-	CommandLineRunner initDatabase(VenueService venueService) {
+	CommandLineRunner initDatabase() {
 		return args -> {
+			Venue v = new Venue();
 			if (venueService.count() > 0) {
 				log.info("Database already populated with venues. Skipping venue initialization.");
 			} else {
+				for (String template : NAME) {
+					v = new Venue(template);
+					log.info("Preloading: " + venueService.save(v));
 
-				
-					for (String template : NAME) {
-						log.info("Preloading: " + venueService.save(new Venue(template)));
-					}
-				}// Build and save initial venues here.
-		};
-		}
-
-			
-	CommandLineRunner initDatabase(EventService eventService) {
-		return args -> {
+				}
+			} // Build and save initial venues here.
 			if (eventService.count() > 0) {
 				log.info("Database already populated with events. Skipping event initialization.");
 			} else {
-				
+
 				Event eA = new Event();
 				eA.setName("Event A");
 				eA.setTime(LocalTime.of(12, 0, 0));
 				eA.setDate(LocalDate.of(2022, 1, 4));
+				eA.setVenue(v.getId());
 				eventService.save(eA);
 			}
 		};
-		}
-			
-	
-	
+	}
+
 }
