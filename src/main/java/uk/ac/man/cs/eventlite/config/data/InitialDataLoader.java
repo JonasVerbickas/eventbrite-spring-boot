@@ -52,8 +52,14 @@ public class InitialDataLoader {
 				eA.setName("Event A");
 				eA.setTime(LocalTime.of(12, 0, 0));
 				eA.setDate(LocalDate.of(2022, 1, 4));
-				eA.setVenue(v.getId());
+				eA.setVenue(v);
 				eventService.save(eA);
+				Event eB = new Event();
+				eB.setName("Event B");
+				eB.setTime(LocalTime.of(12, 0, 0));
+				eB.setDate(LocalDate.of(2022, 1, 4));
+				eB.setVenue(v);
+				eventService.save(eB);
 			}
 		};
 	}

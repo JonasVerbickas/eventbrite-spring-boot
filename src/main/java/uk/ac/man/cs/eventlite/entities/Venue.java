@@ -3,12 +3,16 @@ package uk.ac.man.cs.eventlite.entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import java.util.List;
 
 @Entity
 public class Venue {
 	@Id
 	@GeneratedValue
 	private long id;
+
 
 	private String name;
 
