@@ -1,15 +1,28 @@
 package uk.ac.man.cs.eventlite.entities;
 
-public class Venue {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
+@Entity
+public class Venue {
+	@Id
+	@GeneratedValue
 	private long id;
 
 	private String name;
 
 	private int capacity;
-
 	public Venue() {
+		
+
 	}
+
+	public Venue(String name_in) {
+		this.name=name_in;
+
+	}
+	
 
 	public long getId() {
 		return id;
