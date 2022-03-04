@@ -44,5 +44,10 @@ public class EventServiceImpl implements EventService {
 	public Iterable<Event> findAllByOrderByDateAscTimeAsc() {
 		return eventRepository.findAllByOrderByDateAscTimeAsc();
 	}
+
+	public void deleteById(long id)
+	{
+		eventRepository.deleteById(id);
+	}
 	
 }

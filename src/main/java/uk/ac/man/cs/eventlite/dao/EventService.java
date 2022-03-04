@@ -11,4 +11,6 @@ public interface EventService {
 	public Iterable<Event> findAllByOrderByDateAscTimeAsc();
 	
 	public void save(Event entity);
+
+	public void deleteById(long id);
 }
