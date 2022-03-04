@@ -13,8 +13,12 @@ public class Venue {
 	private String name;
 
 	private int capacity;
-
 	public Venue() {
+		
+	}
+
+	public Venue(String name_in) {
+		this.name=name_in;
 	}
 
 	public long getId() {
