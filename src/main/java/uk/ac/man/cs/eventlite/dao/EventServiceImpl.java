@@ -30,40 +30,19 @@ public class EventServiceImpl implements EventService {
 	public long count(){
 		return eventRepository.count();
 	}
-	// public long count() {
-	// 	long count = 0;
-	// 	Iterator<Event> i = findAll().iterator();
-
-	// 	for (; i.hasNext(); count++) {
-	// 		i.next();
-	// 	}
-
-	// 	return count;
-	// }
 
 	@Override
 	public Iterable<Event> findAll() {
 		return eventRepository.findAll();
-//		ArrayList<Event> events = new ArrayList<Event>();
-//
-//		try {
-//			ObjectMapper mapper = new ObjectMapper();
-//			mapper.registerModule(new JavaTimeModule());
-//
-//			InputStream in = new ClassPathResource(DATA).getInputStream();
-//
-//			events = mapper.readValue(in, mapper.getTypeFactory().constructCollectionType(List.class, Event.class));
-//		} catch (Exception e) {
-//			log.error("Exception while reading file '" + DATA + "': " + e);
-//			// If we can't read the file, then the event list is empty...
-//		}
-//
-//		return events;
 	}
 
 	public void save(Event entity)
 	{
 		eventRepository.save(entity);
+	}
+
+	public Iterable<Event> findAllByOrderByDateAscTimeAsc() {
+		return eventRepository.findAllByOrderByDateAscTimeAsc();
 	}
 	
 }

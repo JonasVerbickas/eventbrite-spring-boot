@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
-import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
 @Controller
@@ -39,7 +38,7 @@ public class EventsController {
 	@GetMapping
 	public String getAllEvents(Model model) {
 
-		model.addAttribute("events", eventService.findAll());
+		model.addAttribute("events", eventService.findAllByOrderByDateAscTimeAsc());
 
 		return "events/index";
 	}

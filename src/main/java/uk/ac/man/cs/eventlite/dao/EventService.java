@@ -7,6 +7,8 @@ public interface EventService {
 	public long count();
 
 	public Iterable<Event> findAll();
+
+	public Iterable<Event> findAllByOrderByDateAscTimeAsc();
 	
 	public void save(Event entity);
 }
