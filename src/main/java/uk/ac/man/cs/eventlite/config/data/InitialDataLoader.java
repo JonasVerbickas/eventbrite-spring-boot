@@ -17,10 +17,12 @@ public class InitialDataLoader {
 
 	private final static Logger log = LoggerFactory.getLogger(InitialDataLoader.class);
 	
+
 	private final static String[] NAME = { "Engineering Building,%s", "Main Library,%s" };
 
 	//@Autowired
 //	private EventService eventService;
+
 
 	@Autowired
 	//private VenueService venueService;
@@ -31,6 +33,7 @@ public class InitialDataLoader {
 			if (venueService.count() > 0) {
 				log.info("Database already populated with venues. Skipping venue initialization.");
 			} else {
+
 				
 					for (String template : NAME) {
 						log.info("Preloading: " + venueService.save(new Venue(template)));
@@ -42,6 +45,7 @@ public class InitialDataLoader {
 			
 	CommandLineRunner initDatabase(EventService eventService) {
 		return args -> {
+
 			if (eventService.count() > 0) {
 				log.info("Database already populated with events. Skipping event initialization.");
 			} else {

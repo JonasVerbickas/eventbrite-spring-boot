@@ -15,11 +15,14 @@ public class Venue {
 	private int capacity;
 	public Venue() {
 		
+
 	}
 
 	public Venue(String name_in) {
 		this.name=name_in;
+
 	}
+	
 
 	public long getId() {
 		return id;
