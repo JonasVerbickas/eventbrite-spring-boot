@@ -42,14 +42,14 @@ public class InitialDataLoader {
 
 				}
 			} // Build and save initial venues here.
-			Event eA = new Event();
-			eA.setName("Event A");
-			eA.setTime(LocalTime.of(12, 0, 0));
-			eA.setDate(LocalDate.of(2022, 2, 1));
-			eA.setVenue(v);
 			if (eventService.count() > 0) {
 				log.info("Database already populated with events. Skipping event initialization.");
 			} else {
+				Event eA = new Event();
+				eA.setName("Event A");
+				eA.setTime(LocalTime.of(12, 0, 0));
+				eA.setDate(LocalDate.of(2022, 2, 1));
+				eA.setVenue(v);
 				eventService.save(eA);
 				Event eD = new Event();
 				eD.setName("Event D");
