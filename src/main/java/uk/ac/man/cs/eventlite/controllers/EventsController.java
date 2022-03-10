@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
@@ -49,5 +51,11 @@ public class EventsController {
 	{
 		eventService.deleteById(id);
 		return "redirect:/events";
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/")
+	public String getSearchedEvent(Model model, @RequestParam (value = "name", required = true) String name) {
+		model.addAttribute("events", eventService.listEventByName(name));
+		return "events/index";
 	}
 }

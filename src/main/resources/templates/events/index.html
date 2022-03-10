@@ -18,6 +18,9 @@
           <th><i class="fas fa-clock"></i> Time</th>
         </tr>
       </thead>
+      <form th:object="${event}" action="/events/" method="get">
+      <input type="text" name = "name" th:value="${name}" id = "name"/>
+      <input type = "submit" value = "Search">
       <tbody>
         <tr th:each="e : ${events}">
           <td th:text="${e.name}">My Event</td>

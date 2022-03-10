@@ -8,5 +8,5 @@ public interface EventRepository extends CrudRepository<Event, Long>  {
 	public Iterable<Event> findAllByOrderByDateAscTimeAsc();
 
 	public void deleteById(long id);
- 
+	public Iterable<Event> findByNameContaining(String name); 
 }

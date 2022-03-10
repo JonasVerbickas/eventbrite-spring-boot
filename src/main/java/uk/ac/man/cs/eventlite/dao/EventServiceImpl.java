@@ -50,4 +50,7 @@ public class EventServiceImpl implements EventService {
 		eventRepository.deleteById(id);
 	}
 	
+	public Iterable<Event> listEventByName(String name){
+		return eventRepository.findByNameContaining(name);
+	}
 }
