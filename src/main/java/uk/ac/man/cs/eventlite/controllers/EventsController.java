@@ -1,6 +1,6 @@
 package uk.ac.man.cs.eventlite.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired; 
+import org.springframework.beans.factory.annotation.Autowired;  
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -56,4 +56,14 @@ public class EventsController {
 		return "events/show";
 	}
 
+	@GetMapping("/edit/{id}")
+	public String newGreeting(Model model) {
+//		if (!model.containsAttribute("greeting")) {
+//			model.addAttribute("greeting", new Event());
+//		}
+
+		return "events/edit";
+	}
+	
+	
 }
