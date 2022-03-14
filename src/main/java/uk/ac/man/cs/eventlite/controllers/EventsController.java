@@ -48,14 +48,14 @@ public class EventsController {
 		return "events/index";
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
 	public String deleteById(@PathVariable("id") long id)
 	{
 		eventService.deleteById(id);
 		return "redirect:/events";
 	}
 	
-	@PutMapping("/{id}/time")
+	@PutMapping("/delete/{id}/time")
 	public String deleteTime(@PathVariable("id") long id) {
 		Event e = eventService.findById(id);
 		e.setTime(null);
@@ -63,7 +63,7 @@ public class EventsController {
 		return "redirect:/events";
 	}
 
-	@PutMapping("/{id}/date")
+	@PutMapping("/delete/{id}/date")
 	public String deleteDate(@PathVariable("id") long id) {
 		Event e = eventService.findById(id);
 		e.setDate(null);
@@ -71,7 +71,7 @@ public class EventsController {
 		return "redirect:/events";
 	}
 
-	@PutMapping("/{id}/all_fields")
+	@PutMapping("/delete/{id}/all_fields")
 	public String deleteAllFields(@PathVariable("id") long id) {
 		Event e = eventService.findById(id);
 		e.setDate(null);
