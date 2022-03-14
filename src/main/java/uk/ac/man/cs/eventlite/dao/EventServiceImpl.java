@@ -36,15 +36,18 @@ public class EventServiceImpl implements EventService {
 		return eventRepository.findAll();
 	}
 
+	@Override
 	public void save(Event entity)
 	{
 		eventRepository.save(entity);
 	}
 
+	@Override
 	public Iterable<Event> findAllByOrderByDateAscTimeAsc() {
 		return eventRepository.findAllByOrderByDateAscTimeAsc();
 	}
 
+	@Override
 	public void deleteById(long id)
 	{
 		eventRepository.deleteById(id);
