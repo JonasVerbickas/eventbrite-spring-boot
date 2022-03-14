@@ -27,7 +27,7 @@
           <td>
             <td sec:authorize="isAuthenticated()">
               <form th:action="@{/events/{id}(id=${e.getId()})}" th:method="delete">
-                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                <button type="submit" class="btn btn-danger btn-sm">Delete event</button>
               </form>
             </td>
             <td sec:authorize="isAuthenticated()">
@@ -37,7 +37,12 @@
             </td>
             <td sec:authorize="isAuthenticated()">
               <form th:action="@{/events/{id}/time(id=${e.getId()})}" th:method="put">
-                <button type="submit" class="btn btn-danger btn-sm">Delete time</button>
+                <button type="submit" class="btn btn-danger btn-sm">delete time</button>
+              </form>
+            </td>
+            <td sec:authorize="isAuthenticated()">
+              <form th:action="@{/events/{id}/all_fields(id=${e.getId()})}" th:method="put">
+                <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
               </form>
             </td>
           </td>

@@ -17,6 +17,7 @@ import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
 import uk.ac.man.cs.eventlite.entities.Event;
+import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Controller
 @RequestMapping(value = "/events", produces = { MediaType.TEXT_HTML_VALUE })
@@ -66,6 +67,17 @@ public class EventsController {
 	public String deleteDate(@PathVariable("id") long id) {
 		Event e = eventService.findById(id);
 		e.setDate(null);
+		eventService.save(e);
+		return "redirect:/events";
+	}
+
+	@PutMapping("/{id}/all_fields")
+	public String deleteAllFields(@PathVariable("id") long id) {
+		Event e = eventService.findById(id);
+		e.setDate(null);
+		e.setName(null);
+		e.setTime(null);
+		// this does not work e.setVenue(null);
 		eventService.save(e);
 		return "redirect:/events";
 	}
