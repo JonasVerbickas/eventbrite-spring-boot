@@ -31,6 +31,11 @@
               </form>
             </td>
             <td sec:authorize="isAuthenticated()">
+              <form th:action="@{/events/{id}/date(id=${e.getId()})}" th:method="put">
+                <button type="submit" class="btn btn-danger btn-sm">Delete date</button>
+              </form>
+            </td>
+            <td sec:authorize="isAuthenticated()">
               <form th:action="@{/events/{id}/time(id=${e.getId()})}" th:method="put">
                 <button type="submit" class="btn btn-danger btn-sm">Delete time</button>
               </form>

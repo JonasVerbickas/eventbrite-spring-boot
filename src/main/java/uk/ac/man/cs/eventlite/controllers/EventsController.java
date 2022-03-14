@@ -55,9 +55,17 @@ public class EventsController {
 	}
 	
 	@PutMapping("/{id}/time")
-	public String deleteField(@PathVariable("id") long id) {
+	public String deleteTime(@PathVariable("id") long id) {
 		Event e = eventService.findById(id);
 		e.setTime(null);
+		eventService.save(e);
+		return "redirect:/events";
+	}
+
+	@PutMapping("/{id}/date")
+	public String deleteDate(@PathVariable("id") long id) {
+		Event e = eventService.findById(id);
+		e.setDate(null);
 		eventService.save(e);
 		return "redirect:/events";
 	}
