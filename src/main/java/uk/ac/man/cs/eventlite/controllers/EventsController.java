@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
+
+import uk.ac.man.cs.eventlite.entities.Event;
 
 @Controller
 @RequestMapping(value = "/events", produces = { MediaType.TEXT_HTML_VALUE })
@@ -50,4 +53,13 @@ public class EventsController {
 		eventService.deleteById(id);
 		return "redirect:/events";
 	}
+	
+	@PutMapping("/{id}/time")
+	public String deleteField(@PathVariable("id") long id) {
+		Event e = eventService.findById(id);
+		e.setTime(null);
+		eventService.save(e);
+		return "redirect:/events";
+	}
 }
+ 
