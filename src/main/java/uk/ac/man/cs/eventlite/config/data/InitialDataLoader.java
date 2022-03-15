@@ -45,7 +45,6 @@ public class InitialDataLoader {
 			if (eventService.count() > 0) {
 				log.info("Database already populated with events. Skipping event initialization.");
 			} else {
-
 				Event eA = new Event();
 				eA.setName("Event A");
 				eA.setTime(LocalTime.of(12, 0, 0));
