@@ -64,8 +64,8 @@ public class EventsControllerApi {
 	}
 
 	@PutMapping("/{id}/time")
-	public ResponseEntity<Object> deleteField(@PathVariable("id") long id) {
-		Event e = eventService.findById(id);
+	public ResponseEntity<Object> deleteTime(@PathVariable("id") long id) {
+		Event e = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
 		e.setTime(null);
 		eventService.save(e);
 		return ResponseEntity.noContent().build();

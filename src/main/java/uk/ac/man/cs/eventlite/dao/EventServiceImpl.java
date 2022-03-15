@@ -1,10 +1,6 @@
 package uk.ac.man.cs.eventlite.dao;
 
 
-import java.io.InputStream; 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -49,8 +45,6 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public Optional<Event> findById(long id) {
-		
-		
 		 return eventRepository.findById(id);
 		 
 	}
@@ -62,9 +56,5 @@ public class EventServiceImpl implements EventService {
 
 	}
 
-	@Override
-	public Event findById(long id) {
-		return eventRepository.findById(id);
-	}
 	
 }

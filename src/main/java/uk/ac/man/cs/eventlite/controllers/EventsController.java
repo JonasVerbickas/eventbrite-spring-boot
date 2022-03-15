@@ -74,39 +74,38 @@ public class EventsController {
 	}
 	
 	
-	@DeleteMapping("/delete/{id}")
-
+	@DeleteMapping("{id}/delete")
 	public String deleteById(@PathVariable("id") long id)
 	{
 		eventService.deleteById(id);
-		return "redirect:/events";
+		return "redirect:/events/";
 	}
 	
-	@PutMapping("/delete/{id}/time")
+	@PutMapping("{id}/delete/time")
 	public String deleteTime(@PathVariable("id") long id) {
-		Event e = eventService.findById(id);
+		Event e = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));;
 		e.setTime(null);
 		eventService.save(e);
-		return "redirect:/events";
+		return "redirect:/events/"+id;
 	}
 
-	@PutMapping("/delete/{id}/date")
+	@PutMapping("{id}/delete/date")
 	public String deleteDate(@PathVariable("id") long id) {
-		Event e = eventService.findById(id);
+		Event e = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));;
 		e.setDate(null);
 		eventService.save(e);
-		return "redirect:/events";
+		return "redirect:/events/"+id;
 	}
 
-	@PutMapping("/delete/{id}/all_fields")
+	@PutMapping("{id}/delete/all_fields")
 	public String deleteAllFields(@PathVariable("id") long id) {
-		Event e = eventService.findById(id);
+		Event e = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));;
 		e.setDate(null);
 		e.setName(null);
 		e.setTime(null);
 		// this does not work e.setVenue(null);
 		eventService.save(e);
-		return "redirect:/events";
+		return "redirect:/events/"+id;
 	}
 }
  

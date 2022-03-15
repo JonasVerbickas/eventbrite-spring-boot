@@ -11,8 +11,6 @@ public interface EventService {
 
 	public Iterable<Event> findAll();
 
-	public Event findById(long id);
-
 	public Iterable<Event> findAllByOrderByDateAscTimeAsc();
 	
 	public Optional<Event> findById(long id);

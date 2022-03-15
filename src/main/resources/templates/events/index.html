@@ -24,28 +24,6 @@
           <td th:text="${e.venue.name}">Event venue</td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
-          <td>
-            <td sec:authorize="isAuthenticated()">
-              <form th:action="@{/events/delete/{id}(id=${e.getId()})}" th:method="delete">
-                <button type="submit" class="btn btn-danger btn-sm">Delete event</button>
-              </form>
-            </td>
-            <td sec:authorize="isAuthenticated()">
-              <form th:action="@{/events/delete/{id}/date(id=${e.getId()})}" th:method="put">
-                <button type="submit" class="btn btn-danger btn-sm">Delete date</button>
-              </form>
-            </td>
-            <td sec:authorize="isAuthenticated()">
-              <form th:action="@{/events/delete/{id}/time(id=${e.getId()})}" th:method="put">
-                <button type="submit" class="btn btn-danger btn-sm">Delete time</button>
-              </form>
-            </td>
-            <td sec:authorize="isAuthenticated()">
-              <form th:action="@{/events/delete/{id}/all_fields(id=${e.getId()})}" th:method="put">
-                <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
-              </form>
-            </td>
-          </td>
         </tr>
       </tbody>
     </table>
