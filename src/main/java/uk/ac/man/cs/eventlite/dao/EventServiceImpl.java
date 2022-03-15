@@ -1,5 +1,6 @@
 package uk.ac.man.cs.eventlite.dao;
 
+
 import java.io.InputStream; 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,11 +10,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import uk.ac.man.cs.eventlite.entities.Event;
 
@@ -37,11 +35,13 @@ public class EventServiceImpl implements EventService {
 		return eventRepository.findAll();
 	}
 
+	@Override
 	public void save(Event entity)
 	{
 		eventRepository.save(entity);
 	}
 
+	@Override
 	public Iterable<Event> findAllByOrderByDateAscTimeAsc() {
 		return eventRepository.findAllByOrderByDateAscTimeAsc();
 	}
@@ -55,10 +55,16 @@ public class EventServiceImpl implements EventService {
 		 
 	}
 
+	@Override
 	public void deleteById(long id)
 	{
 		eventRepository.deleteById(id);
 
+	}
+
+	@Override
+	public Event findById(long id) {
+		return eventRepository.findById(id);
 	}
 	
 }

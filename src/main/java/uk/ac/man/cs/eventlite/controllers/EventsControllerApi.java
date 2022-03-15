@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -59,6 +60,14 @@ public class EventsControllerApi {
 	public ResponseEntity<Object> deleteById(@PathVariable("id") long id)
 	{
 		eventService.deleteById(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@PutMapping("/{id}/time")
+	public ResponseEntity<Object> deleteField(@PathVariable("id") long id) {
+		Event e = eventService.findById(id);
+		e.setTime(null);
+		eventService.save(e);
 		return ResponseEntity.noContent().build();
 	}
 }

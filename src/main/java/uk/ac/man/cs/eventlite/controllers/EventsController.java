@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
+
+import uk.ac.man.cs.eventlite.entities.Event;
+import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Controller
 @RequestMapping(value = "/events", produces = { MediaType.TEXT_HTML_VALUE })
@@ -58,6 +62,8 @@ public class EventsController {
 		return "events/show";
 	}
 
+
+
 	@GetMapping("/edit/{id}")
 	public String newGreeting(Model model) {
 //		if (!model.containsAttribute("greeting")) {
@@ -68,10 +74,39 @@ public class EventsController {
 	}
 	
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
+
 	public String deleteById(@PathVariable("id") long id)
 	{
 		eventService.deleteById(id);
 		return "redirect:/events";
 	}
+	
+	@PutMapping("/delete/{id}/time")
+	public String deleteTime(@PathVariable("id") long id) {
+		Event e = eventService.findById(id);
+		e.setTime(null);
+		eventService.save(e);
+		return "redirect:/events";
+	}
+
+	@PutMapping("/delete/{id}/date")
+	public String deleteDate(@PathVariable("id") long id) {
+		Event e = eventService.findById(id);
+		e.setDate(null);
+		eventService.save(e);
+		return "redirect:/events";
+	}
+
+	@PutMapping("/delete/{id}/all_fields")
+	public String deleteAllFields(@PathVariable("id") long id) {
+		Event e = eventService.findById(id);
+		e.setDate(null);
+		e.setName(null);
+		e.setTime(null);
+		// this does not work e.setVenue(null);
+		eventService.save(e);
+		return "redirect:/events";
+	}
 }
+ 
