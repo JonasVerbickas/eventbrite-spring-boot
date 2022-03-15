@@ -46,6 +46,10 @@ public class EventsControllerApi {
 		throw new EventNotFoundException(id);
 	}
 
+	@GetMapping("/edit/{id}")
+	public ResponseEntity<?> newEvent() {
+		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+	}
 	@GetMapping
 	public CollectionModel<EntityModel<Event>> getAllEvents() {
 		return eventAssembler.toCollectionModel(eventService.findAll())

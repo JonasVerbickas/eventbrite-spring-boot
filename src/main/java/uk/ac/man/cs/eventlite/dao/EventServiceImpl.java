@@ -1,6 +1,12 @@
 package uk.ac.man.cs.eventlite.dao;
 
 
+import java.io.InputStream; 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +46,20 @@ public class EventServiceImpl implements EventService {
 		return eventRepository.findAllByOrderByDateAscTimeAsc();
 	}
 
+
+	@Override
+	public Optional<Event> findById(long id) {
+		
+		
+		 return eventRepository.findById(id);
+		 
+	}
+
 	@Override
 	public void deleteById(long id)
 	{
 		eventRepository.deleteById(id);
+
 	}
 
 	@Override
