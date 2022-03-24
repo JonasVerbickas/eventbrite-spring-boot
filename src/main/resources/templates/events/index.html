@@ -10,36 +10,22 @@
 
 
     <table class="table table-striped table-hover">
-    
-
-       <h1>Upcoming events</h1>
  
-        <tr th:each="e : ${events}">
-        
-
-        
+       <h1>Upcoming events</h1>
+        <tr th:each="e : ${events}">            
          <div th:if="${e.date.compareTo(e.date.now()) >= 0}">
-     
-
           <td th:text="${e.name}">My Event</td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
           <td th:text="${e.venue.name}">Event venue</td>
-          
          </div>
-
-          
         </tr>
       </table>
       <table class="table table-striped table-hover">
       
      <h1>Previous events</h1>
- 
-        <tr th:each="e : ${events}">
-        
+        <tr th:each="e : ${events}">       
          <div th:if="${e.date.compareTo(e.date.now()) <= 0}">
-     
-
           <td th:text="${e.name}">My Event</td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
@@ -47,16 +33,6 @@
          </div>
         </tr>     
        </table>
-  
-    
-  
-    
-    
-    
-    
-    
-    
-    
 
   </div>
 
