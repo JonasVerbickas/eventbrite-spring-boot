@@ -21,7 +21,7 @@ public class InitialDataLoader {
 
 	private final static Logger log = LoggerFactory.getLogger(InitialDataLoader.class);
 
-	private final static String[] NAME = { "Engineering Building,%s", "Main Library,%s" };
+	private final static String[] NAME = { "Engineering Building,%s", "Main Library,%s", "a", "d", "b" };
 
 	@Autowired
 	private EventServiceImpl eventService;
