@@ -16,7 +16,6 @@ public class VenuesController {
 	@Autowired
 	private VenueService venueService;
 
-
 	@GetMapping
 	public String getAllVenues(Model model) {
 
