@@ -10,7 +10,8 @@
 
 
     <table class="table table-striped table-hover">
- 
+  
+  
        <h1>Upcoming events</h1>
         <tr th:each="e : ${events}">            
          <div th:if="${e.date.compareTo(e.date.now()) >= 0}">
