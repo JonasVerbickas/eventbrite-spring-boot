@@ -16,31 +16,31 @@
       <a class="btn btn-primary" role="button" th:href="@{/events}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back</a>
       
       <a class="btn btn-primary" role="button" th:href="@{/events/edit/{num}(num=${id})}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Edit</a>
-      <table>
-          <tr>
-            <td sec:authorize="isAuthenticated()">
-              <form th:action="@{/events/{id}/delete(id=${id})}" th:method="delete">
-                <button type="submit" class="btn btn-danger btn-sm">Delete event</button>
-              </form>
-            </td>
-            <td sec:authorize="isAuthenticated()">
-              <form th:action="@{/events/{id}/delete/date(id=${id})}" th:method="put">
-                <button type="submit" class="btn btn-danger btn-sm">Delete date</button>
-              </form>
-            </td>
-            <td sec:authorize="isAuthenticated()">
-              <form th:action="@{/events/{id}/delete/time(id=${id})}" th:method="put">
-                <button type="submit" class="btn btn-danger btn-sm">Delete time</button>
-              </form>
-            </td>
-            <td sec:authorize="isAuthenticated()">
-              <form th:action="@{/events/{id}/delete/all_fields(id=${id})}" th:method="put">
-                <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
-              </form>
-            </td>
-          </tr>
-        </table>
-    	</form>
+    </form>
+    <table>
+      <tr>
+        <td sec:authorize="isAuthenticated()">
+          <form th:action="@{/events/{id}/delete(id=${id})}" th:method="delete">
+            <button type="submit" class="btn btn-danger btn-sm">Delete event</button>
+          </form>
+        </td>
+        <td sec:authorize="isAuthenticated()">
+          <form th:action="@{/events/{id}/delete/date(id=${id})}" th:method="put">
+            <button type="submit" class="btn btn-danger btn-sm">Delete date</button>
+          </form>
+        </td>
+        <td sec:authorize="isAuthenticated()">
+          <form th:action="@{/events/{id}/delete/time(id=${id})}" th:method="put">
+            <button type="submit" class="btn btn-danger btn-sm">Delete time</button>
+          </form>
+        </td>
+        <td sec:authorize="isAuthenticated()">
+          <form th:action="@{/events/{id}/delete/all_fields(id=${id})}" th:method="put">
+            <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
+          </form>
+        </td>
+      </tr>
+    </table>
   </div>
 </body>
 </html>

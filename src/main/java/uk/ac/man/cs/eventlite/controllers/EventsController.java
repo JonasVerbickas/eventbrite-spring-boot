@@ -18,8 +18,6 @@ import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
-import uk.ac.man.cs.eventlite.entities.Event;
-import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Controller
 @RequestMapping(value = "/events", produces = { MediaType.TEXT_HTML_VALUE })
@@ -73,15 +71,14 @@ public class EventsController {
 		return "events/edit";
 	}
 	
-	
-	@DeleteMapping("{id}/delete")
+	@DeleteMapping("/{id}/delete")
 	public String deleteById(@PathVariable("id") long id)
 	{
 		eventService.deleteById(id);
-		return "redirect:/events/";
+		return "redirect:/events";
 	}
 	
-	@PutMapping("{id}/delete/time")
+	@PutMapping("/{id}/delete/time")
 	public String deleteTime(@PathVariable("id") long id) {
 		Event e = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));;
 		e.setTime(null);
@@ -89,7 +86,7 @@ public class EventsController {
 		return "redirect:/events/"+id;
 	}
 
-	@PutMapping("{id}/delete/date")
+	@PutMapping("/{id}/delete/date")
 	public String deleteDate(@PathVariable("id") long id) {
 		Event e = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));;
 		e.setDate(null);
@@ -97,7 +94,7 @@ public class EventsController {
 		return "redirect:/events/"+id;
 	}
 
-	@PutMapping("{id}/delete/all_fields")
+	@PutMapping("/{id}/delete/all_fields")
 	public String deleteAllFields(@PathVariable("id") long id) {
 		Event e = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));;
 		e.setDate(null);
