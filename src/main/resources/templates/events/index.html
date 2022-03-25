@@ -7,7 +7,6 @@
 </head>
 <body>
   <div layout:fragment="content">
-    <h1>All events</h1>
 
     <table class="table table-striped table-hover">
       <thead>
@@ -25,19 +24,32 @@
         <tr th:each="e : ${events}">
           <td th:text="${e.name}">My Event</td>
           <td th:text="${e.venue.name}">Event venue</td>
+       <h1>Upcoming events</h1>
+        <tr th:each="e : ${events}">            
+         <div th:if="${e.date.compareTo(e.date.now()) >= 0}">
+          <td><a th:href="@{/events/{num}(num=${e.id})}" th:text="${e.name}">My Event</a></td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
-          <td>
-            <td sec:authorize="isAuthenticated()">
-              <form th:action="@{/events/{id}(id=${e.getId()})}" th:method="delete">
-              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-            </form>
-            </td>
-            
-          </td>
+          <td th:text="${e.venue.name}">Event venue</td>
+         </div>
         </tr>
-      </tbody>
-    </table>
+      </table>
+      <table class="table table-striped table-hover">
+      
+     <h1>Previous events</h1>
+        <tr th:each="e : ${events}">       
+         <div th:if="${e.date.compareTo(e.date.now()) <= 0}">
+          <td><a th:href="@{/events/{num}(num=${e.id})}" th:text="${e.name}">My Event</a></td>
+          <td th:text="${{e.date}}">Event date</td>
+          <td th:text="${{e.time}}">Event time</td>
+          <td th:text="${e.venue.name}">Event venue</td>
+         </div>
+        </tr>     
+       </table>
+       <p>
+         <a class="btn btn-primary" role="button" href="/events/new"><i class="fas fa-plus" aria-hidden="true"></i> Add event</a>
+       </p>
+
 
   </div>
 

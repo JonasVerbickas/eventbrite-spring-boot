@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/default}">
+
+<head>
+  <title>An Event</title>
+</head>
+
+<body>
+  <div layout:fragment="content">
+    <h1>Choose to delete or Edit</h1>
+
+    <h2 th:text="${event.getName()}"></h2>
+
+    <table>
+      <tr>
+        <th>DATE</th>
+        <th th:text="${event.getDate()}"></th>
+      </tr>
+      <tr>
+        <th>TIME</th>
+        <th th:text="${event.getTime()}"></th>
+      </tr>
+      <tr>
+        <th>VENUE</th>
+        <th><a th:href="@{/venues/{num}(num=${event.getVenue().getId()})}" th:text="${event.getVenue().getName()}" </a>
+        </th>
+      </tr>
+      <tr>
+        <th>VENUE CAPACITY</th>
+        <th th:text="${event.getVenue().getCapacity()}"></th>
+      </tr>
+    </table>
+
+    <br>
+    <a class="btn btn-primary" role="button" th:href="@{/events}"><i class="fas fa-arrow-left" aria-hidden="true"></i>
+      Back</a>
+    <a sec:authorize="isAuthenticated()" class="btn btn-primary" role="button"
+      th:href="@{/events/edit/{num}(num=${id})}"><i class="fas fa-pen" aria-hidden="true"></i> Edit</a>
+    <br>
+    <table>
+      <tr>
+        <td sec:authorize="isAuthenticated()">
+          <form th:action="@{/events/{id}/delete(id=${id})}" th:method="delete">
+            <button type="submit" class="btn btn-danger btn-sm">Delete event</button>
+          </form>
+        </td>
+        <td sec:authorize="isAuthenticated()">
+          <form th:action="@{/events/{id}/delete/date(id=${id})}" th:method="put">
+            <button type="submit" class="btn btn-danger btn-sm">Delete date</button>
+          </form>
+        </td>
+        <td sec:authorize="isAuthenticated()">
+          <form th:action="@{/events/{id}/delete/time(id=${id})}" th:method="put">
+            <button type="submit" class="btn btn-danger btn-sm">Delete time</button>
+          </form>
+        </td>
+        <td sec:authorize="isAuthenticated()">
+          <form th:action="@{/events/{id}/delete/all_fields(id=${id})}" th:method="put">
+            <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
+          </form>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+
+</html>

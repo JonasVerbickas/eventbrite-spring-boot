@@ -78,4 +78,8 @@ public class Event {
 	public void setVenue(Venue venue) {
 		this.venue = venue;
 	}
+	
+	public String toString(String name) {
+		return String.format(this.name, name);
+	}
 }

@@ -21,7 +21,7 @@ public class InitialDataLoader {
 
 	private final static Logger log = LoggerFactory.getLogger(InitialDataLoader.class);
 
-	private final static String[] NAME = { "Engineering Building,%s", "Main Library,%s" };
+	private final static String[] NAME = { "Engineering Building,%s", "Main Library,%s", "a", "d", "b" };
 
 	@Autowired
 	private EventServiceImpl eventService;
@@ -48,7 +48,7 @@ public class InitialDataLoader {
 				Event eA = new Event();
 				eA.setName("Event A");
 				eA.setTime(LocalTime.of(12, 0, 0));
-				eA.setDate(LocalDate.of(2022, 2, 1));
+				eA.setDate(LocalDate.of(2022, 8, 1));
 				eA.setVenue(v);
 				eventService.save(eA);
 				Event eD = new Event();
@@ -66,7 +66,7 @@ public class InitialDataLoader {
 				Event eC = new Event();
 				eC.setName("Event C");
 				eC.setTime(LocalTime.of(22, 2, 52));
-				eC.setDate(LocalDate.of(2002, 8, 16));
+				eC.setDate(LocalDate.of(2022, 8, 16));
 				eC.setVenue(v);
 				eventService.save(eC);
 				Event eF = new Event();
