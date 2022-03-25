@@ -3,9 +3,6 @@ package uk.ac.man.cs.eventlite.entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-import java.util.List;
 
 @Entity
 public class Venue {
@@ -13,20 +10,18 @@ public class Venue {
 	@GeneratedValue
 	private long id;
 
-
 	private String name;
 
-	private int capacity;
-	public Venue() {
-		
+	private String address = "-";
 
+	private int capacity;
+
+	public Venue() {
 	}
 
 	public Venue(String name_in) {
-		this.name=name_in;
-
+		this.name = name_in;
 	}
-	
 
 	public long getId() {
 		return id;
@@ -50,5 +45,13 @@ public class Venue {
 
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 }

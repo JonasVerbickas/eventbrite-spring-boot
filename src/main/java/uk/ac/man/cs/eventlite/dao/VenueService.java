@@ -8,6 +8,8 @@ public interface VenueService {
 	public long count();
 
 	public Iterable<Venue> findAll();
+
+	public Iterable<Venue> findAllByOrderByNameAsc();
 	
 	public Venue save(Venue venue);
 }
