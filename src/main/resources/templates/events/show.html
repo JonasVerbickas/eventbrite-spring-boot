@@ -15,8 +15,9 @@
     <form th:action="@{/events/{num}(num=${id})}" th:method="delete">
       <a class="btn btn-primary" role="button" th:href="@{/events}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back</a>
       
-      <a class="btn btn-primary" role="button" th:href="@{/events/edit/{num}(num=${id})}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Edit</a>
+      <a sec:authorize="isAuthenticated()" class="btn btn-primary" role="button" th:href="@{/events/edit/{num}(num=${id})}"><i class="fas fa-pen" aria-hidden="true"></i> Edit</a>
     </form>
+    <br>
     <table>
       <tr>
         <td sec:authorize="isAuthenticated()">
