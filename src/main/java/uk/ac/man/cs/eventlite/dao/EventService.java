@@ -18,5 +18,4 @@ public interface EventService {
 	public void save(Event entity);
 
 	public void deleteById(long id);
-	
 }
