@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/default}">
+
+<head>
+  <title>An Venue</title>
+</head>
+
+<body>
+  <div layout:fragment="content">
+    <h1>Choose to delete or Edit</h1>
+
+    <h2 th:text="${v.getName()}"></h2>
+
+    <table>
+    
+      <tr>
+        <th>VENUE CAPACITY</th>
+        <th th:text="${v.getCapacity()}"></th>
+      </tr>
+      
+      <tr>
+        <th>ADDRESS</th>
+        <th th:text="${v.getAddress()}"></th>
+      </tr>
+      
+    </table>
+
+    <br>
+    <a class="btn btn-primary" role="button" th:href="@{/venues}"><i class="fas fa-arrow-left" aria-hidden="true"></i>
+      Back</a>
+    <a sec:authorize="isAuthenticated()" class="btn btn-primary" role="button"
+      th:href="@{/venues/edit/{num}(num=${id})}"><i class="fas fa-pen" aria-hidden="true"></i> Edit</a>
+    <br>
+    <table>
+      <tr>
+        <td sec:authorize="isAuthenticated()">
+          <form th:action="@{/venues/{id}/delete(id=${id})}" th:method="delete">
+            <button type="submit" class="btn btn-danger btn-sm">Delete venue</button>
+          </form>
+        </td>
+
+        <td sec:authorize="isAuthenticated()">
+          <form th:action="@{/venues/{id}/delete/address(id=${id})}" th:method="put">
+            <button type="submit" class="btn btn-danger btn-sm">Delete address</button>
+          </form>
+        </td>
+        
+        <td sec:authorize="isAuthenticated()">
+          <form th:action="@{/venues/{id}/delete/capacity(id=${id})}" th:method="put">
+            <button type="submit" class="btn btn-danger btn-sm">Delete capacity</button>
+          </form>
+        </td>
+        <td sec:authorize="isAuthenticated()">
+          <form th:action="@{/venues/{id}/delete/all_fields(id=${id})}" th:method="put">
+            <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
+          </form>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+
+</html>

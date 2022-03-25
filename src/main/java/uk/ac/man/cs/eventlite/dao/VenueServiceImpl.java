@@ -53,6 +53,12 @@ public class VenueServiceImpl implements VenueService {
 		return venueRepository.findById(id);
 	}
 
+	@Override
+	public void deleteById(long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 

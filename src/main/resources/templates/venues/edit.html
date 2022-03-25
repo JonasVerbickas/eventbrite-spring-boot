@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/default}">
+<head>
+  <title>New</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>Choose to edit, still needs additional textboxes and validation</h1>
+    
+    <form action="#" th:action="@{/events}" th:object="${events}" method="post">
+    
+    
+        <label for="template">Greeting text</label>
+        <input class="form-control" type="text" name="template" id="template" placeholder="Hello, %s!" autofocus="autofocus" />
+
+
+      </div>
+    
+      <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
+      <a class="btn btn-warning" role="button" href="/greetings"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
+    </form>
+  </div>
+</body>
+</html>

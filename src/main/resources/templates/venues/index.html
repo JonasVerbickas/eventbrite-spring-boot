@@ -11,6 +11,7 @@
     <table class="table table-striped table-hover">
       <thead>
         <tr>
+        
           <th><i class="fas fa-home"></i> Venue</th>
           <th><i class="fas fa-bolt"></i> Capacity</th>
           <th><i class="fas fa-map-marker-alt"></i> Address</th>
@@ -18,7 +19,7 @@
       </thead>
       <tbody>
         <tr th:each="v : ${venues}">
-          <td th:text="${v.getName()}"></td>
+          <td><a th:href="@{/venues/{num}(num=${v.id})}" th:text="${v.getName()}"></a></td>
           <td th:text="${v.getCapacity()}"></td>
           <td th:text="${v.getAddress()}"></td>
         </tr>
