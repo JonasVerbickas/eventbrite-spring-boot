@@ -55,7 +55,7 @@ public class EventsController {
 		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
 
 
-		model.addAttribute("event", event.getEvent(name));
+		model.addAttribute("event", event);
 
 		return "events/show";
 	}

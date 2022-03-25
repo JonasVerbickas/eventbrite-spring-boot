@@ -9,42 +9,29 @@
     <h1>Choose to delete or Edit</h1>
 
     <blockquote>
-      <p th:text="${event}">Hello, World!</p>
-    </div>
-
-    <h1 th:text="${event.name}"></h1>
-
-
-  <table style="width:40%">
-  <tr>
-    <th>DATE</th>
-    <th th:text="${event.date}"></th>
-  </tr>
-  <tr>
-   <th>TIME</th>
-    <th th:text="${event.time}"></th>
-  </tr>
-  <tr>
-    <th>VENUE</th>
-    <th><a th:href="@{/venues/{num}(num=${venue.id})}" th:text ="${venue.name}"</a></th>
-  </tr>
-  <tr>
-    <th>VENUE CAPACITY</th>
-    <th th:text="${venue.capacity}"></th>
-  </tr>
-  <tr>
-    <th>DESCRIPTION</th>
-    <th th:text="${event.description}"></th>
-  </tr>
-  <tr>
-    <th>LAT AND LONG VENUE</th>
-    <th th:text="${lat}"></th>
-     <th th:text="${lon}"></th>
-  </tr>
-</table>
-
-<div>
+      <p th:text="${event}">Event name</p>
     </blockquote>
+    <h1 th:text="${event.getName()}"></h1>
+
+    <table>
+    <tr>
+      <th>DATE</th>
+      <th th:text="${event.getDate()}"></th>
+    </tr>
+    <tr>
+    <th>TIME</th>
+      <th th:text="${event.getTime()}"></th>
+    </tr>
+    <tr>
+      <th>VENUE</th>
+      <th><a th:href="@{/venues/{num}(num=${event.getVenue().getId()})}" th:text ="${event.getVenue().getName()}"</a></th>
+    </tr>
+    <tr>
+      <th>VENUE CAPACITY</th>
+      <th th:text="${event.getVenue().getCapacity()}"></th>
+    </tr>
+  </table>
+
 
     <form th:action="@{/events/{num}(num=${id})}" th:method="delete">
       <a class="btn btn-primary" role="button" th:href="@{/events}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back</a>
