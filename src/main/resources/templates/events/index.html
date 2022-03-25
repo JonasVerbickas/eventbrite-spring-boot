@@ -9,8 +9,21 @@
   <div layout:fragment="content">
 
     <table class="table table-striped table-hover">
-  
-  
+      <thead>
+        <tr>
+          <th><i class="fas fa-bolt"></i> Event</th>
+          <th><i class="fas fa-map-marker-alt"></i> Venue</th>
+          <th><i class="fas fa-calendar"></i> Date</th>
+          <th><i class="fas fa-clock"></i> Time</th>
+        </tr>
+      </thead>
+      <form th:object="${event}" action="/events/" method="get">
+      <input type="text" name = "name" th:value="${name}" id = "name"/>
+      <input type = "submit" value = "Search">
+      <tbody>
+        <tr th:each="e : ${events}">
+          <td th:text="${e.name}">My Event</td>
+          <td th:text="${e.venue.name}">Event venue</td>
        <h1>Upcoming events</h1>
         <tr th:each="e : ${events}">            
          <div th:if="${e.date.compareTo(e.date.now()) >= 0}">

@@ -55,4 +55,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	
+	public Iterable<Event> listEventByName(String name){
+		return eventRepository.findByNameContaining(name);
+	}
 }
