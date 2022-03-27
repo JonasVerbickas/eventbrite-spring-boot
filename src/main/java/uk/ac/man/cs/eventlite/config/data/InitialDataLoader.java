@@ -106,7 +106,7 @@ public class InitialDataLoader {
 				eG.setName("Testing");
 				eG.setTime(LocalTime.of(2, 2, 52));
 				eG.setDate(LocalDate.of(2002, 8, 16));
-				eG.setVenue(v);
+				eG.setVenue(vC);
 				eventService.save(eG);
 			}
 		};
