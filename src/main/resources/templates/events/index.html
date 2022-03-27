@@ -9,6 +9,7 @@
 <body>
   <div layout:fragment="content">
     <table class="table table-striped table-hover">
+      <br>
       <thead>
         <tr>
           <th><i class="fas fa-bolt"></i> Event</th>
@@ -18,8 +19,9 @@
         </tr>
       </thead>
       <form th:object="${event}" action="/events/" method="get">
-        <input type="text" name="name" th:value="${name}" id="name" />
-        <input type="submit" value="Search">
+        <input type="text" name="name" th:value="${name}" id="name" placeholder="Event name" />
+        <input type="submit" value="Search" />
+        <br>
         <br>
         <h1>Upcoming events</h1>
         <tbody>
