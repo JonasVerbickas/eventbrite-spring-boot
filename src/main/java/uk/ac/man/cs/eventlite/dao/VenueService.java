@@ -1,5 +1,7 @@
 package uk.ac.man.cs.eventlite.dao;
 
+import java.util.Optional;
+
 import uk.ac.man.cs.eventlite.entities.Venue;
 
 
@@ -11,5 +13,11 @@ public interface VenueService {
 
 	public Iterable<Venue> findAllByOrderByNameAsc();
 	
-	public void save(Venue venue);
+	public Venue save(Venue venue);
+	
+	public Optional<Venue> findById(long i);
+
+	public void deleteById(long id);
+
+	public Iterable<Venue> listVenueByName(String name);
 }

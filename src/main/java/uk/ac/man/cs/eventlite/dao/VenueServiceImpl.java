@@ -1,5 +1,12 @@
 package uk.ac.man.cs.eventlite.dao;
 
+
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -82,4 +89,23 @@ public class VenueServiceImpl implements VenueService {
 		}
 		venueRepository.save(venue);
 	}
+
+	
+	public Optional<Venue> findById(long id){
+		return venueRepository.findById(id);
+	}
+
+	@Override
+	public void deleteById(long id) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public Iterable<Venue> listVenueByName(String name){
+		return venueRepository.findByNameContainingOrderByNameAsc(name);
+	}
+
+	
+	
+
 }
