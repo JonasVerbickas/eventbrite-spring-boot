@@ -89,8 +89,8 @@ public class EventsControllerApi {
 			return ResponseEntity.unprocessableEntity().build();
 		}
 
-		Event newEvent = eventService.save(event);
-		EntityModel<Event> entity = eventAssembler.toModel(newEvent);
+		eventService.save(event);
+		EntityModel<Event> entity = eventAssembler.toModel(event);
 
 		return ResponseEntity.created(entity.getRequiredLink(IanaLinkRelations.SELF).toUri()).build();
 	}
