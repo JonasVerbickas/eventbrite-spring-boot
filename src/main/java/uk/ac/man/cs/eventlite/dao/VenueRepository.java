@@ -16,4 +16,6 @@ public interface VenueRepository extends CrudRepository<Venue, Long> {
 	public Optional<Venue> findById(long id);
 
 	public void deleteById(long id);
+	
+	public Iterable<Venue> findByNameContainingOrderByNameAsc(String name);
 }

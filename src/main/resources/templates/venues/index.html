@@ -17,6 +17,9 @@
           <th><i class="fas fa-map-marker-alt"></i> Address</th>
         </tr>
       </thead>
+      <form th:object="${venue}" action="/venues/" method="get">
+        <input type="text" name="name" th:value="${name}" id="name" placeholder="Venue name" />
+        <input type="submit" value="Search" />
       <tbody>
         <tr th:each="v : ${venues}">
           <td><a th:href="@{/venues/{num}(num=${v.id})}" th:text="${v.getName()}"></a></td>
