@@ -16,6 +16,9 @@ public class Venue {
 
 	private int capacity;
 
+	private double longitude;
+	private double latitude;
+
 	public Venue() {
 	}
 
@@ -53,5 +56,25 @@ public class Venue {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public double getLatitude() {
+		System.out.println("getLatitude:" + this.latitude + " for " + this.getName());
+		return this.latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		System.out.println("setLatitude:"+latitude+" for " + this.getName());
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		System.out.println("getLongitude:" + this.longitude + " for " + this.getName());
+		return this.longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		System.out.println("setLongitude:"+latitude+" for " + this.getName());
+		this.longitude = longitude;
 	}
 }
