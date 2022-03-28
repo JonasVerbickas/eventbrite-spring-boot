@@ -8,36 +8,74 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import uk.ac.man.cs.eventlite.entities.Venue;
+import com.mapbox.api.geocoding.v5.MapboxGeocoding;
+import com.mapbox.api.geocoding.v5.models.CarmenFeature;
+import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import java.util.List;
 
 @Service
 @Transactional
 public class VenueServiceImpl implements VenueService {
-	
+
 	@Autowired
 	private VenueRepository venueRepository;
-	
+
 	private final static Logger log = LoggerFactory.getLogger(VenueServiceImpl.class);
 
 	private final static String DATA = "data/venues.json";
-	
+
 	@Override
 	public long count() {
 		return venueRepository.count();
 	}
-	
+
 	@Override
 	public Iterable<Venue> findAll() {
 		return venueRepository.findAll();
 	}
-	
+
 	@Override
 	public Iterable<Venue> findAllByOrderByNameAsc() {
 		return venueRepository.findAllByOrderByNameAsc();
 	}
-	
+
+	private void subSave(Venue v){
+		venueRepository.save(v);
+	}
+
+
 	@Override
-	public Venue save(Venue venue) {
-		venueRepository.save(venue);
-		return venue;
+	public void save(Venue venue) {
+		MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+				.accessToken("pk.eyJ1Ijoiam9uYXMtIiwiYSI6ImNsMTVkMXk1eTB2aWYzYm10Zzg0djFhMHcifQ.dNCKShUv6VxLMt5ZEgW45A")
+				.query(venue.getAddress())
+				.build();
+		mapboxGeocoding.enqueueCall(new Callback<GeocodingResponse>() {
+
+			@Override
+			public void onResponse(Call<GeocodingResponse> call,
+					Response<GeocodingResponse> response) {
+						
+				System.out.println("Geocoding Success: ");
+				System.out.println("Response has a body" + response.body());
+				List<CarmenFeature> results = response.body().features();
+
+				// Get the first Feature from the successful geocoding response
+				double point = results.get(0).center().coordinates().get(1);
+				venue.setLatitude(point);
+				subSave(venue);
+			}
+
+			@Override
+			public void onFailure(Call<GeocodingResponse> call, Throwable throwable) {
+				System.out.println("Geocoding Failure: " + throwable.getMessage());
+				venue.setLatitude(0.0);
+				subSave(venue);
+			}
+		});
 	}
 }

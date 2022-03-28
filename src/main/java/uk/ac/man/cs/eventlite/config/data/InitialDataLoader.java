@@ -39,8 +39,8 @@ public class InitialDataLoader {
 				for (String template : NAME) {
 					v = new Venue(template);
 					v.setAddress("3333 Raleigh St, Houston, TX 77021, United States");
-					log.info("Preloading: " + venueService.save(v));
-
+					venueService.save(v);
+					log.info("Preloading: " + v);
 				}
 			} // Build and save initial venues here.
 			if (eventService.count() > 0) {

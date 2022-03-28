@@ -11,5 +11,5 @@ public interface VenueService {
 
 	public Iterable<Venue> findAllByOrderByNameAsc();
 	
-	public Venue save(Venue venue);
+	public void save(Venue venue);
 }

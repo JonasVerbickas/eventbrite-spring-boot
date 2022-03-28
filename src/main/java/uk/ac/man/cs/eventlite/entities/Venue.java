@@ -4,23 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import com.mapbox.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.api.geocoding.v5.models.CarmenFeature;
-import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
-
-import com.mapbox.api.geocoding.v5.GeocodingCriteria;
-import com.mapbox.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.api.geocoding.v5.models.CarmenFeature;
-import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
-import com.mapbox.core.exceptions.ServicesException;
-import com.mapbox.geojson.Point;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 @Entity
 public class Venue {
 	@Id
@@ -71,36 +54,7 @@ public class Venue {
 	}
 
 	public void setAddress(String address) {
-
 		this.address = address;
-		MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
-				.accessToken("pk.eyJ1Ijoiam9uYXMtIiwiYSI6ImNsMTVkMXk1eTB2aWYzYm10Zzg0djFhMHcifQ.dNCKShUv6VxLMt5ZEgW45A")
-				.query(address)
-				.build();
-		mapboxGeocoding.enqueueCall(new Callback<GeocodingResponse>() {
-			@Override
-			public void onResponse(Call<GeocodingResponse> call,
-					Response<GeocodingResponse> response) {
-				System.out.println("Geocoding Success: ");
-				if (response.body() != null) {
-					System.out.println("Response has a body" + response.body());
-					List<CarmenFeature> results = response.body().features();
-
-						// Get the first Feature from the successful geocoding response
-						double point = results.get(0).center().coordinates().get(1);
-						setLatitude(point);
-				}
-				else
-				{
-					System.out.println("NO BODY:" +response);
-				}
-			}
-			
-			@Override
-			public void onFailure(Call<GeocodingResponse> call, Throwable throwable) {
-				System.out.println("Geocoding Failure: " + throwable.getMessage());
-			}
-		});
 	}
 
 	public double getLatitude() {
