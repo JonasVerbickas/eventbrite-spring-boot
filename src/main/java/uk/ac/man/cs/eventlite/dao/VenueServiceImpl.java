@@ -43,11 +43,6 @@ public class VenueServiceImpl implements VenueService {
 		return venueRepository.findAllByOrderByNameAsc();
 	}
 
-	private void subSave(Venue v){
-		venueRepository.save(v);
-	}
-
-
 	@Override
 	public void save(Venue venue) {
 		MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
@@ -59,23 +54,32 @@ public class VenueServiceImpl implements VenueService {
 			@Override
 			public void onResponse(Call<GeocodingResponse> call,
 					Response<GeocodingResponse> response) {
-						
+
 				System.out.println("Geocoding Success: ");
 				System.out.println("Response has a body" + response.body());
 				List<CarmenFeature> results = response.body().features();
 
 				// Get the first Feature from the successful geocoding response
-				double point = results.get(0).center().coordinates().get(1);
-				venue.setLatitude(point);
-				subSave(venue);
+				List<Double> point = results.get(0).center().coordinates();
+				venue.setLongitude(point.get(0));
+				venue.setLatitude(point.get(1));
 			}
 
 			@Override
 			public void onFailure(Call<GeocodingResponse> call, Throwable throwable) {
 				System.out.println("Geocoding Failure: " + throwable.getMessage());
+				venue.setLongitude(0.0);
 				venue.setLatitude(0.0);
-				subSave(venue);
 			}
 		});
+		try {
+			// Using sleep here is inefficient
+			// A List of all addresses should be maintained and fetched at the same time
+			// Mapbox supports up to 50 queries per request
+			Thread.sleep(1000L);
+		} catch (InterruptedException e) {
+			System.out.println("Sleeping Thread:" + e);
+		}
+		venueRepository.save(venue);
 	}
 }
