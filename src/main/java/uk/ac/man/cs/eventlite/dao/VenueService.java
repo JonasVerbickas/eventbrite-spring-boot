@@ -19,5 +19,5 @@ public interface VenueService {
 
 	public void deleteById(long id);
 
-	public Iterable<Venue> listVenueByName(String name);
+	public Iterable<Venue> listVenueByNameIgnoreCase(String name);
 }

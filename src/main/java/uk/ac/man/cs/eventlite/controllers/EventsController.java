@@ -96,7 +96,7 @@ public class EventsController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public String getSearchedEvent(Model model, @RequestParam (value = "name", required = true) String name) {
-		model.addAttribute("events", eventService.listEventByName(name));
+		model.addAttribute("events", eventService.listEventByNameIgnoreCase(name));
 		return "events/index";
 	}
 

@@ -20,6 +20,6 @@ public interface EventService {
 	public void deleteById(long id);
 	
 
-	public Iterable<Event> listEventByName(String name);
+	public Iterable<Event> listEventByNameIgnoreCase(String name);
 
 }

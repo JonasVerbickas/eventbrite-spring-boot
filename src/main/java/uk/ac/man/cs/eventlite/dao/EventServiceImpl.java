@@ -55,7 +55,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	
-	public Iterable<Event> listEventByName(String name){
-		return eventRepository.findByNameContaining(name);
+	public Iterable<Event> listEventByNameIgnoreCase(String name){
+		return eventRepository.findByNameContainingIgnoreCaseOrderByDateAscNameAsc(name);
 	}
 }

@@ -100,7 +100,7 @@ public class VenueServiceImpl implements VenueService {
 		
 	}
 	
-	public Iterable<Venue> listVenueByName(String name){
-		return venueRepository.findByNameContainingOrderByNameAsc(name);
+	public Iterable<Venue> listVenueByNameIgnoreCase(String name){
+		return venueRepository.findByNameContainingIgnoreCaseOrderByNameAsc(name);
 	}
 }
