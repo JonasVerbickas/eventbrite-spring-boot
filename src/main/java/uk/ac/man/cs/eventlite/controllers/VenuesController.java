@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import uk.ac.man.cs.eventlite.dao.VenueService;
@@ -85,6 +86,12 @@ public class VenuesController {
 		// this does not work e.setVenue(null);
 		venueService.save(v);
 		return "redirect:/venues/"+id;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/")
+	public String getSearchedVenue(Model model, @RequestParam (value = "name", required = true) String name) {
+		model.addAttribute("venues", venueService.listVenueByName(name));
+		return "venues/index";
 	}
 	
 

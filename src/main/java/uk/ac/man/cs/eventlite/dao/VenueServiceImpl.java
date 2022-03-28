@@ -58,6 +58,10 @@ public class VenueServiceImpl implements VenueService {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public Iterable<Venue> listVenueByName(String name){
+		return venueRepository.findByNameContainingOrderByNameAsc(name);
+	}
 
 	
 	
