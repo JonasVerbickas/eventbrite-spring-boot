@@ -3,6 +3,7 @@ package uk.ac.man.cs.eventlite.entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -17,7 +18,7 @@ public class Venue {
 
 	private String address = "-";
 	
-	
+	@Min(value = 1, message = "this venue cannot be 0 capacity")
 	private int capacity;
 
 	private double longitude;
