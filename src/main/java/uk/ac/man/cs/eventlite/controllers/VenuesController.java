@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
@@ -24,7 +25,9 @@ public class VenuesController {
 
 	@Autowired
 	private VenueService venueService;
-
+	
+	@Autowired
+	private EventService eventService;
 	@GetMapping
 	public String getAllVenues(Model model) {
 
