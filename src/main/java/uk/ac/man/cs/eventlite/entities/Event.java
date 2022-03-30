@@ -1,15 +1,19 @@
 package uk.ac.man.cs.eventlite.entities;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sun.istack.NotNull;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Size;
 import javax.persistence.GeneratedValue;
 
 @Entity
@@ -29,14 +33,24 @@ public class Event {
 
 	private String name;
 
+	
+	@Size(max = 500, message = "Description should not have more than 500 characters")
+	@Column(length = 100000)
+	private String description;
+	
+	
 	@ManyToOne
 	private Venue venue;
 
 	public Event() {
 	}
 
-	public Event(String s) {
-		this.name = s;
+	public Event(String name, Venue venue, LocalDate date, LocalTime time,String description) {
+		this.name = name;
+		this.venue = venue;
+		this.date = date;
+		this.time = time;
+		this.description = description;
 	}
 
 	public long getId() {
@@ -81,5 +95,13 @@ public class Event {
 	
 	public String toString(String name) {
 		return String.format(this.name, name);
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }
