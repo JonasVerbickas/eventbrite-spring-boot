@@ -3,17 +3,21 @@ package uk.ac.man.cs.eventlite.entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Venue {
 	@Id
 	@GeneratedValue
 	private long id;
-
+	@NotBlank(message = "Cannot be empty!")
+	@Size(max = 256, message = "the length of the venue's name should not be more than 256 characters")
 	private String name;
 
 	private String address = "-";
-
+	
+	
 	private int capacity;
 
 	private double longitude;
