@@ -13,6 +13,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import javax.persistence.GeneratedValue;
 
@@ -22,6 +23,8 @@ public class Event {
 	@Id
 	@GeneratedValue
 	private long id;
+	
+	
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -30,7 +33,8 @@ public class Event {
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime time;
-
+	@NotBlank(message = "Cannot be empty!")
+	@Size(max = 256, message = "the length of the venue's name should not be more than 256 characters")
 	private String name;
 
 	
