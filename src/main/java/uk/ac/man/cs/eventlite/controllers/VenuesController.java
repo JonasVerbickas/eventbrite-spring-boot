@@ -92,7 +92,7 @@ public class VenuesController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
-	public String getSearchedVenue(Model model, @RequestParam (value = "name", required = true) String name) {
+	public String getSearchedVenue(Model model, @RequestParam (value = "search", required = true) String name) {
 		model.addAttribute("venues", venueService.listVenueByNameIgnoreCase(name));
 		return "venues/index";
 	}
