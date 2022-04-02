@@ -7,13 +7,17 @@ import java.time.LocalTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sun.istack.NotNull;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.persistence.GeneratedValue;
 
@@ -24,10 +28,10 @@ public class Event {
 	@GeneratedValue
 	private long id;
 	
-	
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+
 	private LocalDate date;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
