@@ -89,7 +89,7 @@ public class VenueServiceImpl implements VenueService {
 		venueRepository.save(venue);
 	}
 
-	
+	@Override
 	public Optional<Venue> findById(long id){
 		return venueRepository.findById(id);
 	}
@@ -97,9 +97,10 @@ public class VenueServiceImpl implements VenueService {
 	@Override
 	public void deleteById(long id) {
 		// TODO Auto-generated method stub
+		venueRepository.deleteById(id);
 		
 	}
-	
+	@Override
 	public Iterable<Venue> listVenueByNameIgnoreCase(String name){
 		return venueRepository.findByNameContainingIgnoreCaseOrderByNameAsc(name);
 	}
