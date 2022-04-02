@@ -19,8 +19,11 @@
         </tr>
       </thead>
       <form th:object="${event}" action="/events/" method="get">
-        <input type="text" name="name" th:value="${name}" id="name" placeholder="Event name" />
-        <input type="submit" value="Search" />
+        <div class='row'>
+        <input class="form-search mb-2 col-auto " type="search" name="search" th:value="${search}" id="search" placeholder="Venue name" />
+        <button type="submit" class="btn btn-primary mb-2 col-auto">Search</button>
+        </div>
+      </form>
         <br>
         <br>
         <h1>Upcoming events</h1>
