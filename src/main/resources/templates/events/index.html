@@ -10,7 +10,7 @@
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
   <style>
-  body { margin: 0; padding: 0; }
+  body { margin: 8px; padding: 0; }
   #map { height: 500px; width: 100%; }
   </style>
 </head>
@@ -29,7 +29,7 @@
       </thead>
       <form th:object="${event}" action="/events/" method="get">
         <div class='row'>
-        <input class="form-search mb-2 col-auto " type="search" name="search" th:value="${search}" id="search" placeholder="Venue name" />
+        <input class="form-search mb-2 col-auto " type="search" name="search" th:value="${search}" id="search" placeholder="Event name" />
         <button type="submit" class="btn btn-primary mb-2 col-auto">Search</button>
         </div>
       </form>
@@ -82,14 +82,14 @@
     			center: [-2.2, 53.4],
     			zoom: 9 
     		});
-    	var events = /*[[${events}]]*/;
+      // thymeleaf syntax below
+    	var events/*[+  = [[${events}]] +]*/;
     	events.forEach(function markers(e, index) {
     		const marker = new mapboxgl.Marker()
     			.setLngLat([e.venue.longitude, e.venue.latitude])
     			.setPopup(new mapboxgl.Popup().setHTML("<h2>" + e.name + "</h2><br><p style=\"text-align: center;\">Starts at " +  e.time + "</p>"))
     			.addTo(map);
-    		
-    	})	
+    	})
     </script>	
   </div>
 </body>
