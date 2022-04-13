@@ -86,10 +86,10 @@
     <div id="map"></div>
     <script th:inline="javascript">
     
-    var latitude = /*[[${event.getVenue().getLatitude()}]]*/;
-    var longitude = /*[[${event.getVenue().getLongitude()}]]*/;
-    var name = /*[[${event.getName()}]]*/;
-    var time = /*[[${event.getTime()}]]*/;
+    var latitude = /*[[${event.getVenue().getLatitude()}]]*/ null;
+    var longitude = /*[[${event.getVenue().getLongitude()}]]*/ null;
+    var name = /*[[${event.getName()}]]*/ null;
+    var time = /*[[${event.getTime()}]]*/ null;
     
     mapboxgl.accessToken = 'pk.eyJ1Ijoiam9uYXMtIiwiYSI6ImNsMTVkMXk1eTB2aWYzYm10Zzg0djFhMHcifQ.dNCKShUv6VxLMt5ZEgW45A';
     	const map = new mapboxgl.Map({

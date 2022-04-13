@@ -82,7 +82,7 @@
     			center: [-2.2, 53.4],
     			zoom: 9 
     		});
-    	var events = /*[[${events}]]*/;
+    	var events = /*[[${events}]]*/ null;
     	events.forEach(function markers(e, index) {
     		const marker = new mapboxgl.Marker()
     			.setLngLat([e.venue.longitude, e.venue.latitude])

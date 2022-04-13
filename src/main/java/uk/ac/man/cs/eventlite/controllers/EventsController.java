@@ -29,7 +29,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.dao.EventService;
-import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
 
@@ -39,7 +38,6 @@ public class EventsController {
 
 	@Autowired
 	private EventService eventService;
-	private VenueService venueService;
 
 	@ExceptionHandler(EventNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
