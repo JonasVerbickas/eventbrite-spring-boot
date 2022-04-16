@@ -90,7 +90,7 @@ public class EventsController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public String getSearchedEvent(Model model, @RequestParam (value = "search", required = true) String name) {
-		model.addAttribute("events", eventService.listEventByNameIgnoreCase(name));
+		model.addAttribute("events", eventService.findByNameContainingIgnoreCaseOrderByDateAscNameAsc(name));
 		return "events/index";
 	}
 
