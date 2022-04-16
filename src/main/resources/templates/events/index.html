@@ -10,8 +10,15 @@
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
   <style>
-  body { margin: 0; padding: 0; }
-  #map { height: 500px; width: 100%; }
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      height: 500px;
+      width: 100%;
+    }
   </style>
 </head>
 
@@ -29,22 +36,23 @@
       </thead>
       <form th:object="${event}" action="/events/" method="get">
         <div class='row'>
-        <input class="form-search mb-2 col-auto " type="search" name="search" th:value="${search}" id="search" placeholder="Venue name" />
-        <button type="submit" class="btn btn-primary mb-2 col-auto">Search</button>
+          <input class="form-search mb-2 col-auto " type="search" name="search" th:value="${search}" id="search"
+            placeholder="Venue name" />
+          <button type="submit" class="btn btn-primary mb-2 col-auto">Search</button>
         </div>
       </form>
-        <br>
-        <br>
-        <h1>Upcoming events</h1>
-        <tbody>
-          <tr th:each="e : ${events}">
-            <div th:if="${e.date.compareTo(e.date.now()) >= 0}">
-              <td><a th:href="@{/events/{num}(num=${e.id})}" th:text="${e.name}">My Event</a></td>
-              <td th:text="${{e.date}}">Event date</td>
-              <td th:text="${{e.time}}">Event time</td>
-              <td th:text="${e.venue.name}">Event venue</td>
-            </div>
-          </tr>
+      <br>
+      <br>
+      <h1>Upcoming events</h1>
+      <tbody>
+        <tr th:each="e : ${events}">
+          <div th:if="${e.date.compareTo(e.date.now()) >= 0}">
+            <td><a th:href="@{/events/{num}(num=${e.id})}" th:text="${e.name}">My Event</a></td>
+            <td th:text="${{e.date}}">Event date</td>
+            <td th:text="${{e.time}}">Event time</td>
+            <td th:text="${e.venue.name}">Event venue</td>
+          </div>
+        </tr>
     </table>
 
     <table class="table table-striped table-hover">
@@ -67,30 +75,47 @@
       </tr>
     </table>
     <p>
-      <div style="display: flex; flex-direction: row; justify-content: space-between">
-        <a class="btn btn-primary" role="button" href="/events/new"><i class="fas fa-plus" aria-hidden="true"></i> Add
-          event</a>
-        <a class="btn btn-primary" role="button" href="/venues">View list of Venues</a>
-      </div>
+    <div style="display: flex; flex-direction: row; justify-content: space-between">
+      <a class="btn btn-primary" role="button" href="/events/new"><i class="fas fa-plus" aria-hidden="true"></i> Add
+        event</a>
+      <a class="btn btn-primary" role="button" href="/venues">View list of Venues</a>
+    </div>
     </p>
     <div id="map"></div>
     <script th:inline="javascript">
-    	mapboxgl.accessToken = 'pk.eyJ1Ijoiam9uYXMtIiwiYSI6ImNsMTVkMXk1eTB2aWYzYm10Zzg0djFhMHcifQ.dNCKShUv6VxLMt5ZEgW45A';
-    		const map = new mapboxgl.Map({
-    			container: 'map',
-    			style: 'mapbox://styles/mapbox/streets-v11',
-    			center: [-2.2, 53.4],
-    			zoom: 9 
-    		});
-    	var events = /*[[${events}]]*/ null;
-    	events.forEach(function markers(e, index) {
-    		const marker = new mapboxgl.Marker()
-    			.setLngLat([e.venue.longitude, e.venue.latitude])
-    			.setPopup(new mapboxgl.Popup().setHTML("<h2>" + e.name + "</h2><br><p style=\"text-align: center;\">Starts at " +  e.time + "</p>"))
-    			.addTo(map);
-    		
-    	})	
-    </script>	
+      var events = /*[[${events}]]*/ null;
+
+      let min_lng = events[0].venue.longitude;
+      let min_lat = events[0].venue.latitude;
+      let max_lng = events[0].venue.longitude;
+      let max_lat = events[0].venue.latitude;
+      events.slice(1).forEach(function markers(e, index) {
+        min_lng = Math.min(min_lng, e.venue.longitude)
+        min_lat = Math.min(min_lat, e.venue.latitude)
+        max_lng = Math.max(max_lng, e.venue.longitude)
+        max_lat = Math.max(max_lat, e.venue.latitude)
+      });
+      // display the minimum map with all events
+      // 0.001 works as padding (preventing markers from getting blocked)
+      const lat_long_bounds = new mapboxgl.LngLatBounds(
+        new mapboxgl.LngLat(min_lng-0.001, min_lat-0.001),
+        new mapboxgl.LngLat(max_lng+0.001, max_lat+0.001)
+      );
+
+      mapboxgl.accessToken = 'pk.eyJ1Ijoiam9uYXMtIiwiYSI6ImNsMTVkMXk1eTB2aWYzYm10Zzg0djFhMHcifQ.dNCKShUv6VxLMt5ZEgW45A';
+      const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        bounds: lat_long_bounds
+      });
+      events.forEach(function markers(e, index) {
+        const marker = new mapboxgl.Marker()
+          .setLngLat([e.venue.longitude, e.venue.latitude])
+          .setPopup(new mapboxgl.Popup().setHTML("<h2>" + e.name + "</h2><br><p style=\"text-align: center;\">Starts at " + e.time + "</p>"))
+          .addTo(map);
+
+      })	
+    </script>
   </div>
 </body>
 
