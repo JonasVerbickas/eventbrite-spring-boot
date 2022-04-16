@@ -51,7 +51,7 @@ public class EventsController {
 	@GetMapping
 	public String getAllEvents(Model model) {
 
-		model.addAttribute("events", eventService.findAllByOrderByDateAscTimeAsc());
+		model.addAttribute("events", eventService.findAllByOrderByDateAscNameAsc());
 
 		return "events/index";
 	}
