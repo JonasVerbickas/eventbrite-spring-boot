@@ -102,27 +102,12 @@ public class InitialDataLoader {
 				eF.setDate(LocalDate.of(2002, 8, 16));
 				eF.setVenue(vC);
 				eventService.save(eF);
-				
 				Event eG = new Event();
 				eG.setName("Testing");
 				eG.setTime(LocalTime.of(2, 2, 52));
 				eG.setDate(LocalDate.of(2002, 8, 16));
 				eG.setVenue(vC);
 				eventService.save(eG);
-				
-				Event eH = new Event();
-				eH.setName("Event H");
-				eH.setTime(LocalTime.of(2, 2, 52));
-				eH.setDate(LocalDate.of(2022, 7, 16));
-				eH.setVenue(vC);
-				eventService.save(eH);
-				
-				Event eI = new Event();
-				eI.setName("Event I");
-				eI.setTime(LocalTime.of(2, 2, 52));
-				eI.setDate(LocalDate.of(2022, 6, 16));
-				eI.setVenue(vC);
-				eventService.save(eI);
 			}
 		};
 	}
