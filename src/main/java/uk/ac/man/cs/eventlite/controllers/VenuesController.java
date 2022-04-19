@@ -57,7 +57,7 @@ public class VenuesController {
 	
 	@PutMapping("/{id}/delete/address")
 	public String deleteTime(@PathVariable("id") long id) {
-		Venue v= venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));;
+		Venue v = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));;
 		v.setAddress(null);
 		venueService.save(v);
 		return "redirect:/venues/"+id;
