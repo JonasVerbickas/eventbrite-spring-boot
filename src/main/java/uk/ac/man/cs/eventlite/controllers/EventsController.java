@@ -113,7 +113,6 @@ public class EventsController {
 	@PutMapping("/{id}/delete/all_fields")
 	public String deleteAllFields(@PathVariable("id") long id) {
 		Event e = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
-		;
 		e.setDate(null);
 		e.setName(null);
 		e.setTime(null);
@@ -174,8 +173,15 @@ public class EventsController {
 		return "redirect:/events";
 	}
 
-	@GetMapping("/tweet/")
-	public void tweet() throws TwitterException {
+	@GetMapping("/post_tweet")
+	public String postTweet() throws TwitterException {
 		 twitterService.postATweet();
+		return "redirect:/events";
+	}
+
+	@GetMapping("/get_timeline")
+	public String getTimeline() throws TwitterException {
+		 twitterService.getTimeline();
+		return "redirect:/events";
 	}
 }

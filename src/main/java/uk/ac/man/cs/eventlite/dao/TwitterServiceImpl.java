@@ -1,5 +1,6 @@
 package uk.ac.man.cs.eventlite.dao;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -15,33 +16,33 @@ import twitter4j.conf.ConfigurationBuilder;
 @Service
 public class TwitterServiceImpl {
 	Twitter twitter;
+	TwitterFactory tf;
 	public TwitterServiceImpl()
 	{
 		ConfigurationBuilder cb = new ConfigurationBuilder();
 		cb.setDebugEnabled(true)
-				.setOAuthConsumerKey("1joTftLh14E9IAVp5D2BMjNdE")
-				.setOAuthConsumerSecret("guMY5aDOZZJQwfdczvhlEG3m3ZzF0SgtYIuIrpQThDgEg1H7mg")
-				.setOAuthAccessToken("1510558622031523844-MEtB52l0AHJHQ0FnjsKdkJ4OzNRjqn")
-				.setOAuthAccessTokenSecret("04kSgikkwIUgdm89NUgXluVFdnMhwvp2EXgbxiYENIvN1");
-		TwitterFactory tf = new TwitterFactory(cb.build());
-		twitter = tf.getInstance();
+				.setOAuthConsumerKey("MqMpjC9c0ytH5FAK0FIbcffKR")
+				.setOAuthConsumerSecret("1SvT0wETlgwM8tly2DomnemHpLgAKlOp2eZnHvSyuordKVMsmD")
+				.setOAuthAccessToken("1510558622031523844-hZujotZLVxhAcPenNYCVjb9gNjFsj3")
+				.setOAuthAccessTokenSecret("BfWp4a90YwgDu3HydccJ4en6SSfwpJiI2nggIwu3RzIMP");
+		tf = new TwitterFactory(cb.build());
 	}
 
-	public String getTweets() throws TwitterException
+	public void getTimeline() throws TwitterException
 	{
-		Query query = new Query("source:twitter4j baeldung");
-		QueryResult result = twitter.search(query);
-
-		String output = result.getTweets().stream()
-				.map(item -> item.getText())
-				.collect(Collectors.toList()).toString();
-		System.out.println(output);
-		return output;
+		Twitter twitter = tf.getInstance();
+		List<Status> statuses = twitter.getHomeTimeline();
+		System.out.println("Showing home timeline.");
+		for (Status status : statuses) {
+			System.out.println(status.getUser().getName() + ":" +
+					status.getText());
+		}
 	}
 
 	public void postATweet() throws TwitterException
 	{
-		Status status = twitter.updateStatus("creating baeldung API");
+		Twitter twitter = tf.getInstance();
+		Status status = twitter.updateStatus("m e g t f v o m");
 		System.out.println("TwitterServiceImpl.postATweet()" + status.getText());
 	}
 }
