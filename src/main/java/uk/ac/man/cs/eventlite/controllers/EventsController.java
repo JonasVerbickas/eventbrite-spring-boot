@@ -28,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import twitter4j.TwitterException;
 import uk.ac.man.cs.eventlite.entities.Event;
+import uk.ac.man.cs.eventlite.entities.Tweet;
 import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.TwitterServiceImpl;
@@ -66,6 +67,7 @@ public class EventsController {
 		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
 
 		model.addAttribute("event", event);
+		model.addAttribute("tweet", new Tweet());
 
 		return "events/event_detail";
 	}
@@ -156,7 +158,6 @@ public class EventsController {
 		eventToEdit.setName(event_in.getName());
 		if (event_in.getDate() != null) {
 			eventToEdit.setDate(event_in.getDate());
-
 		}
 
 		if (event_in.getTime() != null) {
@@ -173,9 +174,9 @@ public class EventsController {
 		return "redirect:/events";
 	}
 
-	@GetMapping("/post_tweet")
-	public String postTweet() throws TwitterException {
-		 twitterService.postATweet();
+	@PostMapping("/post_tweet")
+	public String postTweet(@ModelAttribute Tweet tweet) throws TwitterException {
+		twitterService.postATweet(tweet.getTweetText());
 		return "redirect:/events";
 	}
 

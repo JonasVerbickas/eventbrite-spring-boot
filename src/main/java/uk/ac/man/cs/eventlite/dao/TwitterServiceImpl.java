@@ -39,10 +39,10 @@ public class TwitterServiceImpl {
 		}
 	}
 
-	public void postATweet() throws TwitterException
+	public void postATweet(String tweet_text) throws TwitterException
 	{
 		Twitter twitter = tf.getInstance();
-		Status status = twitter.updateStatus("BAH");
+		Status status = twitter.updateStatus(tweet_text);
 		System.out.println("TwitterServiceImpl.postATweet()" + status.getText());
 	}
 }

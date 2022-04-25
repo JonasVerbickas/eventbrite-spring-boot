@@ -1,34 +1,39 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layouts/default}">
+
 <head>
   <title>Edit</title>
 </head>
+
 <body>
   <div layout:fragment="content">
     <h1>Choose to edit, still needs additional textboxes and validation</h1>
-    
+
     <form action="#" th:action="@{/events/edit/{num}(num=${id})}" th:object="${event_new}" method="post">
-    
-    
-        <label for="name">Event Name</label>
-        <input class="form-control" type="text" name="name" id="name" th:field="*{name}"  placeholder="Hello, %s!" autofocus="autofocus" />
 
-		<label for="date">Event Date</label>
-        <input class="form-control" type="date" name="date" id="date" th:field="*{date}" placeholder="Hello, %s!" autofocus="autofocus" />
-		
-		<label for="time">Event Time</label>
-        <input class="form-control" type="time" name="time" id="time" th:field="*{time}" placeholder="Hello, %s!" autofocus="autofocus" />
-		
-		<label for="venue">Event Venue </label>
-        <input class="form-control" type="text" name="venue" id="venue" th:field="*{venue}" placeholder="Hello, %s!" autofocus="autofocus" />
-		
 
-  
-    
+      <label for="name">Event Name</label>
+      <input class="form-control" type="text" name="name" id="name" th:field="*{name}" placeholder="Hello, %s!"
+        autofocus="autofocus" />
+
+      <label for="date">Event Date</label>
+      <input class="form-control" type="date" name="date" id="date" th:field="*{date}" placeholder="Hello, %s!"
+        autofocus="autofocus" />
+
+      <label for="time">Event Time</label>
+      <input class="form-control" type="time" name="time" id="time" th:field="*{time}" placeholder="Hello, %s!"
+        autofocus="autofocus" />
+
+      <label for="venue">Event Venue </label>
+      <input class="form-control" type="text" name="venue" id="venue" th:field="*{venue}" placeholder="Hello, %s!"
+        autofocus="autofocus" />
+
+
       <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
       <a class="btn btn-warning" role="button" href="/events"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
     </form>
   </div>
 </body>
+
 </html>
