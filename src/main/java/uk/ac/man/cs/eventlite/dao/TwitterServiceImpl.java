@@ -42,7 +42,7 @@ public class TwitterServiceImpl {
 	public void postATweet() throws TwitterException
 	{
 		Twitter twitter = tf.getInstance();
-		Status status = twitter.updateStatus("m e g t f v o m");
+		Status status = twitter.updateStatus("BAH");
 		System.out.println("TwitterServiceImpl.postATweet()" + status.getText());
 	}
 }

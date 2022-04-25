@@ -67,7 +67,7 @@ public class EventsController {
 
 		model.addAttribute("event", event);
 
-		return "events/show";
+		return "events/event_detail";
 	}
 
 	@GetMapping("/edit/{id}")
