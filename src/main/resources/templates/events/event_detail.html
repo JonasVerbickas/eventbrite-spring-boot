@@ -88,9 +88,10 @@
         </tr>
       </table>
     </div>
+    <br>
     <div id="twitter">
       <form th:action=" @{/events/post_tweet}" th:method="post" th:object="${tweet}">
-        <label for="tweet_text">Share the event!</label>
+        <label for="tweet_text" style="font-weight: bold;">Share the event!</label>
         <div class="form-group">
           <input class="form-control" type="text" id="tweetText" placeholder="Tweet text..." th:field="*{tweetText}"
             required>
@@ -99,7 +100,7 @@
       </form>
     </div>
 
-    <div id="map"></div>
+    <div id="map" style="width: 100%;"></div>
     <script th:inline="javascript">
 
       let latitude = /*[[${event.getVenue().getLatitude()}]]*/ null;

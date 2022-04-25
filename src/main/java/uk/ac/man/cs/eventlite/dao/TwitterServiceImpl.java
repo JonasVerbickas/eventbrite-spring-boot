@@ -1,12 +1,9 @@
 package uk.ac.man.cs.eventlite.dao;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import twitter4j.Query;
-import twitter4j.QueryResult;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
