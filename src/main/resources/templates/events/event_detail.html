@@ -24,7 +24,9 @@
 
 <body>
   <div layout:fragment="content">
-
+    
+    <!-- EVENT DETAILS -->
+    <br>
     <div id="event-name-and-details" style="border-radius: 10px; background-color:#EAECEF; padding: 24px;">
       <h1 th:text="${event.getName()}"></h1>
       <div id="details">
@@ -54,6 +56,9 @@
         </table>
       </div>
     </div>
+
+    <!-- EDIT/DELETE BUTTONS -->
+    <br>
     <div id="back-edit-delete-buttons">
       <div id="back-edit-row">
         <a class="btn btn-primary" role="button" th:href="@{/events}"><i class="fas fa-arrow-left"
@@ -62,7 +67,6 @@
         <a sec:authorize="isAuthenticated()" class="btn btn-primary" role="button"
           th:href="@{/events/edit/{num}(num=${id})}"><i class="fas fa-pen" aria-hidden="true"></i> Edit</a>
       </div>
-      <br>
       <table id="delete-button-row">
         <tr>
           <td sec:authorize="isAuthenticated()">
@@ -88,6 +92,8 @@
         </tr>
       </table>
     </div>
+    
+    <!-- TWITTER -->
     <br>
     <div id="twitter">
       <div th:switch="${prev_tweet_text.length() > 0}">
@@ -102,7 +108,6 @@
           </div>
         </div>
       </div>
-
       <form th:action="@{/events/{num}/post_tweet(num=${id})}" th:method="post" th:object="${tweet}">
         <label for="tweet_text" style="font-weight: bold;">Share the event!</label>
         <div class="form-group">
@@ -113,6 +118,8 @@
       </form>
     </div>
 
+    <!-- MAP -->
+    <br>
     <div id="map" style="width: 100%;"></div>
     <script th:inline="javascript">
 
