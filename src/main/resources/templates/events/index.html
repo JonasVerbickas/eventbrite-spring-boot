@@ -25,7 +25,9 @@
 <body>
   <div layout:fragment="content">
 
-    <form th:object="${event}" action="/events/" method="get">
+    <!-- SEARCH BAR -->
+    <br>
+    <form  action="/events/" method="get">
       <div class='row'>
         <input class="form-search mb-2 col-auto " type="search" name="search" th:value="${search}" id="search"
           placeholder="Event name" />
@@ -33,7 +35,7 @@
       </div>
     </form>
 
-     <h1>Upcoming events</h1>
+    <h1>Upcoming events</h1>
     <table class="table table-striped table-hover">
       <thead>
         <tr>
@@ -53,7 +55,6 @@
           </div>
         </tr>
     </table>
-
 
     <h1>Previous events</h1>
     <table class="table table-striped table-hover">
@@ -75,6 +76,7 @@
       </tr>
     </table>
 
+    <!-- ADD EVENT / VIEW VENUE buttons -->
     <div style="display: flex; flex-direction: row; justify-content: space-between">
       <a class="btn btn-primary" role="button" href="/events/new"><i class="fas fa-plus" aria-hidden="true"></i> Add
         event</a>
