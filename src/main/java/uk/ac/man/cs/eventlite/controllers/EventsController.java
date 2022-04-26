@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import twitter4j.TwitterException;
@@ -53,22 +55,23 @@ public class EventsController {
 	}
 
 	@GetMapping
-	public String getAllEvents(Model model) {
-
+	public String getAllEvents(Model model) throws TwitterException {
+		twitterService.getTimeline();
 		model.addAttribute("events", eventService.findAllByOrderByDateAscTimeAsc());
-
 		return "events/index";
 	}
 
+
+	// `prev_tweet_text` is used to display a text of the tweet made by the current user for this particular event
 	@GetMapping("/{id}")
-	public String event(@PathVariable("id") long id,
-			@RequestParam(value = "name", required = false, defaultValue = "World") String name, Model model) {
+	public String event(@PathVariable("id") long id, Model model, @ModelAttribute("prev_tweet_text") String prev_tweet_text)  {
 
 		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
 
 		model.addAttribute("event", event);
+		System.out.println("prev_tweet_text" + prev_tweet_text);
 		model.addAttribute("tweet", new Tweet());
-
+		
 		return "events/event_detail";
 	}
 
@@ -174,15 +177,16 @@ public class EventsController {
 		return "redirect:/events";
 	}
 
-	@PostMapping("/post_tweet")
-	public String postTweet(@ModelAttribute Tweet tweet) throws TwitterException {
+	@PostMapping("/{id}/post_tweet")
+	public ModelAndView postTweet(Model model, @PathVariable("id") long id, @ModelAttribute Tweet tweet) throws TwitterException {
 		twitterService.postATweet(tweet.getTweetText());
-		return "redirect:/events";
+		ModelMap modelMap = new ModelMap("prev_tweet_text", tweet.getTweetText());
+		return new ModelAndView("redirect:/events/" + id, modelMap);
 	}
 
 	@GetMapping("/get_timeline")
 	public String getTimeline() throws TwitterException {
-		 twitterService.getTimeline();
-		return "redirect:/events";
+		twitterService.getTimeline();
+		return "redirect:/events" ;
 	}
 }
