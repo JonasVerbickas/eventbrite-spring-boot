@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/default}">
+
+<head>
+  <title>An Event</title>
+  <link rel="shortcut icon" href="#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      height: 500px;
+      width: 66%;
+    }
+  </style>
+</head>
+
+<body>
+  <div layout:fragment="content">
+    
+    <!-- EVENT DETAILS -->
+    <br>
+    <div id="event-name-and-details" style="border-radius: 10px; background-color:#EAECEF; padding: 24px;">
+      <h1 th:text="${event.getName()}"></h1>
+      <div id="details">
+        <table>
+          <tr>
+            <th>DATE</th>
+            <th th:text="${event.getDate()}"></th>
+          </tr>
+          <tr>
+            <th>TIME</th>
+            <th th:text="${event.getTime()}"></th>
+          </tr>
+          <tr>
+            <th>VENUE</th>
+            <th><a th:href="@{/venues/{num}(num=${event.getVenue().getId()})}" th:text="${event.getVenue().getName()}"
+                </a>
+            </th>
+          </tr>
+          <tr>
+            <th>VENUE CAPACITY</th>
+            <th th:text="${event.getVenue().getCapacity()}"></th>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <th th:text="${event.getDescription()}"></th>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- EDIT/DELETE BUTTONS -->
+    <br>
+    <div id="back-edit-delete-buttons">
+      <div id="back-edit-row">
+        <a class="btn btn-primary" role="button" th:href="@{/events}"><i class="fas fa-arrow-left"
+            aria-hidden="true"></i>
+          Back</a>
+        <a sec:authorize="isAuthenticated()" class="btn btn-primary" role="button"
+          th:href="@{/events/edit/{num}(num=${id})}"><i class="fas fa-pen" aria-hidden="true"></i> Edit</a>
+      </div>
+      <table id="delete-button-row">
+        <tr>
+          <td sec:authorize="isAuthenticated()">
+            <form th:action="@{/events/{id}/delete(id=${id})}" th:method="delete">
+              <button type="submit" class="btn btn-danger btn-sm">Delete event</button>
+            </form>
+          </td>
+          <td sec:authorize="isAuthenticated()">
+            <form th:action="@{/events/{id}/delete/date(id=${id})}" th:method="put">
+              <button type="submit" class="btn btn-danger btn-sm">Delete date</button>
+            </form>
+          </td>
+          <td sec:authorize="isAuthenticated()">
+            <form th:action="@{/events/{id}/delete/time(id=${id})}" th:method="put">
+              <button type="submit" class="btn btn-danger btn-sm">Delete time</button>
+            </form>
+          </td>
+          <td sec:authorize="isAuthenticated()">
+            <form th:action="@{/events/{id}/delete/all_fields(id=${id})}" th:method="put">
+              <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
+            </form>
+          </td>
+        </tr>
+      </table>
+    </div>
+    
+    <!-- TWITTER -->
+    <br>
+    <div id="twitter">
+      <div th:switch="${prev_tweet_text.length() > 0}">
+        <div th:case="${true}" >
+          <div th:switch="${!prev_tweet_text.equals('ERROR')}">
+            <p th:case="${true}" style="background-color: #D3EDD9; border-radius: 10px; padding: 16px;">
+            Your tweet: <b th:text="${prev_tweet_text}"></b> was posted
+          </p>
+          <p th:case="${false}" style="background-color: #ff9090; border-radius: 10px; padding: 16px;">
+            FAILED TO POST YOUR TWEET! (Either it has been posted before OR something is wrong with twitter API)
+          </p>
+          </div>
+        </div>
+      </div>
+      <form th:action="@{/events/{num}/post_tweet(num=${id})}" th:method="post" th:object="${tweet}">
+        <label for="tweet_text" style="font-weight: bold;">Share the event!</label>
+        <div class="form-group">
+          <input class="form-control" type="text" id="tweetText" placeholder="Tweet text..." th:field="*{tweetText}"
+            required>
+          <button type="submit" class="btn btn-primary">Tweet</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- MAP -->
+    <br>
+    <div id="map" style="width: 100%;"></div>
+    <script th:inline="javascript">
+
+      let latitude = /*[[${event.getVenue().getLatitude()}]]*/ null;
+      let longitude = /*[[${event.getVenue().getLongitude()}]]*/ null;
+      let name = /*[[${event.getName()}]]*/ null;
+      let time = /*[[${event.getTime()}]]*/ null;
+
+      mapboxgl.accessToken = 'pk.eyJ1Ijoiam9uYXMtIiwiYSI6ImNsMTVkMXk1eTB2aWYzYm10Zzg0djFhMHcifQ.dNCKShUv6VxLMt5ZEgW45A';
+      const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [longitude, latitude],
+        zoom: 15
+      });
+      const marker = new mapboxgl.Marker()
+        .setLngLat([longitude, latitude])
+        .setPopup(new mapboxgl.Popup().setHTML("<h2>" + name + "</h2><br><p style=\"text-align: center;\">Starts at " + time + "</p>"))
+        .addTo(map);
+    </script>
+  </div>
+</body>
+
+</html>
