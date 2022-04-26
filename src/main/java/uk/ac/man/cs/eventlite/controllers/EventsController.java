@@ -95,8 +95,10 @@ public class EventsController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/")
-	public String getSearchedEvent(Model model, @RequestParam(value = "search", required = true) String name) {
+	public String getSearchedEvent(Model model, @RequestParam(value = "search", required = true) String name) throws TwitterException {
 		model.addAttribute("events", eventService.listEventByNameIgnoreCase(name));
+		List<Status> timeline = twitterService.getTimeline();
+		model.addAttribute("timeline", timeline);
 		return "events/index";
 	}
 

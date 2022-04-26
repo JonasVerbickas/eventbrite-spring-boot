@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -28,7 +29,7 @@ public class TwitterServiceImpl {
 	public List<Status> getTimeline() throws TwitterException
 	{
 		Twitter twitter = tf.getInstance();
-		List<Status> statuses = twitter.getUserTimeline();
+		List<Status> statuses = twitter.getUserTimeline(new Paging(1, 5));
 		System.out.println("Showing user timeline.");
 		for (Status status : statuses) {
 			System.out.println(status.getUser().getName() + ":" +
