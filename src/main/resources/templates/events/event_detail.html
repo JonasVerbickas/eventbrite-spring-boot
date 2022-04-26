@@ -91,9 +91,16 @@
     <br>
     <div id="twitter">
       <div th:switch="${prev_tweet_text.length() > 0}">
-        <p th:case="${true}" style="background-color: #D3EDD9; border-radius: 10px; padding: 16px;">
-          Your tweet: <b th:text="${prev_tweet_text}"></b> was posted
-        </p>
+        <div th:case="${true}" >
+          <div th:switch="${!prev_tweet_text.equals('ERROR')}">
+            <p th:case="${true}" style="background-color: #D3EDD9; border-radius: 10px; padding: 16px;">
+            Your tweet: <b th:text="${prev_tweet_text}"></b> was posted
+          </p>
+          <p th:case="${false}" style="background-color: #ff9090; border-radius: 10px; padding: 16px;">
+            FAILED TO POST YOUR TWEET! (Either it has been posted before OR something is wrong with twitter API)
+          </p>
+          </div>
+        </div>
       </div>
 
       <form th:action="@{/events/{num}/post_tweet(num=${id})}" th:method="post" th:object="${tweet}">

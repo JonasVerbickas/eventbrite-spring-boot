@@ -183,8 +183,14 @@ public class EventsController {
 	}
 
 	@PostMapping("/{id}/post_tweet")
-	public ModelAndView postTweet(Model model, @PathVariable("id") long id, @ModelAttribute Tweet tweet) throws TwitterException {
-		twitterService.postATweet(tweet.getTweetText());
+	public ModelAndView postTweet(Model model, @PathVariable("id") long id, @ModelAttribute Tweet tweet)  {
+		try {
+			twitterService.postATweet(tweet.getTweetText());
+			
+		} catch (TwitterException e) {
+			// THIS ONLY WORKS BECAUSE TWEET WITH TEXT "ERROR" WAS POSTED BEFORE
+			tweet.setTweetText("ERROR");
+		}
 		ModelMap modelMap = new ModelMap("prev_tweet_text", tweet.getTweetText());
 		return new ModelAndView("redirect:/events/" + id, modelMap);
 	}
