@@ -90,9 +90,11 @@
     </div>
     <br>
     <div id="twitter">
-      <p style="background-color: #D3EDD9; border-radius: 10px; padding: 16px;">
-        Your tweet: <b th:text="${prev_tweet_text}"></b> was posted
-      </p>
+      <div th:switch="${prev_tweet_text.length() > 0}">
+        <p th:case="${true}" style="background-color: #D3EDD9; border-radius: 10px; padding: 16px;">
+          Your tweet: <b th:text="${prev_tweet_text}"></b> was posted
+        </p>
+      </div>
 
       <form th:action="@{/events/{num}/post_tweet(num=${id})}" th:method="post" th:object="${tweet}">
         <label for="tweet_text" style="font-weight: bold;">Share the event!</label>

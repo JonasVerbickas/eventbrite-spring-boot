@@ -2,6 +2,7 @@ package uk.ac.man.cs.eventlite.controllers;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import twitter4j.Status;
 import twitter4j.TwitterException;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Tweet;
@@ -56,8 +58,9 @@ public class EventsController {
 
 	@GetMapping
 	public String getAllEvents(Model model) throws TwitterException {
-		twitterService.getTimeline();
 		model.addAttribute("events", eventService.findAllByOrderByDateAscTimeAsc());
+		List<Status> timeline = twitterService.getTimeline();
+		model.addAttribute("timeline", timeline);
 		return "events/index";
 	}
 

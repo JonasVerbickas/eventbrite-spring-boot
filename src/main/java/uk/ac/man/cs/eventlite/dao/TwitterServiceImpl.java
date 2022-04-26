@@ -25,15 +25,16 @@ public class TwitterServiceImpl {
 		tf = new TwitterFactory(cb.build());
 	}
 
-	public void getTimeline() throws TwitterException
+	public List<Status> getTimeline() throws TwitterException
 	{
 		Twitter twitter = tf.getInstance();
-		List<Status> statuses = twitter.getHomeTimeline();
-		System.out.println("Showing home timeline.");
+		List<Status> statuses = twitter.getUserTimeline();
+		System.out.println("Showing user timeline.");
 		for (Status status : statuses) {
 			System.out.println(status.getUser().getName() + ":" +
 					status.getText());
 		}
+		return statuses;
 	}
 
 	public void postATweet(String tweet_text) throws TwitterException
