@@ -2,6 +2,7 @@ package uk.ac.man.cs.eventlite.controllers;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -30,7 +31,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import twitter4j.Status;
-import twitter4j.TwitterException;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Tweet;
 import uk.ac.man.cs.eventlite.entities.Venue;
@@ -57,7 +57,7 @@ public class EventsController {
 	}
 
 	@GetMapping
-	public String getAllEvents(Model model) throws TwitterException {
+	public String getAllEvents(Model model)  {
 		model.addAttribute("events", eventService.findAllByOrderByDateAscNameAsc());
 		List<Status> timeline = twitterService.getTimeline();
 		model.addAttribute("timeline", timeline);
@@ -72,7 +72,6 @@ public class EventsController {
 		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
 
 		model.addAttribute("event", event);
-		System.out.println("prev_tweet_text" + prev_tweet_text);
 		model.addAttribute("tweet", new Tweet());
 		
 		return "events/event_detail";
@@ -95,7 +94,7 @@ public class EventsController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/")
-	public String getSearchedEvent(Model model, @RequestParam(value = "search", required = true) String name) throws TwitterException {
+	public String getSearchedEvent(Model model, @RequestParam(value = "search", required = true) String name){
 		model.addAttribute("events", eventService.findByNameContainingIgnoreCaseOrderByDateAscNameAsc(name));
 		List<Status> timeline = twitterService.getTimeline();
 		model.addAttribute("timeline", timeline);
@@ -184,20 +183,12 @@ public class EventsController {
 
 	@PostMapping("/{id}/post_tweet")
 	public ModelAndView postTweet(Model model, @PathVariable("id") long id, @ModelAttribute Tweet tweet)  {
-		try {
-			twitterService.postATweet(tweet.getTweetText());
-			
-		} catch (TwitterException e) {
-			// THIS ONLY WORKS BECAUSE TWEET WITH TEXT "ERROR" WAS POSTED BEFORE
+		boolean successful = twitterService.postATweet(tweet.getTweetText());
+		if (!successful)
+		{
 			tweet.setTweetText("ERROR");
 		}
 		ModelMap modelMap = new ModelMap("prev_tweet_text", tweet.getTweetText());
 		return new ModelAndView("redirect:/events/" + id, modelMap);
-	}
-
-	@GetMapping("/get_timeline")
-	public String getTimeline() throws TwitterException {
-		twitterService.getTimeline();
-		return "redirect:/events" ;
 	}
 }

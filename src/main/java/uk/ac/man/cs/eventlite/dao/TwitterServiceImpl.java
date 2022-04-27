@@ -1,5 +1,6 @@
 package uk.ac.man.cs.eventlite.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -26,22 +27,29 @@ public class TwitterServiceImpl {
 		tf = new TwitterFactory(cb.build());
 	}
 
-	public List<Status> getTimeline() throws TwitterException
+	public List<Status> getTimeline()
 	{
 		Twitter twitter = tf.getInstance();
-		List<Status> statuses = twitter.getUserTimeline(new Paging(1, 5));
-		System.out.println("Showing user timeline.");
-		for (Status status : statuses) {
-			System.out.println(status.getUser().getName() + ":" +
-					status.getText());
+		List<Status> statuses;
+		try {
+			statuses = twitter.getUserTimeline(new Paging(1, 5));
+		} catch (TwitterException e) {
+			statuses = new ArrayList<Status>();	
 		}
 		return statuses;
 	}
 
-	public void postATweet(String tweet_text) throws TwitterException
+	public boolean postATweet(String tweet_text)
 	{
 		Twitter twitter = tf.getInstance();
-		Status status = twitter.updateStatus(tweet_text);
-		System.out.println("TwitterServiceImpl.postATweet()" + status.getText());
+		try {
+			Status status = twitter.updateStatus(tweet_text);
+			System.out.println("Successfully tweeted: " + status.getText());
+			return true;
+		} catch (TwitterException e) {
+			// THIS ONLY WORKS BECAUSE TWEET WITH TEXT "ERROR" WAS POSTED BEFORE
+			System.out.println("Tweeting failed");
+			return false;
+		}
 	}
 }
