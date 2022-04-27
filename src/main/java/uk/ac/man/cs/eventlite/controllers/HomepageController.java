@@ -19,8 +19,15 @@ import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 import uk.ac.man.cs.eventlite.exceptions.VenueNotFoundException;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
 
 @Controller
 @RequestMapping(value = "/home", produces = { MediaType.TEXT_HTML_VALUE })
@@ -30,11 +37,20 @@ public class HomepageController{
 	private EventService eventService;
 	private VenueService venueService;
 	
+	
+	
 	@GetMapping
 	public String getAllEvents(Model model) {
 		
 		Collection<Event> collection = new ArrayList<Event>();
+		Collection<Venue> venueCollection = new ArrayList<Venue>();
+		Map<Venue, Integer> dic = new HashMap<Venue, Integer>();
+		
 		int counter = 0;
+		
+		Venue venue;
+		
+		int curEvents = 0;
 		
 		for(Event e: eventService.findAllByOrderByDateAscTimeAsc()) {
 			
@@ -47,9 +63,39 @@ public class HomepageController{
 				break;
 			}
 		}
-
+		
+		for(Event e: eventService.findAllByOrderByDateAscTimeAsc()) {
+			
+			venue = e.getVenue();
+			
+			if (!dic.containsKey(venue)) {
+				dic.put(venue, 0);
+			} else {
+				curEvents = dic.get(venue);
+				curEvents++;
+				dic.replace(venue, curEvents);
+			}
+			
+		}
+		
+		Map<Venue, Integer> sortedMapInDescending = dic.entrySet()
+				.stream()
+				.sorted(Collections.reverseOrder(Entry.comparingByValue()))
+				.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue(),
+						(entry1, entry2) -> entry2, LinkedHashMap::new));
+		
+		
+		counter = 0;
+		
+		for (Venue vv: sortedMapInDescending.keySet()) {
+			venueCollection.add(vv);
+		}
 		model.addAttribute("events", collection);
+		model.addAttribute("venues", venueCollection);
 		
 		return "home/homepage";
 	}
+
+	
+	
 }

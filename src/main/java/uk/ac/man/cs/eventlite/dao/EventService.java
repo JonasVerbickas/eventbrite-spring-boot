@@ -18,7 +18,6 @@ public interface EventService {
 	public void save(Event entity);
 
 	public void deleteById(long id);
-	
 
 	public Iterable<Event> listEventByNameIgnoreCase(String name);
 
