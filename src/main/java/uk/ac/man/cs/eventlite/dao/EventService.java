@@ -12,13 +12,13 @@ public interface EventService {
 	public Iterable<Event> findAll();
 
 	public Iterable<Event> findAllByOrderByDateAscNameAsc();
-	
+
+
 	public Optional<Event> findById(long id);
 	
 	public void save(Event entity);
 
 	public void deleteById(long id);
-	
 
 	public Iterable<Event> findByNameContainingIgnoreCaseOrderByDateAscNameAsc(String name);
 
