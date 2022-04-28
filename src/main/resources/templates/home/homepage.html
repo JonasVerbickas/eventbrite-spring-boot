@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/default}">
+
 <head>
   <title>Homepage</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -12,7 +14,7 @@
 <body>
   <div layout:fragment="content">
     <table class="table table-striped table-hover">
-    <br>
+      <br>
       <thead>
         <tr>
           <th><i class="fas fa-bolt"></i> Event</th>
@@ -31,9 +33,11 @@
         </div>
       </tr>
     </table>
-    
-    <table class="table table-striped table-hover">
+    <a class="btn btn-primary" role="button" href="/events">View all Events</a>
     <br>
+
+    <table class="table table-striped table-hover">
+      <br>
       <thead>
         <tr>
           <th><i class="fas fa-home"></i> Venue</th>
@@ -43,18 +47,20 @@
       </thead>
       <h1>Three venues with most events</h1>
       <tr th:each="v : ${venues}">
-      	<div>
+        <div>
           <td><a th:href="@{/venues/{num}(num=${v.id})}" th:text="${v.getName()}"></a></td>
           <td th:text="${v.getCapacity()}"></td>
           <td th:text="${v.getAddress()}"></td>
-         </div>
-       </tr>
+        </div>
+      </tr>
     </table>
-    
-   </div>
+    <a class="btn btn-primary" role="button" href="/venues">View all Venues</a>
+
+  </div>
 
   <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
   <script type="text/javascript" src="/webjars/popper.js/umd/popper.min.js"></script>
   <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </body>
+
 </html>

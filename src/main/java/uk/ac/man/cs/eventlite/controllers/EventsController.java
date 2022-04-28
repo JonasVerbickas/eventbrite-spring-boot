@@ -181,9 +181,6 @@ public class EventsController {
 		 eventService.save(eventToEdit);
 		
 		 
-		 
-		 
-		 
 		return "redirect:/events";
 	}
 

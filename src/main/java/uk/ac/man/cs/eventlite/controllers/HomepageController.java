@@ -16,8 +16,6 @@ import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
-import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
-import uk.ac.man.cs.eventlite.exceptions.VenueNotFoundException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,7 +28,7 @@ import java.util.ArrayList;
 
 
 @Controller
-@RequestMapping(value = "/home", produces = { MediaType.TEXT_HTML_VALUE })
+@RequestMapping(value = "", produces = { MediaType.TEXT_HTML_VALUE })
 public class HomepageController{
 	
 	@Autowired
@@ -95,7 +93,4 @@ public class HomepageController{
 		
 		return "home/homepage";
 	}
-
-	
-	
 }
