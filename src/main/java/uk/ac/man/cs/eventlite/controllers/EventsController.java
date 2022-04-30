@@ -58,7 +58,28 @@ public class EventsController {
 
 	@GetMapping
 	public String getAllEvents(Model model)  {
-		model.addAttribute("events", eventService.findAllByOrderByDateAscNameAsc());
+		Iterable<Event> events = eventService.findAllByOrderByDateAscNameAsc();
+		model.addAttribute("events", events);
+		List<Event> past_events = new ArrayList<Event>();
+		List<Event> future_events = new ArrayList<Event>();
+
+		LocalDate now = LocalDate.now();
+		System.out.println("NOW" + now);
+		for (Event e : events) {
+			if(e.getDate() == null)
+			{
+				past_events.add(e);
+			}
+			else if(e.getDate().compareTo(now) < 0)
+			{
+				past_events.add(e);
+			}
+			else{
+				future_events.add(e);
+			}
+		}
+		model.addAttribute("past_events", past_events);
+		model.addAttribute("future_events", future_events);
 		List<Status> timeline = twitterService.getTimeline();
 		model.addAttribute("timeline", timeline);
 		return "events/index";

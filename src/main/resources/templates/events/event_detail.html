@@ -31,15 +31,10 @@
     <div class="detail-box">
       <div style="display: flex; flex-direction: row; align-items: center;">
         <h1 th:text="${event.getName()}"></h1>
-          <div sec:authorize="isAuthenticated()">
-            <form th:action="@{/events/{id}/delete(id=${id})}" th:method="delete">
-              <button type="submit" class="btn btn-danger btn-sm">Delete event</button>
-            </form>
-          </div>
-          <div sec:authorize="isAuthenticated()">
-            <form th:action="@{/events/{id}/delete/all_fields(id=${id})}" th:method="put">
-              <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
-            </form>
+        <div sec:authorize="isAuthenticated()">
+          <form th:action="@{/events/{id}/delete(id=${id})}" th:method="delete">
+            <button type="submit" class="btn btn-danger btn-sm">Delete event</button>
+          </form>
         </div>
       </div>
       <div>
@@ -77,9 +72,14 @@
           </tr>
         </table>
       </div>
+      <div sec:authorize="isAuthenticated()">
+        <form th:action="@{/events/{id}/delete/all_fields(id=${id})}" th:method="put">
+          <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
+        </form>
+      </div>
     </div>
 
-    <!-- EDIT/DELETE BUTTONS -->
+    <!-- EDIT/BACK BUTTONS -->
     <br>
     <div id="back-edit-delete-buttons">
       <div id="back-edit-row">
