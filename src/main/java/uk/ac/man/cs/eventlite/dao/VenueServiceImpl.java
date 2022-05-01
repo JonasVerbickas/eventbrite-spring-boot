@@ -47,7 +47,7 @@ public class VenueServiceImpl implements VenueService {
 	}
 
 	@Override
-	public void save(Venue venue) {
+	public Venue save(Venue venue) {
 		MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
 				.accessToken("pk.eyJ1Ijoiam9uYXMtIiwiYSI6ImNsMTVkMXk1eTB2aWYzYm10Zzg0djFhMHcifQ.dNCKShUv6VxLMt5ZEgW45A")
 				.query(venue.getAddress())
@@ -83,7 +83,7 @@ public class VenueServiceImpl implements VenueService {
 		} catch (InterruptedException e) {
 			System.out.println("Sleeping Thread:" + e);
 		}
-		venueRepository.save(venue);
+		return venueRepository.save(venue);
 	}
 
 	@Override
