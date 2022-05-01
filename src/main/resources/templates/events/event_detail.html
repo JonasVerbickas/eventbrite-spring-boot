@@ -81,14 +81,9 @@
 
     <!-- EDIT/BACK BUTTONS -->
     <br>
-    <div id="back-edit-delete-buttons">
-      <div id="back-edit-row">
-        <a class="btn btn-primary" role="button" th:href="@{/events}"><i class="fas fa-arrow-left"
-            aria-hidden="true"></i>
-          Back</a>
+    <div id="edit-button-row">
         <a sec:authorize="isAuthenticated()" class="btn btn-primary" role="button"
           th:href="@{/events/edit/{num}(num=${id})}"><i class="fas fa-pen" aria-hidden="true"></i> Edit</a>
-      </div>
     </div>
 
     <!-- TWITTER -->
