@@ -138,8 +138,7 @@ public class EventsController {
 			return "events/new";
 		}
 		
-		event.setDate(LocalDate.parse("2012-02-11"));
-		event.setTime(LocalTime.parse("12:20:20"));
+
 		Venue v1 = new Venue();
 		v1.setId(1);
 		event.setVenue(v1);
