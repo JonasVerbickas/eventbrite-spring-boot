@@ -108,7 +108,7 @@ public class VenuesController {
 		}
 
 		venueService.save(venue);
-		redirectAttrs.addFlashAttribute("ok_message", "New venue added.");
+		redirectAttrs.addFlashAttribute("ok_message", "Venue added");
 
 		return "redirect:/venues";
 	}
