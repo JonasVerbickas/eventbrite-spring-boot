@@ -13,7 +13,7 @@ public interface VenueService {
 
 	public Iterable<Venue> findAllByOrderByNameAsc();
 	
-	public void save(Venue venue);
+	public Venue save(Venue venue);
 	
 	public Optional<Venue> findById(long i);
 
