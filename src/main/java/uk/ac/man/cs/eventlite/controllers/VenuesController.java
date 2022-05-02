@@ -104,7 +104,7 @@ public class VenuesController {
 
 		if (errors.hasErrors()) {
 			model.addAttribute("venue");
-			return "venue/addVenue";
+			return "venues/addVenue";
 		}
 
 		venueService.save(venue);
