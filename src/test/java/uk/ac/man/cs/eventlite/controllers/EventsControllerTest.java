@@ -65,17 +65,14 @@ public class EventsControllerTest {
 
 	@Test
 	public void getIndexWithEvents() throws Exception {
-		when(venue.getName()).thenReturn("Kilburn Building");
-		when(venueService.findAll()).thenReturn(Collections.<Venue>singletonList(venue));
-
-		when(event.getVenue().getId()).thenReturn(1L);
-		when(eventService.findAll()).thenReturn(Collections.<Event>singletonList(event));
-
+		// JavaScript map crashes with mocked Event/Venues
+		Event e = new Event();
+		Venue v = new Venue();
+		e.setVenue(v);
+		when(eventService.findAllByOrderByDateAscNameAsc()).thenReturn(Collections.<Event>singletonList(e));
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
 				.andExpect(view().name("events/index")).andExpect(handler().methodName("getAllEvents"));
-
-		verify(eventService).findAll();
-		verify(venueService).findAll();
+		verify(eventService).findAllByOrderByDateAscNameAsc();
 	}
 
 	@Test

@@ -88,7 +88,7 @@ public class EventsController {
 
 	// `prev_tweet_text` is used to display a text of the tweet made by the current user for this particular event
 	@GetMapping("/{id}")
-	public String event(@PathVariable("id") long id, Model model, @ModelAttribute("prev_tweet_text") String prev_tweet_text)  {
+	public String getEvent(@PathVariable("id") long id, Model model, @ModelAttribute("prev_tweet_text") String prev_tweet_text)  {
 
 		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
 
