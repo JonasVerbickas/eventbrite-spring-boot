@@ -97,6 +97,11 @@ public class VenueServiceImpl implements VenueService {
 	}
 
 	@Override
+	public void delete(Venue venue) {
+		venueRepository.delete(venue);
+	}
+
+	@Override
 	public void deleteById(long id) {
 		venueRepository.deleteById(id);
 		

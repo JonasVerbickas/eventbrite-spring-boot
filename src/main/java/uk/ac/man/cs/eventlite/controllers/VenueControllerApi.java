@@ -71,7 +71,16 @@ public class VenueControllerApi {
 		return ResponseEntity.created(entity.getRequiredLink(IanaLinkRelations.SELF).toUri()).build();
 	}
 	
-	
+	@DeleteMapping(path="{id}")
+	public ResponseEntity<Void> deleteBookById(@PathVariable long id) {
+	    try {
+	        venueService.deleteById(id);
+	        return ResponseEntity.ok().build();
+	    } catch (ResourceNotFoundException ex) {
+	        return ResponseEntity.notFound().build();
+	    }
+	}
+
 
 	@GetMapping("/{id}")
 	public EntityModel<Venue> getEvent(@PathVariable("id") long id) {
