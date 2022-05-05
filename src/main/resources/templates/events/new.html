@@ -10,7 +10,7 @@
     <form action="#" th:action="@{/events}" th:object="${event}" method="post">
       <div class="form-group" th:classappend="${#fields.hasErrors('name')}? has-error">
         <label for="name">Event Name</label>
-        <input class="form-control" type="text" name="name" id="name" placeholder=" " autofocus="autofocus" />
+        <input class="form-control" type="text" name="name" id="name" placeholder=" " autofocus="autofocus" maxlength="256" />
         <label for="date">Event Date</label>
         <input class="form-control" type="date" name="date" id="date" placeholder=" " autofocus="autofocus" />
         <label for="time">Event Time</label>
@@ -18,14 +18,13 @@
    <div class="form-group">
     <label for="eventVenue">Event Venue:</label>
     <select class="form-control" id="venue" name="venue">
-     <option th:each="venue : ${venues}" th:value="${venue.id}" 
-      th:text="${{venue.name}}" th:selected="(${venue.id} == ${{event.venue.id}})">
-      Venue Name
+      <option th:each="venue : ${venues}" th:value="${venue.getId()}" th:text="${venue.getName()}"></option>
      </option>
     </select>
-
-
-
+    
+    <label for="description">Description</label>
+        <input class="form-control" type="text" name="description" id="description" placeholder=" " autofocus="autofocus" maxlength="300" />
+    
       </div>
     
       <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
