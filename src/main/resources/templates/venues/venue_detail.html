@@ -32,10 +32,13 @@
     <br>
     <table>
       <tr>
-        <td sec:authorize="isAuthenticated()">
+        <div sec:authorize="isAuthenticated()">
           <form th:action="@{/venues/{id}/delete(id=${id})}" th:method="delete">
             <button type="submit" class="btn btn-danger btn-sm">Delete venue</button>
           </form>
+        </div>
+
+		 </td>
         </td>
 
         <td sec:authorize="isAuthenticated()">
