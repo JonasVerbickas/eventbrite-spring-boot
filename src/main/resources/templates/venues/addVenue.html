@@ -10,11 +10,11 @@
     <form action="#" th:action="@{/venues}" th:object="${venue}" method="post">
       <div class="form-group" th:classappend="${#fields.hasErrors('name')}? has-error">
         <label for="name">Venue name</label>
-        <input class="form-control" type="text" name="name" id="name" placeholder=" " autofocus="autofocus" />
+        <input class="form-control" type="text" name="name" id="name" placeholder=" " autofocus="autofocus" maxlength="256" />
         <label for="capacity">Capacity</label>
         <input class="form-control" type="number" name="capacity" id="capacity" placeholder=" " autofocus="autofocus" />
         <label for="address">Address</label>
-        <input class="form-control" type="txt" name="address" id="address" placeholder=" " autofocus="autofocus" />
+        <input class="form-control" type="txt" name="address" id="address" placeholder=" " autofocus="autofocus" maxlength="300" />
         
       <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i>Save</button>
       <a class="btn btn-warning" role="button" href="/events"><i class="fas fa-ban" aria-hidden="true"></i>Cancel</a>
