@@ -46,6 +46,11 @@ public class EventServiceImpl implements EventService {
 		 return eventRepository.findById(id);
 		 
 	}
+	
+	@Override
+	public void delete(Event event) {
+		eventRepository.delete(event);
+	}
 
 	@Override
 	public void deleteById(long id)
