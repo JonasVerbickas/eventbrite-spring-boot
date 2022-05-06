@@ -8,15 +8,14 @@
 
 <body>
   <div layout:fragment="content">
-    <h1>Choose to edit, still needs additional textboxes and validation</h1>
+    <h1>Choose to edit, still needs validation</h1>
 
-    <form action="#" th:action="@{/events/edit/{num}(num=${id})}" th:object="${event_new}" method="post">
+    <form action="#" th:action="@{/events/edit/{num}(num=${event_old.id})}" th:object="${event_new}" method="post">
 
-
-      <label for="name">Event Name</label>
-      <input class="form-control" type="text" name="name" id="name" th:field="*{name}" placeholder="Hello, %s!"
-        autofocus="autofocus" />
-
+	  <label for="name">Event Name</label>
+      <input class="form-control" type="text" name="name" th:value=${event_old.name}  id="name" th:field="*{name}" 
+        autofocus="autofocus" required/>
+        
       <label for="date">Event Date</label>
       <input class="form-control" type="date" name="date" id="date" th:field="*{date}" placeholder="Hello, %s!"
         autofocus="autofocus" />
@@ -24,10 +23,18 @@
       <label for="time">Event Time</label>
       <input class="form-control" type="time" name="time" id="time" th:field="*{time}" placeholder="Hello, %s!"
         autofocus="autofocus" />
+        
+       <label for="time">Event Description</label>
+      <input class="form-control" type="text" name="time" id="time" th:field="*{description}" placeholder="Enter Description"
+        autofocus="autofocus" /> 
 
       <label for="venue">Event Venue </label>
-      <input class="form-control" type="text" name="venue" id="venue" th:field="*{venue}" placeholder="Hello, %s!"
-        autofocus="autofocus" />
+      <select class="form-control" name="venue" th:field="*{venue}" id="venue">
+        <div th:each="v : ${venues}">
+        <option th:value=${v.id} th:text=${v.name}> </option>
+        </div> 
+        </select>
+      
 
 
       <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
