@@ -25,6 +25,7 @@
           <th><i class="fas fa-home"></i> Venue</th>
           <th><i class="fas fa-bolt"></i> Capacity</th>
           <th><i class="fas fa-map-marker-alt"></i> Address</th>
+          <th><i class="post code"></i> Post code</th>
         </tr>
       </thead>
       <h1>All venues</h1>
@@ -32,7 +33,8 @@
         <tr th:each="v : ${venues}">
           <td><a th:href="@{/venues/{num}(num=${v.id})}" th:text="${v.getName()}"></a></td>
           <td th:text="${v.getCapacity()}"></td>
-          <td th:text="${v.getAddress()}"></td>          
+          <td th:text="${v.getAddress()}"></td>
+          <td th:text="${v.getPostcode()}"></td>             
         </tr>
       </tbody>
     </table>
