@@ -14,6 +14,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -89,7 +90,8 @@ public class VenueControllerApi {
 	@GetMapping("/{id}")
 	public EntityModel<Venue> getEvent(@PathVariable("id") long id) {
 		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
-		return venueAssembler.toModel(venue);
+		return venueAssembler.toModel(venue).add(linkTo(methodOn(VenueControllerApi.class).getAllEvents(id)).withRel("events"))
+				.add(linkTo(methodOn(VenueControllerApi.class).getNext3Event(id)).withRel("next3events"));
 	}
 	
 	@GetMapping("/{id}/next3events")
