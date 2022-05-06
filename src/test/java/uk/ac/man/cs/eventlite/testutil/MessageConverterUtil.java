@@ -38,5 +38,7 @@ public class MessageConverterUtil implements InitializingBean {
 		log.info("Initializing message converter list for unit testing");
 	 }
 
-
+	public static HttpMessageConverter<?>[] getMessageConverters() {
+		return converters;
+	}
 }
