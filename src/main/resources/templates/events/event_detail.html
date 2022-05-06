@@ -108,7 +108,7 @@
       <form th:action="@{/events/{num}/post_tweet(num=${id})}" th:method="post" th:object="${tweet}">
         <label for="tweet_text" style="font-weight: bold;">Share the event!</label>
         <div class="form-group">
-          <input class="form-control" type="text" id="tweetText" placeholder="Tweet text..." th:field="*{tweetText}"
+          <input class="form-control" type="text" id="tweetText" th:placeholder="${event.name}" th:field="*{tweetText}"
             required>
           <button type="submit" class="btn btn-primary">Tweet</button>
         </div>
