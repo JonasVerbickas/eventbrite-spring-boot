@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -14,19 +14,19 @@ public class Venue {
     @GeneratedValue
     private long id;
 
-    @NotEmpty(message="The venue name cannot be empty.")
+    @NotBlank(message = "the venue name cannot be empty!")
     @Size(max=50, message="The venue name can not exceed 50 characters.")
     private String name;
 
-    @NotEmpty(message="The venue capacity cannot be empty.")
-    @Min(value=5, message="The venue can not have a capacity less than 5 people.")
+//    @NotBlank(message = "the venue capacity cannot be empty!")
+//    @Min(value=5, message="The venue can not have a capacity less than 5 people.")
     private int capacity;
 
-    @NotEmpty(message="The venue address cannot be empty.")
+    @NotBlank(message = "the venue address cannot be empty!")
     @Size(max=500, message="The venue address can not exceed 500 characters.")
     private String address = "-";
 
-    @NotEmpty(message="The venue postcode cannot be empty.")
+    @NotBlank(message = "the venue postcode cannot be empty!")
     @Size(max=7, message="The venue postcode must be in the format XXX XXX.")
     private String postcode;
 
@@ -65,8 +65,13 @@ public class Venue {
 		this.capacity = capacity;
 	}
 
+	public String getAddresswithPostcode() {
+		String addrWithZip = address + this.getPostcode();
+		return addrWithZip;
+	}
+	
 	public String getAddress() {
-		return address;
+		return this.address;
 	}
 
 	public void setAddress(String address) {
