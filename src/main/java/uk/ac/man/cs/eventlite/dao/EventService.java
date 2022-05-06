@@ -4,6 +4,7 @@ import java.util.Optional;
 
 
 import uk.ac.man.cs.eventlite.entities.Event;
+import uk.ac.man.cs.eventlite.entities.Venue;
 
 public interface EventService {
 
@@ -12,7 +13,8 @@ public interface EventService {
 	public Iterable<Event> findAll();
 
 	public Iterable<Event> findAllByOrderByDateAscNameAsc();
-
+	
+	public Iterable<Event> findAllByVenueOrderByDateAscNameAsc(Venue venue);
 
 	public Optional<Event> findById(long id);
 	
