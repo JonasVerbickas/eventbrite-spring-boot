@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/default}">
+
+<head>
+  <title>Edit Venue</title>
+</head>
+
+<body>
+  <div layout:fragment="content">
+    <h1>Choose to edit, still needs additional textboxes and validation</h1>
+
+    <form action="#" th:action="@{/venues/edit/{num}(num=${venue_old.id})}" th:object="${venue_new}" method="post">
+
+        
+      <label for="date">Venue Name</label>
+      <input class="form-control" type="text" name="date" id="date" th:field="*{name}" placeholder="Hello, %s!"
+        autofocus="autofocus" />
+
+      <label for="time">Venue Address</label>
+      <input class="form-control" type="text" name="time" id="time" th:field="*{address}" placeholder="Hello, %s!"
+        autofocus="autofocus" />
+        
+       <label for="time">Venue Capacity</label>
+      <input class="form-control" type="text" name="time" id="time" th:field="*{capacity}"
+        autofocus="autofocus" /> 
+
+
+
+      <button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
+      <a class="btn btn-warning" role="button" href="/events"><i class="fas fa-ban" aria-hidden="true"></i> Cancel</a>
+    </form>
+  </div>
+</body>
+
+</html>

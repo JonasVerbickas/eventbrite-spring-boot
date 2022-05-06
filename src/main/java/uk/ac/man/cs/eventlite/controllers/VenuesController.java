@@ -6,14 +6,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import uk.ac.man.cs.eventlite.dao.VenueService;
+import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
+import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 import uk.ac.man.cs.eventlite.exceptions.VenueNotFoundException;
 
 @Controller
@@ -44,8 +48,14 @@ public class VenuesController {
 	}
 	
 	@GetMapping("/edit/{id}")
-	public String newGreeting(Model model) {
-		return "venues/edit";
+	public String forDropDownVenuesinEdit(Model model, @PathVariable("id") long id) {
+		Venue venue = venueService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
+
+		model.addAttribute("venue_old", venue);
+		model.addAttribute("venue_new", new Venue());
+		model.addAttribute("venues", venueService.findAll());
+
+		return "venues/editVenue";
 	}
 	
 	@DeleteMapping("/{id}/delete")
@@ -86,6 +96,27 @@ public class VenuesController {
 	public String getSearchedVenue(Model model, @RequestParam (value = "search", required = true) String name) {
 		model.addAttribute("venues", venueService.listVenueByNameIgnoreCase(name));
 		return "venues/index";
+	}
+	
+	
+	@PostMapping("/edit/{id}")
+	public String updateById(Model model, @PathVariable("id") long id, @ModelAttribute Venue venue_in) {
+		model.addAttribute("venue_new", venue_in);
+		
+		Venue venueToEdit = venueService.findById(id).get();
+		if (venue_in.getName()!= null) {
+			venueToEdit.setName(venue_in.getName());
+		}
+		if (venue_in.getAddress() != null) {
+			venueToEdit.setAddress(venue_in.getAddress());
+		}
+
+		
+		venueToEdit.setCapacity(venue_in.getCapacity());
+	
+		venueService.save(venueToEdit);
+
+		return "redirect:/venues";
 	}
 	
 

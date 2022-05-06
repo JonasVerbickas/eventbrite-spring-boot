@@ -1,6 +1,6 @@
 package uk.ac.man.cs.eventlite.controllers;
 
-import java.time.LocalDate;
+import java.time.LocalDate; 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +35,7 @@ import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Tweet;
 import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.dao.EventService;
+import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.dao.TwitterServiceImpl;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
@@ -44,6 +45,8 @@ public class EventsController {
 
 	@Autowired
 	private EventService eventService;
+	@Autowired
+	private VenueService venueService;
 
 	@Autowired
 	private TwitterServiceImpl twitterService;
@@ -81,8 +84,9 @@ public class EventsController {
 	public String updatePageRedirect(Model model, @PathVariable("id") long id) {
 		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
 
-		model.addAttribute("id", event.getId());
+		model.addAttribute("event_old", event);
 		model.addAttribute("event_new", new Event());
+		model.addAttribute("venues", venueService.findAll());
 
 		return "events/edit";
 	}
@@ -161,8 +165,12 @@ public class EventsController {
 	@PostMapping("/edit/{id}")
 	public String updateById(Model model, @PathVariable("id") long id, @ModelAttribute Event event_in) {
 		model.addAttribute("event_new", event_in);
+		
+		
 		Event eventToEdit = eventService.findById(id).get();
-		eventToEdit.setName(event_in.getName());
+		if (event_in.getName()!= null) {
+			eventToEdit.setName(event_in.getName());
+		}
 		if (event_in.getDate() != null) {
 			eventToEdit.setDate(event_in.getDate());
 		}
@@ -176,6 +184,11 @@ public class EventsController {
 			eventToEdit.setVenue(event_in.getVenue());
 		}
 
+		if (event_in.getDescription() != null) {
+
+			eventToEdit.setDescription(event_in.getDescription());
+		}
+	
 		eventService.save(eventToEdit);
 
 		return "redirect:/events";
