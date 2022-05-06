@@ -3,26 +3,32 @@ package uk.ac.man.cs.eventlite.entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Entity
 public class Venue {
-	@Id
-	@GeneratedValue
-	private long id;
-	@NotBlank(message = "Cannot be empty!")
-	@Size(max = 256, message = "the length of the venue's name should not be more than 256 characters")
-	private String name;
+    @Id
+    @GeneratedValue
+    private long id;
 
-	private String address = "-";
-	
-	@Min(value = 1, message = "this venue cannot be 0 capacity")
-	private int capacity;
 
-	private double longitude;
-	private double latitude;
+    private String name;
+
+
+    private int capacity;
+
+
+    private String address = "-";
+
+
+    private String postcode;
+
+    private double latitude;
+    private double longitude;
+
 
 	public Venue() {
 	}
@@ -82,4 +88,15 @@ public class Venue {
 		System.out.println("setLongitude:"+latitude+" for " + this.getName());
 		this.longitude = longitude;
 	}
+	
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+	
+	
 }
