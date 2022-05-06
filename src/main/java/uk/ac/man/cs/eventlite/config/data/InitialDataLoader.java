@@ -37,7 +37,7 @@ public class InitialDataLoader {
 			Venue vA = new Venue();
 			Venue vB = new Venue();
 			Venue vC = new Venue();
-			Venue vD = new Venue();
+			
 
 
 			if (venueService.count() > 0) {
@@ -51,17 +51,20 @@ public class InitialDataLoader {
 					
 					vA.setName("Engineering Building");
 					vA.setCapacity(300);
-					vA.setAddress("Booth St E, M13");
+					vA.setAddress("Booth St E");
+					vA.setPostcode("M13")		;			
 					venueService.save(vA);		
 					
 					vB .setName("Main Library");
 					vB.setCapacity(100);
-					vB.setAddress("Oxford Road, M13 9PP");
+					vB.setAddress("Oxford Road");
+					vB.setPostcode("M13 9PP");
 					venueService.save(vB);
 
 					vC .setName("Manchester Academy");
 					vC.setCapacity(200);
-					vC.setAddress("Manchester Students Union, OXford Rd, M13 9PR");
+					vC.setAddress("Manchester Students Union, OXford Rd");
+					vC.setPostcode("M13 9PR");
 					venueService.save(vC);
 			/***	}***/
 			} // Build and save initial venues here.
