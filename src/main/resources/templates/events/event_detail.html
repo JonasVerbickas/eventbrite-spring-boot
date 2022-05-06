@@ -31,11 +31,6 @@
     <div class="detail-box">
       <div style="display: flex; flex-direction: row; align-items: center;">
         <h1 th:text="${event.getName()}"></h1>
-        <div sec:authorize="isAuthenticated()">
-          <form th:action="@{/events/{id}/delete(id=${id})}" th:method="delete">
-            <button type="submit" class="btn btn-danger btn-sm">Delete event</button>
-          </form>
-        </div>
       </div>
       <div>
         <table class="table">
@@ -70,20 +65,29 @@
             <td>Description</td>
             <td th:text="${event.getDescription()}"></td>
           </tr>
+          <tr>
+            <td sec:authorize="isAuthenticated()">
+              <form th:action="@{/events/{id}/delete(id=${id})}" th:method="delete">
+                <button type="submit" class="btn btn-danger btn-sm">Delete event</button>
+              </form>
+            </td>
+            <td></td>
+            <td sec:authorize="isAuthenticated()">
+              <form th:action="@{/events/{id}/delete/all_fields(id=${id})}" th:method="put">
+                <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
+              </form>
+            </td>
+          </tr>
         </table>
       </div>
-      <div sec:authorize="isAuthenticated()">
-        <form th:action="@{/events/{id}/delete/all_fields(id=${id})}" th:method="put">
-          <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
-        </form>
-      </div>
+
     </div>
 
     <!-- EDIT/BACK BUTTONS -->
     <br>
     <div id="edit-button-row">
-        <a sec:authorize="isAuthenticated()" class="btn btn-primary" role="button"
-          th:href="@{/events/edit/{num}(num=${id})}"><i class="fas fa-pen" aria-hidden="true"></i> Edit</a>
+      <a sec:authorize="isAuthenticated()" class="btn btn-primary" role="button"
+        th:href="@{/events/edit/{num}(num=${id})}"><i class="fas fa-pen" aria-hidden="true"></i> Edit</a>
     </div>
 
     <!-- TWITTER -->

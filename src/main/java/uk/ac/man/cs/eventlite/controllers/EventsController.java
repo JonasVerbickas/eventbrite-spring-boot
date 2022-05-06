@@ -172,7 +172,7 @@ public class EventsController {
 
 		if (errors.hasErrors()) {
 			model.addAttribute("event");
-			return "event/addEvent";
+			return "event/new";
 		}
 		model.addAttribute("venue", venueService.findAll());
 
