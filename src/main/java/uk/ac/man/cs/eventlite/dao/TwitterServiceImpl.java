@@ -24,6 +24,7 @@ public class TwitterServiceImpl {
 				.setOAuthConsumerSecret("1SvT0wETlgwM8tly2DomnemHpLgAKlOp2eZnHvSyuordKVMsmD")
 				.setOAuthAccessToken("1510558622031523844-hZujotZLVxhAcPenNYCVjb9gNjFsj3")
 				.setOAuthAccessTokenSecret("BfWp4a90YwgDu3HydccJ4en6SSfwpJiI2nggIwu3RzIMP");
+		
 		tf = new TwitterFactory(cb.build());
 	}
 

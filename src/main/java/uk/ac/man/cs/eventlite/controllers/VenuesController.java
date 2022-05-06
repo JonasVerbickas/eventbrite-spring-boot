@@ -77,6 +77,14 @@ public class VenuesController {
 		venueService.save(v);
 		return "redirect:/venues/"+id;
 	}
+	
+	@PutMapping("/{id}/delete/postcode")
+	public String deleteDate2(@PathVariable("id") long id) {
+		Venue v = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));;
+		v.setPostcode(null);
+		venueService.save(v);
+		return "redirect:/venues/"+id;
+	}
 
 	@PutMapping("/{id}/delete/all_fields")
 	public String deleteAllFields(@PathVariable("id") long id) {
@@ -84,6 +92,7 @@ public class VenuesController {
 		v.setCapacity(0);
 		v.setName(null);
 		v.setAddress(null);
+		v.setPostcode(null);
 		// this does not work e.setVenue(null);
 		venueService.save(v);
 		return "redirect:/venues/"+id;

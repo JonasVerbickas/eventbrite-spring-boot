@@ -21,6 +21,10 @@
           <th>ADDRESS</th>
           <th th:text="${v.getAddress()}"></th>
         </tr>
+         <tr>
+          <th>POST CODE</th>
+          <th th:text="${v.getPostcode()}"></th>
+        </tr>
       </table>
     </div>
 
@@ -52,6 +56,13 @@
             <button type="submit" class="btn btn-danger btn-sm">Delete capacity</button>
           </form>
         </td>
+        
+         <td sec:authorize="isAuthenticated()">
+          <form th:action="@{/venues/{id}/delete/postcode(id=${id})}" th:method="put">
+            <button type="submit" class="btn btn-danger btn-sm">Delete postcode</button>
+          </form>
+        </td>
+        
         <td sec:authorize="isAuthenticated()">
           <form th:action="@{/venues/{id}/delete/all_fields(id=${id})}" th:method="put">
             <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
