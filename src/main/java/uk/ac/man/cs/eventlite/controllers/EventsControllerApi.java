@@ -3,9 +3,11 @@ package uk.ac.man.cs.eventlite.controllers;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo; 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.Collection;
+import java.util.Optional;
 
 import javax.validation.Valid;
-
+import org.springframework.hateoas.Link;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -25,8 +27,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.ac.man.cs.eventlite.assemblers.EventModelAssembler;
+import uk.ac.man.cs.eventlite.assemblers.VenueModelAssembler;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.entities.Event;
+import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
 @RestController
@@ -40,6 +44,9 @@ public class EventsControllerApi {
 
 	@Autowired
 	private EventModelAssembler eventAssembler;
+	
+	@Autowired
+	private VenueModelAssembler venueAssembler;
 
 	@ExceptionHandler(EventNotFoundException.class)
 	public ResponseEntity<?> eventNotFoundHandler(EventNotFoundException ex) {
@@ -50,9 +57,17 @@ public class EventsControllerApi {
 	@GetMapping("/{id}")
 	public EntityModel<Event> getEvent(@PathVariable("id") long id) {
 		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
-		return eventAssembler.toModel(event);
+		return eventAssembler.toModel(event).add(linkTo(methodOn(EventsControllerApi.class).getVenue(id)).withRel("venue"));
 	}
 
+	@GetMapping("/{id}/venue")
+	public Venue getVenue(@PathVariable("id")long id) {
+		Event e = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
+		Venue v = e.getVenue();
+		return v;
+	}
+	
+	
 	@GetMapping("/edit/{id}")
 	public ResponseEntity<?> newEvent() {
 		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
