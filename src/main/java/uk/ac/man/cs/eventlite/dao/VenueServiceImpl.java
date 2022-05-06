@@ -48,7 +48,7 @@ public class VenueServiceImpl implements VenueService {
 
 	@Override
 	public Venue save(Venue venue) {
-		if(venue.getAddress() != null)
+		if((venue.getAddress() != null) && venue.getPostcode() != null)
 		{
 			MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
 					.accessToken(
