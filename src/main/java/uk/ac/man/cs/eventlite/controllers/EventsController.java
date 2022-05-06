@@ -36,6 +36,7 @@ import uk.ac.man.cs.eventlite.entities.Tweet;
 import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.TwitterServiceImpl;
+import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
 @Controller
@@ -44,6 +45,10 @@ public class EventsController {
 
 	@Autowired
 	private EventService eventService;
+	
+	@Autowired
+    private VenueService venueService;
+
 
 	@Autowired
 	private TwitterServiceImpl twitterService;
@@ -155,27 +160,27 @@ public class EventsController {
 	public String newEvent(Model model) {
 		if (!model.containsAttribute("event")) {
 			model.addAttribute("event", new Event());
+			model.addAttribute("venue", venueService.findAll());
 		}
 		return "events/new";
 	}
+
 
 	@PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public String createEvent(@RequestBody @Valid @ModelAttribute Event event, BindingResult errors,
 			Model model, RedirectAttributes redirectAttrs) {
 
 		if (errors.hasErrors()) {
-			model.addAttribute("event", event);
-			return "events/new";
+			model.addAttribute("event");
+			return "event/addEvent";
 		}
+		model.addAttribute("venue", venueService.findAll());
 
-		Venue v1 = new Venue();
-		v1.setId(1);
-		event.setVenue(v1);
 		eventService.save(event);
-		redirectAttrs.addFlashAttribute("ok_message", "New event added.");
 
 		return "redirect:/events";
 	}
+
 
 	@PostMapping("/edit/{id}")
 	public String updateById(Model model, @PathVariable("id") long id, @ModelAttribute Event event_in) {

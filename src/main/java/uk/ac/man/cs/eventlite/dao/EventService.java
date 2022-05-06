@@ -16,7 +16,7 @@ public interface EventService {
 
 	public Optional<Event> findById(long id);
 	
-	public void save(Event entity);
+	public Event save(Event entity);
 	
 	public void delete(Event event);
 
