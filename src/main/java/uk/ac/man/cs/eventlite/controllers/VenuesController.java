@@ -1,18 +1,23 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;  
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
@@ -91,6 +96,31 @@ public class VenuesController {
 		venueService.save(v);
 		return "redirect:/venues/"+id;
 	}
+	
+	@GetMapping("/addVenue")
+	public String newVenue(Model model) {
+		if (!model.containsAttribute("venue")) {
+			model.addAttribute("venue", new Venue());
+		}
+
+		return "venues/addVenue";
+	}
+
+	@PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	public String createVenue(@RequestBody @Valid @ModelAttribute Venue venue, BindingResult errors,
+			Model model, RedirectAttributes redirectAttrs) {
+
+		if (errors.hasErrors()) {
+			model.addAttribute("venue");
+			return "venues/addVenue";
+		}
+
+		venueService.save(venue);
+		redirectAttrs.addFlashAttribute("ok_message", "Venue added");
+
+		return "redirect:/venues";
+	}
+
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public String getSearchedVenue(Model model, @RequestParam (value = "search", required = true) String name) {

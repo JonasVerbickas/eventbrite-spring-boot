@@ -47,7 +47,7 @@ public class VenueServiceImpl implements VenueService {
 	}
 
 	@Override
-	public void save(Venue venue) {
+	public Venue save(Venue venue) {
 		if(venue.getAddress() != null)
 		{
 			MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
@@ -56,6 +56,7 @@ public class VenueServiceImpl implements VenueService {
 					.query(venue.getAddress())
 					.build();
 			mapboxGeocoding.enqueueCall(new Callback<GeocodingResponse>() {
+
 
 				@Override
 				public void onResponse(Call<GeocodingResponse> call,
@@ -87,12 +88,17 @@ public class VenueServiceImpl implements VenueService {
 				System.out.println("Sleeping Thread:" + e);
 			}
 		}
-		venueRepository.save(venue);
+		return venueRepository.save(venue);
 	}
 
 	@Override
 	public Optional<Venue> findById(long id){
 		return venueRepository.findById(id);
+	}
+
+	@Override
+	public void delete(Venue venue) {
+		venueRepository.delete(venue);
 	}
 
 	@Override

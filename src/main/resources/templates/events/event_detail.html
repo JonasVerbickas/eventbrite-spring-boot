@@ -8,6 +8,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/styles.css}" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
   <style>
     body {
@@ -24,87 +25,79 @@
 
 <body>
   <div layout:fragment="content">
-    
+
     <!-- EVENT DETAILS -->
     <br>
-    <div id="event-name-and-details" style="border-radius: 10px; background-color:#EAECEF; padding: 24px;">
-      <h1 th:text="${event.getName()}"></h1>
-      <div id="details">
-        <table>
+    <div class="detail-box">
+      <div style="display: flex; flex-direction: row; align-items: center;">
+        <h1 th:text="${event.getName()}"></h1>
+        <div sec:authorize="isAuthenticated()">
+          <form th:action="@{/events/{id}/delete(id=${id})}" th:method="delete">
+            <button type="submit" class="btn btn-danger btn-sm">Delete event</button>
+          </form>
+        </div>
+      </div>
+      <div>
+        <table class="table">
           <tr>
-            <th>DATE</th>
-            <th th:text="${event.getDate()}"></th>
+            <td>DATE</td>
+            <td th:text="${event.getDate()}"></td>
+            <td sec:authorize="isAuthenticated()">
+              <form th:action="@{/events/{id}/delete/date(id=${id})}" th:method="put">
+                <button type="submit" class="btn btn-danger btn-sm">Delete date</button>
+              </form>
+            </td>
           </tr>
           <tr>
-            <th>TIME</th>
-            <th th:text="${event.getTime()}"></th>
+            <td>TIME</td>
+            <td th:text="${event.getTime()}"></td>
+            <td sec:authorize="isAuthenticated()">
+              <form th:action="@{/events/{id}/delete/time(id=${id})}" th:method="put">
+                <button type="submit" class="btn btn-danger btn-sm">Delete time</button>
+              </form>
+            </td>
           </tr>
           <tr>
-            <th>VENUE</th>
-            <th><a th:href="@{/venues/{num}(num=${event.getVenue().getId()})}" th:text="${event.getVenue().getName()}"
-                </a>
-            </th>
+            <td>VENUE</td>
+            <td><a th:href="@{/venues/{num}(num=${event.getVenue().getId()})}"
+                th:text="${event.getVenue().getName()}"></a></td>
           </tr>
           <tr>
-            <th>VENUE CAPACITY</th>
-            <th th:text="${event.getVenue().getCapacity()}"></th>
+            <td>VENUE CAPACITY</td>
+            <td th:text="${event.getVenue().getCapacity()}"></td>
           </tr>
           <tr>
-            <th>Description</th>
-            <th th:text="${event.getDescription()}"></th>
+            <td>Description</td>
+            <td th:text="${event.getDescription()}"></td>
           </tr>
         </table>
       </div>
+      <div sec:authorize="isAuthenticated()">
+        <form th:action="@{/events/{id}/delete/all_fields(id=${id})}" th:method="put">
+          <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
+        </form>
+      </div>
     </div>
 
-    <!-- EDIT/DELETE BUTTONS -->
+    <!-- EDIT/BACK BUTTONS -->
     <br>
-    <div id="back-edit-delete-buttons">
-      <div id="back-edit-row">
-        <a class="btn btn-primary" role="button" th:href="@{/events}"><i class="fas fa-arrow-left"
-            aria-hidden="true"></i>
-          Back</a>
+    <div id="edit-button-row">
         <a sec:authorize="isAuthenticated()" class="btn btn-primary" role="button"
           th:href="@{/events/edit/{num}(num=${id})}"><i class="fas fa-pen" aria-hidden="true"></i> Edit</a>
-      </div>
-      <table id="delete-button-row">
-        <tr>
-          <td sec:authorize="isAuthenticated()">
-            <form th:action="@{/events/{id}/delete(id=${id})}" th:method="delete">
-              <button type="submit" class="btn btn-danger btn-sm">Delete event</button>
-            </form>
-          </td>
-          <td sec:authorize="isAuthenticated()">
-            <form th:action="@{/events/{id}/delete/date(id=${id})}" th:method="put">
-              <button type="submit" class="btn btn-danger btn-sm">Delete date</button>
-            </form>
-          </td>
-          <td sec:authorize="isAuthenticated()">
-            <form th:action="@{/events/{id}/delete/time(id=${id})}" th:method="put">
-              <button type="submit" class="btn btn-danger btn-sm">Delete time</button>
-            </form>
-          </td>
-          <td sec:authorize="isAuthenticated()">
-            <form th:action="@{/events/{id}/delete/all_fields(id=${id})}" th:method="put">
-              <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
-            </form>
-          </td>
-        </tr>
-      </table>
     </div>
-    
+
     <!-- TWITTER -->
     <br>
     <div id="twitter">
       <div th:switch="${prev_tweet_text.length() > 0}">
-        <div th:case="${true}" >
+        <div th:case="${true}">
           <div th:switch="${!prev_tweet_text.equals('ERROR')}">
             <p th:case="${true}" style="background-color: #D3EDD9; border-radius: 10px; padding: 16px;">
-            Your tweet: <b th:text="${prev_tweet_text}"></b> was posted
-          </p>
-          <p th:case="${false}" style="background-color: #ff9090; border-radius: 10px; padding: 16px;">
-            FAILED TO POST YOUR TWEET! (Either it has been posted before OR something is wrong with twitter API)
-          </p>
+              Your tweet: <b th:text="${prev_tweet_text}"></b> was posted
+            </p>
+            <p th:case="${false}" style="background-color: #ff9090; border-radius: 10px; padding: 16px;">
+              FAILED TO POST YOUR TWEET! (Either it has been posted before OR something is wrong with twitter API)
+            </p>
           </div>
         </div>
       </div>

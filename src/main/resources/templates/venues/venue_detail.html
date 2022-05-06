@@ -4,26 +4,25 @@
 
 <head>
   <title>An Venue</title>
+  <link rel="stylesheet" th:href="@{/styles.css}" />
 </head>
 
 <body>
   <div layout:fragment="content">
-    <h1>Choose to delete or Edit</h1>
 
-    <h2 th:text="${v.getName()}"></h2>
-
-    <table>
-      <tr>
-        <th>VENUE CAPACITY</th>
-        <th th:text="${v.getCapacity()}"></th>
-      </tr>
-      
-      <tr>
-        <th>ADDRESS</th>
-        <th th:text="${v.getAddress()}"></th>
-      </tr>
-    </table>
-    
+    <div class="detail-box">
+      <h1 th:text="${v.getName()}"></h1>
+      <table class="table">
+        <tr>
+          <th>VENUE CAPACITY</th>
+          <th th:text="${v.getCapacity()}"></th>
+        </tr>
+        <tr>
+          <th>ADDRESS</th>
+          <th th:text="${v.getAddress()}"></th>
+        </tr>
+      </table>
+    </div>
 
     <br>
     <a class="btn btn-primary" role="button" th:href="@{/venues}"><i class="fas fa-arrow-left" aria-hidden="true"></i>
@@ -33,10 +32,13 @@
     <br>
     <table>
       <tr>
-        <td sec:authorize="isAuthenticated()">
+        <div sec:authorize="isAuthenticated()">
           <form th:action="@{/venues/{id}/delete(id=${id})}" th:method="delete">
             <button type="submit" class="btn btn-danger btn-sm">Delete venue</button>
           </form>
+        </div>
+
+		 </td>
         </td>
 
         <td sec:authorize="isAuthenticated()">
@@ -44,7 +46,7 @@
             <button type="submit" class="btn btn-danger btn-sm">Delete address</button>
           </form>
         </td>
-        
+
         <td sec:authorize="isAuthenticated()">
           <form th:action="@{/venues/{id}/delete/capacity(id=${id})}" th:method="put">
             <button type="submit" class="btn btn-danger btn-sm">Delete capacity</button>

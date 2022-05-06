@@ -37,6 +37,7 @@ import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.dao.TwitterServiceImpl;
+import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
 @Controller
@@ -45,8 +46,10 @@ public class EventsController {
 
 	@Autowired
 	private EventService eventService;
+
+	
 	@Autowired
-	private VenueService venueService;
+    private VenueService venueService;
 
 	@Autowired
 	private TwitterServiceImpl twitterService;
@@ -61,7 +64,28 @@ public class EventsController {
 
 	@GetMapping
 	public String getAllEvents(Model model)  {
-		model.addAttribute("events", eventService.findAllByOrderByDateAscNameAsc());
+		Iterable<Event> events = eventService.findAllByOrderByDateAscNameAsc();
+		model.addAttribute("events", events);
+		List<Event> past_events = new ArrayList<Event>();
+		List<Event> future_events = new ArrayList<Event>();
+
+		LocalDate now = LocalDate.now();
+		System.out.println("NOW" + now);
+		for (Event e : events) {
+			if(e.getDate() == null)
+			{
+				past_events.add(e);
+			}
+			else if(e.getDate().compareTo(now) < 0)
+			{
+				past_events.add(e);
+			}
+			else{
+				future_events.add(e);
+			}
+		}
+		model.addAttribute("past_events", past_events);
+		model.addAttribute("future_events", future_events);
 		List<Status> timeline = twitterService.getTimeline();
 		model.addAttribute("timeline", timeline);
 		return "events/index";
@@ -70,7 +94,7 @@ public class EventsController {
 
 	// `prev_tweet_text` is used to display a text of the tweet made by the current user for this particular event
 	@GetMapping("/{id}")
-	public String event(@PathVariable("id") long id, Model model, @ModelAttribute("prev_tweet_text") String prev_tweet_text)  {
+	public String getEvent(@PathVariable("id") long id, Model model, @ModelAttribute("prev_tweet_text") String prev_tweet_text)  {
 
 		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
 
@@ -138,29 +162,27 @@ public class EventsController {
 	public String newEvent(Model model) {
 		if (!model.containsAttribute("event")) {
 			model.addAttribute("event", new Event());
+			model.addAttribute("venue", venueService.findAll());
 		}
 		return "events/new";
 	}
+
 
 	@PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public String createEvent(@RequestBody @Valid @ModelAttribute Event event, BindingResult errors,
 			Model model, RedirectAttributes redirectAttrs) {
 
 		if (errors.hasErrors()) {
-			model.addAttribute("event", event);
-			return "events/new";
+			model.addAttribute("event");
+			return "event/addEvent";
 		}
+		model.addAttribute("venue", venueService.findAll());
 
-		event.setDate(LocalDate.parse("2012-02-11"));
-		event.setTime(LocalTime.parse("12:20:20"));
-		Venue v1 = new Venue();
-		v1.setId(1);
-		event.setVenue(v1);
 		eventService.save(event);
-		redirectAttrs.addFlashAttribute("ok_message", "New event added.");
 
 		return "redirect:/events";
 	}
+
 
 	@PostMapping("/edit/{id}")
 	public String updateById(Model model, @PathVariable("id") long id, @ModelAttribute Event event_in) {
