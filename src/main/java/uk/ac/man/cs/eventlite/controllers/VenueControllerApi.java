@@ -32,6 +32,7 @@ import uk.ac.man.cs.eventlite.assemblers.VenueModelAssembler;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
+import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 import uk.ac.man.cs.eventlite.exceptions.VenueNotFoundException;
 
 @RestController
@@ -84,7 +85,8 @@ public class VenueControllerApi {
 
 	@GetMapping("/{id}")
 	public EntityModel<Venue> getEvent(@PathVariable("id") long id) {
-		throw new VenueNotFoundException(id);
+		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
+		return venueAssembler.toModel(venue);
 	}
 	
 	@GetMapping
