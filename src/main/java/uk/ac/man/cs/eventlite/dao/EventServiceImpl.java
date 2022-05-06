@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 
 import uk.ac.man.cs.eventlite.entities.Event;
+import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -57,6 +58,12 @@ public class EventServiceImpl implements EventService {
 	{
 		eventRepository.deleteById(id);
 
+	}
+
+	@Override
+	public Iterable<Event> findAllByVenueOrderByDateAscNameAsc(Venue venue) {
+		// TODO Auto-generated method stub
+		return eventRepository.findAllByVenueOrderByDateAscNameAsc(venue);
 	}
 
 	
