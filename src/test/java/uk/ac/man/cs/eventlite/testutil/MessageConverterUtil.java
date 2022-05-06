@@ -36,7 +36,7 @@ public class MessageConverterUtil implements InitializingBean {
 		converters = new HttpMessageConverter<?>[converterList.size()];
 		converterList.toArray(converters);
 		log.info("Initializing message converter list for unit testing");
-	}
+	 }
 
 
 }
