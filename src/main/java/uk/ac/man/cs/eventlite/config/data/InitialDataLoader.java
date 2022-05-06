@@ -37,8 +37,8 @@ public class InitialDataLoader {
 			Venue vA = new Venue();
 			Venue vB = new Venue();
 			Venue vC = new Venue();
-			
-
+			Venue vD = new Venue();
+			 
 
 			if (venueService.count() > 0) {
 				log.info("Database already populated with venues. Skipping venue initialization.");
