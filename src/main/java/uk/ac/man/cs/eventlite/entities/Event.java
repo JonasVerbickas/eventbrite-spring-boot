@@ -107,4 +107,84 @@ public class Event {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public static boolean checkName(Event event) {
+		if (event.name.length() > 255 || event.name == null || event.name.length() == 0) {
+			return false;
+		}
+		return true; 
+		
+	}
+	
+	public static boolean checkVenue(Event event) {
+		if (event.venue == null) {
+			return false;
+		} 
+		return true;
+	}
+	
+	public static boolean checkDescription(Event event) {
+		if (event.description == null || event.description.length() == 0 || event.description.length() > 500)  {
+			return false;
+		} 
+		return true;
+	}
+	
+	public static boolean checkDate(Event event) {
+		if (event.date == null) {
+			return false;
+		} 
+		return true;
+	}
+	
+	public static boolean checkTime(Event event) {
+		if (event.time == null) {
+			return false;
+		} 
+		return true;
+	}
+	
+	public static boolean checkisFuture(Event event) {
+		if(event.date == null) {
+			return false;
+		}
+		LocalDate enterDate = LocalDate.now();
+		boolean before = event.date.isBefore(enterDate);
+		
+		return !before;
+	}
+	
+	public static String checkAll(Event event) {
+		if(!checkName(event)) {
+			String name_error_msg = "event name is invalid";
+			return name_error_msg;
+		}
+		
+		if(!checkVenue(event)){
+			String venue_error_msg = "event venue is invalid";
+			return venue_error_msg;
+		}
+		
+		if(!checkDescription(event)) {
+			String des_error_msg = "event description is invalid";
+			return des_error_msg;
+		}
+		
+		if(!checkDate(event)) {
+			String date_error_msg = "event date is invalid";
+			return date_error_msg;
+		}
+		
+		if(!checkTime(event)) {
+			String time_error_msg = "event time is invalid";
+			return time_error_msg;
+		}
+		
+		if(!checkisFuture(event)) {
+			String future_error_msg = "event should happen in the future!!";
+			return future_error_msg;
+		}
+		return "";
+	}
+
 }
