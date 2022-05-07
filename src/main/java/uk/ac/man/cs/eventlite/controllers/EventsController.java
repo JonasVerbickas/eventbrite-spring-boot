@@ -176,6 +176,21 @@ public class EventsController {
 			model.addAttribute("event");
 			return "event/new";
 		}
+		if(!event.checkName(event)) {
+			redirectAttrs.addFlashAttribute("ERROR_MESSAGE", "Name invalid");
+			return "redirect:/events/new";
+		}else if(!event.checkDescription(event)) {
+			redirectAttrs.addFlashAttribute("ERROR_MESSAGE", "Description invalid");
+			return "redirect:/events/new";
+		}else if(!event.checkisFuture(event)) {
+			redirectAttrs.addFlashAttribute("ERROR_MESSAGE", "time invalid");
+			return "redirect:/events/new";
+		}else {
+			Venue venue = event.getVenue();
+			eventService.save(event);
+			redirectAttrs.addFlashAttribute("ok_message", "New event added.");
+		}
+
 		model.addAttribute("venue", venueService.findAll());
 
 		eventService.save(event);
