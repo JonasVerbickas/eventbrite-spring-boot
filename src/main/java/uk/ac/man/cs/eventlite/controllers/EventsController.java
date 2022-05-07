@@ -216,10 +216,21 @@ public class EventsController {
 
 			eventToEdit.setDescription(event_in.getDescription());
 		}
+		
+		
+		if(eventToEdit.checkAll(eventToEdit) == "All pass") {
+			model.addAttribute("error", "");
+			eventService.save(eventToEdit);
+			return "redirect:/events";
+		}else {
+			String errorMsg = eventToEdit.getErrorMsg();
+			model.addAttribute("error", errorMsg);
+			return "events/edit";
+		}
 	
-		eventService.save(eventToEdit);
+		//eventService.save(eventToEdit);
 
-		return "redirect:/events";
+		//return "redirect:/events";
 	}
 
 	@PostMapping("/{id}/post_tweet")

@@ -123,11 +123,21 @@ public class VenuesController {
 			model.addAttribute("venue");
 			return "venues/addVenue";
 		}
+		
+		if(venue.checkAll(venue) == "All pass") {
+			model.addAttribute("error", "");
+			venueService.save(venue);
+			return "redirect:/events";
+		}else {
+//			String errorMsg = venue.getErrorMsg();
+//			model.addAttribute("error", errorMsg);
+			return "venues/addVenue";
 
-		venueService.save(venue);
-		redirectAttrs.addFlashAttribute("ok_message", "Venue added");
+//			venueService.save(venue);
+//			redirectAttrs.addFlashAttribute("ok_message", "Venue added");
 
-		return "redirect:/venues";
+		//return "redirect:/venues";
+	}
 	}
 
 	

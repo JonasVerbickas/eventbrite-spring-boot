@@ -106,6 +106,52 @@ public class Venue {
     public void setPostcode(String postcode) {
         this.postcode = postcode;
     }
+    
+	public static boolean checkName(Venue venue) {
+		//name cannot longer than 256, cannot be null, the length of name cannot be 0
+		if (venue.name.length() > 255 || venue.name == null || venue.name.length() == 0) {
+			return false;
+		}
+		return true; 
+		
+	}
+	
+	public static boolean checkAddr(Venue venue) {
+		//Same as name
+		if (venue.address == null|| venue.address.length() == 0|| venue.address.length() >= 300) {
+			return false;
+		} 
+		return true;
+	}
+	
+	public static boolean checkCapacity(Venue venue) {
+		//should be a positive integer
+		if (venue.capacity <= 0 || !(Math.round(venue.capacity) == venue.capacity)) {
+			return false;
+		} 
+		return true;
+	}
+	
+	
+	public static String checkAll(Venue venue) {
+		if(!checkName(venue)) {
+			String name_error_msg = "event name is invalid";
+			return name_error_msg;
+		}
+		
+		if(!checkAddr(venue)){
+			String addr_error_msg = "event venue's address is invalid";
+			return addr_error_msg;
+		}
+		
+		if(!checkCapacity(venue)) {
+			String cap_error_msg = "capacity's is invalid";
+			return cap_error_msg;
+		}
+		
+		return "All pass";
+	}
+
 	
 	
 }
