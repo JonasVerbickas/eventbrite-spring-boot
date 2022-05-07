@@ -153,15 +153,21 @@ public class VenuesController {
 		model.addAttribute("venue_new", venue_in);
 		
 		Venue venueToEdit = venueService.findById(id).get();
-		if (venue_in.getName()!= null) {
+		if (venue_in.getName()!= null && venue_in.getName().length() <=256) {
 			venueToEdit.setName(venue_in.getName());
 		}
-		if (venue_in.getAddress() != null) {
+		if (venue_in.getAddress() != null&&venue_in.getAddress().length() <=500) {
 			venueToEdit.setAddress(venue_in.getAddress());
 		}
-
+		if (venue_in.getPostcode() != null&&venue_in.getPostcode().length() <=100) {
+			venueToEdit.setPostcode(venue_in.getPostcode());
+		}
 		
-		venueToEdit.setCapacity(venue_in.getCapacity());
+
+		if(venue_in.checkCapacity(venue_in)) {
+			venueToEdit.setCapacity(venue_in.getCapacity());
+		}
+		
 	
 		venueService.save(venueToEdit);
 
