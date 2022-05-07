@@ -165,8 +165,9 @@ public class Event {
 	
 	public static String checkAll(Event event) {
 		if(!checkName(event)) {
-
+			String name_err_msg = "";
 			if(event.getName() == null) {
+				name_err_msg = "event name invalid";
 				event.setErrorMsg("event name cannot be null!"); 
 			}else if(event.getName().length()>255) {
 				event.setErrorMsg("event name should within 256 chars!"); 
@@ -175,7 +176,8 @@ public class Event {
 				
 			}
 			
-			return event.getErrorMsg();
+			//return event.getErrorMsg();
+			return name_err_msg;
 		}
 		
 		if(!checkVenue(event)){
