@@ -41,6 +41,7 @@ public class Event {
 	@Column(length = 100000)
 	private String description;
 	
+	private String errorMsg;
 	
 	@ManyToOne
 	private Venue venue;
@@ -108,6 +109,14 @@ public class Event {
 		this.description = description;
 	}
 	
+	public void setErrorMsg(String err) {
+		this.errorMsg = err;
+	}
+	
+	public String getErrorMsg() {
+		return this.errorMsg;
+	}
+	
 	public static boolean checkName(Event event) {
 		if (event.name.length() > 255 || event.name == null || event.name.length() == 0) {
 			return false;
@@ -156,35 +165,55 @@ public class Event {
 	
 	public static String checkAll(Event event) {
 		if(!checkName(event)) {
-			String name_error_msg = "event name is invalid";
-			return name_error_msg;
+
+			if(event.getName() == null) {
+				event.setErrorMsg("event name cannot be null!"); 
+			}else if(event.getName().length()>255) {
+				event.setErrorMsg("event name should within 256 chars!"); 
+			}else {
+				event.setErrorMsg("your event name invalid for unknow reason. Make sure you fill a name within 256 chars!!!");
+				
+			}
+			
+			return event.getErrorMsg();
 		}
 		
 		if(!checkVenue(event)){
-			String venue_error_msg = "event venue is invalid";
-			return venue_error_msg;
+			String venue_error_msg = "Select a Venue!!!";
+			event.setErrorMsg("Select a Venue!!!");
+			return event.getErrorMsg();
 		}
 		
 		if(!checkDescription(event)) {
-			String des_error_msg = "event description is invalid";
-			return des_error_msg;
+			if(event.getDescription() == null) {
+				event.setErrorMsg("event description cannot be null");
+			}else if(event.getName().length()>=500) {
+				event.setErrorMsg("event description should within 500 chars!");
+			}else {
+				event.setErrorMsg("your description name invalid for unknow reason. Make sure you fill a name within 500 chars!!!");
+			}
+			return event.getErrorMsg();
 		}
 		
 		if(!checkDate(event)) {
-			String date_error_msg = "event date is invalid";
-			return date_error_msg;
+			event.setErrorMsg("Enter a Date");
+			return event.getErrorMsg();
 		}
 		
 		if(!checkTime(event)) {
-			String time_error_msg = "event time is invalid";
-			return time_error_msg;
+			event.setErrorMsg("event time is invalid");
+			return event.getErrorMsg();
 		}
 		
 		if(!checkisFuture(event)) {
-			String future_error_msg = "event should happen in the future!!";
-			return future_error_msg;
+			event.setErrorMsg("event should happen in the future!!");
+			return event.getErrorMsg();
 		}
-		return "";
+		return "All pass";
 	}
+	
+//	public ActionResult myAction(message) {
+//		return JavaScript(window.alert(message));
+//	}
 
 }

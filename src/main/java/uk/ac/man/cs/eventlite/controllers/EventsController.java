@@ -171,31 +171,22 @@ public class EventsController {
 	@PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public String createEvent(@RequestBody @Valid @ModelAttribute Event event, BindingResult errors,
 			Model model, RedirectAttributes redirectAttrs) {
-
+		model.addAttribute("venue", venueService.findAll());
 		if (errors.hasErrors()) {
 			model.addAttribute("event");
-			return "event/new";
+			return "events/new";
 		}
-		if(!event.checkName(event)) {
-			redirectAttrs.addFlashAttribute("ERROR_MESSAGE", "Name invalid");
-			return "redirect:/events/new";
-		}else if(!event.checkDescription(event)) {
-			redirectAttrs.addFlashAttribute("ERROR_MESSAGE", "Description invalid");
-			return "redirect:/events/new";
-		}else if(!event.checkisFuture(event)) {
-			redirectAttrs.addFlashAttribute("ERROR_MESSAGE", "time invalid");
-			return "redirect:/events/new";
-		}else {
-			Venue venue = event.getVenue();
+		
+		if(event.checkAll(event) == "All pass") {
+			model.addAttribute("error", "");
 			eventService.save(event);
-			redirectAttrs.addFlashAttribute("ok_message", "New event added.");
+			return "redirect:/events";
+		}else {
+			String errorMsg = event.getErrorMsg();
+			model.addAttribute("error", errorMsg);
+			return "events/new";
 		}
 
-		model.addAttribute("venue", venueService.findAll());
-
-		eventService.save(event);
-
-		return "redirect:/events";
 	}
 
 
