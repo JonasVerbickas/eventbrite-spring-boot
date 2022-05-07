@@ -14,19 +14,19 @@
 
 	  <label for="name">Event Name</label>
       <input class="form-control" type="text" name="name" th:value=${event_old.name}  id="name" th:field="*{name}" 
-        autofocus="autofocus" required/>
+        autofocus="autofocus" maxlength = "256" required/>
         
       <label for="date">Event Date</label>
       <input class="form-control" type="date" name="date" id="date" th:field="*{date}" placeholder="Hello, %s!"
-        autofocus="autofocus" />
+        autofocus="autofocus" required/>
 
       <label for="time">Event Time</label>
       <input class="form-control" type="time" name="time" id="time" th:field="*{time}" placeholder="Hello, %s!"
-        autofocus="autofocus" />
+        autofocus="autofocus" required/>
         
        <label for="time">Event Description</label>
       <input class="form-control" type="text" name="time" id="time" th:field="*{description}" placeholder="Enter Description"
-        autofocus="autofocus" /> 
+        autofocus="autofocus" maxlength = "500" required/> 
 
       <label for="venue">Event Venue </label>
       <select class="form-control" name="venue" th:field="*{venue}" id="venue">

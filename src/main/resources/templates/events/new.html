@@ -10,14 +10,14 @@
     <form action="#" th:action="@{/events}" th:object="${event}" method="post">
       <div class="form-group" th:classappend="${#fields.hasErrors('name')}? has-error">
         <label for="name">Event Name</label>
-        <input class="form-control" type="text" name="name" id="name" placeholder=" " autofocus="autofocus" />
+        <input class="form-control" type="text" name="name" id="name" placeholder=" " autofocus="autofocus" maxlength = "256" required/>
         <label for="date">Event Date</label>
-        <input class="form-control" type="date" name="date" id="date" placeholder=" " autofocus="autofocus" />
+        <input class="form-control" type="date" name="date" id="date" placeholder=" " autofocus="autofocus" required/>
         <label for="time">Event Time</label>
-        <input class="form-control" type="time" name="time" id="time" placeholder=" " autofocus="autofocus" />
+        <input class="form-control" type="time" name="time" id="time" placeholder=" " autofocus="autofocus" required/>
 			<div class="form-group">
       	<label for="venue">Event Venue</label>
-	  	<select class="form-control" name="venue" id="venue">
+	  	<select class="form-control" name="venue" id="venue"required>
 	  	<option value = "selectVenue">---select a venue---</option>
     	<option  th:each="venue : ${venue}" th:value="${venue.getId()}" th:text="${venue.getName()}"></option>
 	  	</select>
@@ -25,7 +25,7 @@
 				
 		<div class=" form-group">
 		<label for="eventTime">Event Description:</label>
-		<input type="text" class="form-control" th:field="*{description}" th:placeholder="${{event.description}}">
+		<input type="text" class="form-control" th:field="*{description}" th:placeholder="${{event.description}}" maxlength = "500" required>
 		</div>
 
 
