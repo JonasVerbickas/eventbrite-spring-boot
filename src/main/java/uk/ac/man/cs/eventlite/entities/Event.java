@@ -41,6 +41,7 @@ public class Event {
 	@Column(length = 100000)
 	private String description;
 	
+	private String errorMsg;
 	
 	@ManyToOne
 	private Venue venue;
@@ -107,4 +108,114 @@ public class Event {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public void setErrorMsg(String err) {
+		this.errorMsg = err;
+	}
+	
+	public String getErrorMsg() {
+		return this.errorMsg;
+	}
+	
+	public static boolean checkName(Event event) {
+		if (event.name.length() > 255 || event.name == null || event.name.length() == 0) {
+			return false;
+		}
+		return true; 
+		
+	}
+	
+	public static boolean checkVenue(Event event) {
+		if (event.venue == null) {
+			return false;
+		} 
+		return true;
+	}
+	
+	public static boolean checkDescription(Event event) {
+		if (event.description == null || event.description.length() == 0 || event.description.length() > 500)  {
+			return false;
+		} 
+		return true;
+	}
+	
+	public static boolean checkDate(Event event) {
+		if (event.date == null) {
+			return false;
+		} 
+		return true;
+	}
+	
+	public static boolean checkTime(Event event) {
+		if (event.time == null) {
+			return false;
+		} 
+		return true;
+	}
+	
+	public static boolean checkisFuture(Event event) {
+		if(event.date == null) {
+			return false;
+		}
+		LocalDate enterDate = LocalDate.now();
+		boolean before = event.date.isBefore(enterDate);
+		
+		return !before;
+	}
+	
+	public static String checkAll(Event event) {
+		if(!checkName(event)) {
+			String name_err_msg = "";
+			if(event.getName() == null) {
+				name_err_msg = "event name invalid";
+				event.setErrorMsg("event name cannot be null!"); 
+			}else if(event.getName().length()>255) {
+				event.setErrorMsg("event name should within 256 chars!"); 
+			}else {
+				event.setErrorMsg("your event name invalid for unknow reason. Make sure you fill a name within 256 chars!!!");
+				
+			}
+			
+			//return event.getErrorMsg();
+			return name_err_msg;
+		}
+		
+		if(!checkVenue(event)){
+			String venue_error_msg = "Select a Venue!!!";
+			event.setErrorMsg("Select a Venue!!!");
+			return event.getErrorMsg();
+		}
+		
+		if(!checkDescription(event)) {
+			if(event.getDescription() == null) {
+				event.setErrorMsg("event description cannot be null");
+			}else if(event.getName().length()>=500) {
+				event.setErrorMsg("event description should within 500 chars!");
+			}else {
+				event.setErrorMsg("your description name invalid for unknow reason. Make sure you fill a name within 500 chars!!!");
+			}
+			return event.getErrorMsg();
+		}
+		
+		if(!checkDate(event)) {
+			event.setErrorMsg("Enter a Date");
+			return event.getErrorMsg();
+		}
+		
+		if(!checkTime(event)) {
+			event.setErrorMsg("event time is invalid");
+			return event.getErrorMsg();
+		}
+		
+		if(!checkisFuture(event)) {
+			event.setErrorMsg("event should happen in the future!!");
+			return event.getErrorMsg();
+		}
+		return "All pass";
+	}
+	
+//	public ActionResult myAction(message) {
+//		return JavaScript(window.alert(message));
+//	}
+
 }

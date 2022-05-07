@@ -171,16 +171,22 @@ public class EventsController {
 	@PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public String createEvent(@RequestBody @Valid @ModelAttribute Event event, BindingResult errors,
 			Model model, RedirectAttributes redirectAttrs) {
-
+		model.addAttribute("venue", venueService.findAll());
 		if (errors.hasErrors()) {
 			model.addAttribute("event");
-			return "event/new";
+			return "events/new";
 		}
-		model.addAttribute("venue", venueService.findAll());
+		
+		if(event.checkAll(event) == "All pass") {
+			model.addAttribute("error", "");
+			eventService.save(event);
+			return "redirect:/events";
+		}else {
+			String errorMsg = event.getErrorMsg();
+			model.addAttribute("error", errorMsg);
+			return "events/new";
+		}
 
-		eventService.save(event);
-
-		return "redirect:/events";
 	}
 
 
@@ -210,10 +216,21 @@ public class EventsController {
 
 			eventToEdit.setDescription(event_in.getDescription());
 		}
+		
+		
+		if(eventToEdit.checkAll(eventToEdit) == "All pass") {
+			model.addAttribute("error", "");
+			eventService.save(eventToEdit);
+			return "redirect:/events";
+		}else {
+			String errorMsg = eventToEdit.getErrorMsg();
+			model.addAttribute("error", errorMsg);
+			return "events/edit";
+		}
 	
-		eventService.save(eventToEdit);
+		//eventService.save(eventToEdit);
 
-		return "redirect:/events";
+		//return "redirect:/events";
 	}
 
 	@PostMapping("/{id}/post_tweet")
