@@ -29,8 +29,8 @@
     <br>
     <form  action="/events/" method="get">
       <div class='form-row'>
-        <input class="form-control col-5 " type="search" name="search" th:value="${search}" id="search"
-          placeholder="Event name" />
+        <input class="form-control col-5 " type="search" name="search" th:value="${search_value}" id="search"
+          placeholder="Event name" autocomplete="off" />
         <button type="submit" class="btn btn-primary col-1">Search</button>
       </div>
     </form>

@@ -84,7 +84,6 @@ public class Venue {
 	}
 
 	public void setLatitude(double latitude) {
-		System.out.println("setLatitude:"+latitude+" for " + this.getName());
 		this.latitude = latitude;
 	}
 
@@ -94,7 +93,6 @@ public class Venue {
 	}
 
 	public void setLongitude(double longitude) {
-		System.out.println("setLongitude:"+latitude+" for " + this.getName());
 		this.longitude = longitude;
 	}
 	

@@ -51,13 +51,13 @@ public class InitialDataLoader {
 					
 					vA.setName("Engineering Building");
 					vA.setCapacity(300);
-					vA.setAddress("Booth St E");
+					vA.setAddress("Manchester, Booth St E");
 					vA.setPostcode("M13")		;			
 					venueService.save(vA);		
 					
-					vB .setName("Main Library");
+					vB.setName("Main Library");
 					vB.setCapacity(100);
-					vB.setAddress("Oxford Road");
+					vB.setAddress("Manchester, Oxford Road");
 					vB.setPostcode("M13 9PP");
 					venueService.save(vB);
 

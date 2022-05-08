@@ -62,10 +62,8 @@ public class EventsController {
 		return "events/not_found";
 	}
 
-	@GetMapping
-	public String getAllEvents(Model model)  {
-		Iterable<Event> events = eventService.findAllByOrderByDateAscNameAsc();
-		model.addAttribute("events", events);
+	private void sortPastAndFutureEvents(Iterable<Event> events, Model model)
+	{
 		List<Event> past_events = new ArrayList<Event>();
 		List<Event> future_events = new ArrayList<Event>();
 
@@ -86,6 +84,13 @@ public class EventsController {
 		}
 		model.addAttribute("past_events", past_events);
 		model.addAttribute("future_events", future_events);
+	}
+
+	@GetMapping
+	public String getAllEvents(Model model)  {
+		Iterable<Event> events = eventService.findAllByOrderByDateAscNameAsc();
+		model.addAttribute("events", events);
+		this.sortPastAndFutureEvents(events, model);
 		List<Status> timeline = twitterService.getTimeline();
 		model.addAttribute("timeline", timeline);
 		return "events/index";
@@ -122,8 +127,13 @@ public class EventsController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/")
-	public String getSearchedEvent(Model model, @RequestParam(value = "search", required = true) String name){
-		model.addAttribute("events", eventService.findByNameContainingIgnoreCaseOrderByDateAscNameAsc(name));
+	public String getSearchedEvent(Model model, @RequestParam(value = "search", required = true) String search_value){
+		model.addAttribute("search_value", search_value);
+		// Event stuff
+		Iterable<Event> events = eventService.findByNameContainingIgnoreCaseOrderByDateAscNameAsc(search_value);
+		model.addAttribute("events", events);
+		this.sortPastAndFutureEvents(events, model);
+		// Twitter stuff
 		List<Status> timeline = twitterService.getTimeline();
 		model.addAttribute("timeline", timeline);
 		return "events/index";

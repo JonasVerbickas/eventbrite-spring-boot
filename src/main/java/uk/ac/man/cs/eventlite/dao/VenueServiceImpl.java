@@ -53,7 +53,7 @@ public class VenueServiceImpl implements VenueService {
 			MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
 					.accessToken(
 							"pk.eyJ1Ijoiam9uYXMtIiwiYSI6ImNsMTVkMXk1eTB2aWYzYm10Zzg0djFhMHcifQ.dNCKShUv6VxLMt5ZEgW45A")
-					.query(venue.getAddress())
+					.query(venue.getName() + ", " + venue.getAddress() + ", " + venue.getPostcode())
 					.build();
 			mapboxGeocoding.enqueueCall(new Callback<GeocodingResponse>() {
 
