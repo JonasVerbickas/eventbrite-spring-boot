@@ -41,8 +41,7 @@ public class VenuesController {
 	}
 	
 	@GetMapping("/{id}") 
-	public String event(@PathVariable("id") long id,
-			@RequestParam(value = "name", required = false, defaultValue = "World") String name, Model model) throws Exception {
+	public String event(@PathVariable("id") long id, Model model) throws Exception {
 
 		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
 
@@ -142,8 +141,9 @@ public class VenuesController {
 
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
-	public String getSearchedVenue(Model model, @RequestParam (value = "search", required = true) String name) {
-		model.addAttribute("venues", venueService.listVenueByNameIgnoreCase(name));
+	public String getSearchedVenue(Model model, @RequestParam (value = "search", required = true) String search_value) {
+		model.addAttribute("search_value", search_value);
+		model.addAttribute("venues", venueService.listVenueByNameIgnoreCase(search_value));
 		return "venues/index";
 	}
 	
