@@ -14,62 +14,55 @@
       <h1 th:text="${v.getName()}"></h1>
       <table class="table">
         <tr>
-          <th>VENUE CAPACITY</th>
-          <th th:text="${v.getCapacity()}"></th>
+          <td>VENUE CAPACITY</td>
+          <td th:text="${v.getCapacity()}"></td>
+          <td sec:authorize="isAuthenticated()">
+            <form th:action="@{/venues/{id}/delete/capacity(id=${id})}" th:method="put">
+              <button type="submit" class="btn btn-danger btn-sm">Delete capacity</button>
+            </form>
+          </td>
         </tr>
         <tr>
-          <th>ADDRESS</th>
-          <th th:text="${v.getAddress()}"></th>
+          <td>ADDRESS</td>
+          <td th:text="${v.getAddress()}"></td>
+          <td sec:authorize="isAuthenticated()">
+            <form th:action="@{/venues/{id}/delete/address(id=${id})}" th:method="put">
+              <button type="submit" class="btn btn-danger btn-sm">Delete address</button>
+            </form>
+          </td>
         </tr>
-         <tr>
-          <th>POST CODE</th>
-          <th th:text="${v.getPostcode()}"></th>
+        <tr>
+          <td>POST CODE</td>
+          <td th:text="${v.getPostcode()}"></td>
+          <td sec:authorize="isAuthenticated()">
+            <form th:action="@{/venues/{id}/delete/postcode(id=${id})}" th:method="put">
+              <button type="submit" class="btn btn-danger btn-sm">Delete postcode</button>
+            </form>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div sec:authorize="isAuthenticated()">
+              <form th:action="@{/venues/{id}/delete(id=${id})}" th:method="delete">
+                <button type="submit" class="btn btn-danger btn-sm">Delete venue</button>
+              </form>
+            </div>
+          </td>
+          <td></td>
+          <td sec:authorize="isAuthenticated()">
+            <form th:action="@{/venues/{id}/delete/all_fields(id=${id})}" th:method="put">
+              <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
+            </form>
+          </td>
+
         </tr>
       </table>
     </div>
 
     <br>
-    <a class="btn btn-primary" role="button" th:href="@{/venues}"><i class="fas fa-arrow-left" aria-hidden="true"></i>
-      Back</a>
     <a sec:authorize="isAuthenticated()" class="btn btn-primary" role="button"
       th:href="@{/venues/edit/{num}(num=${id})}"><i class="fas fa-pen" aria-hidden="true"></i> Edit</a>
     <br>
-    <table>
-      <tr>
-        <div sec:authorize="isAuthenticated()">
-          <form th:action="@{/venues/{id}/delete(id=${id})}" th:method="delete">
-            <button type="submit" class="btn btn-danger btn-sm">Delete venue</button>
-          </form>
-        </div>
-
-		 </td>
-        </td>
-
-        <td sec:authorize="isAuthenticated()">
-          <form th:action="@{/venues/{id}/delete/address(id=${id})}" th:method="put">
-            <button type="submit" class="btn btn-danger btn-sm">Delete address</button>
-          </form>
-        </td>
-
-        <td sec:authorize="isAuthenticated()">
-          <form th:action="@{/venues/{id}/delete/capacity(id=${id})}" th:method="put">
-            <button type="submit" class="btn btn-danger btn-sm">Delete capacity</button>
-          </form>
-        </td>
-        
-         <td sec:authorize="isAuthenticated()">
-          <form th:action="@{/venues/{id}/delete/postcode(id=${id})}" th:method="put">
-            <button type="submit" class="btn btn-danger btn-sm">Delete postcode</button>
-          </form>
-        </td>
-        
-        <td sec:authorize="isAuthenticated()">
-          <form th:action="@{/venues/{id}/delete/all_fields(id=${id})}" th:method="put">
-            <button type="submit" class="btn btn-danger btn-sm">Delete all fields</button>
-          </form>
-        </td>
-      </tr>
-    </table>
   </div>
 </body>
 
