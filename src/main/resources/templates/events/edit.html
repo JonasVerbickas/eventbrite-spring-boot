@@ -8,7 +8,7 @@
 
 <body>
   <div layout:fragment="content">
-    <h1>Choose to edit, still needs validation</h1>
+    <h1>Choose to edit</h1>
 
     <form action="#" th:action="@{/events/edit/{num}(num=${event_old.id})}" th:object="${event_old}" method="post">
 
