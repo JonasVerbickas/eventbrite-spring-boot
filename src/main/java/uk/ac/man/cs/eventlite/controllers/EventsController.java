@@ -112,9 +112,7 @@ public class EventsController {
 	@GetMapping("/edit/{id}")
 	public String updatePageRedirect(Model model, @PathVariable("id") long id) {
 		Event event = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
-
 		model.addAttribute("event_old", event);
-		model.addAttribute("event_new", new Event());
 		model.addAttribute("venues", venueService.findAll());
 
 		return "events/edit";
@@ -201,31 +199,29 @@ public class EventsController {
 
 
 	@PostMapping("/edit/{id}")
-	public String updateById(Model model, @PathVariable("id") long id, @ModelAttribute Event event_in) {
-		model.addAttribute("event_new", event_in);
-		
+	public String updateById(Model model, @PathVariable("id") long id, @Valid @ModelAttribute("event_old") Event event_in, BindingResult errors, RedirectAttributes redirectAttrs ) {
+			
 		
 		Event eventToEdit = eventService.findById(id).get();
-		if (event_in.getName()!= null) {
-			eventToEdit.setName(event_in.getName());
-		}
-		if (event_in.getDate() != null) {
-			eventToEdit.setDate(event_in.getDate());
-		}
+	
+		if (errors.hasErrors()){
+			model.addAttribute("event_old", event_in);
+			model.addAttribute("venues", venueService.findAll());
+			return String.format("events/edit", event_in.getId());
+			}	
+			
+		
+		eventToEdit.setName(event_in.getName());
+		
+		
+		eventToEdit.setDate(event_in.getDate());
+		
 
-		if (event_in.getTime() != null) {
-			eventToEdit.setTime(event_in.getTime());
-		}
+		eventToEdit.setTime(event_in.getTime());
 
-		if (event_in.getVenue() != null) {
+		eventToEdit.setVenue(event_in.getVenue());
 
-			eventToEdit.setVenue(event_in.getVenue());
-		}
-
-		if (event_in.getDescription() != null) {
-
-			eventToEdit.setDescription(event_in.getDescription());
-		}
+		eventToEdit.setDescription(event_in.getDescription());
 		
 		
 //		if(eventToEdit.checkAll(eventToEdit) == "All pass") {

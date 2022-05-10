@@ -1,8 +1,7 @@
 package uk.ac.man.cs.eventlite.entities;
 
-import java.time.LocalDate;
+import java.time.LocalDate; 
 import java.time.LocalTime;
-
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -13,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.Size;
 import javax.persistence.GeneratedValue;
 
@@ -26,14 +26,15 @@ public class Event {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-
+	@Future(message = "Date Has To Be In The Future")
+	
 	private LocalDate date;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime time;
 	@NotBlank(message = "Cannot be empty!")
-	@Size(max = 256, message = "the length of the venue's name should not be more than 256 characters")
+	@Size(max = 256, message = "the length of the events name should not be more than 256 characters")
 	private String name;
 
 	
