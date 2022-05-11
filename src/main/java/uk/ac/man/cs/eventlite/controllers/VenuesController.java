@@ -122,21 +122,15 @@ public class VenuesController {
 			model.addAttribute("venue");
 			return "venues/addVenue";
 		}
-		
-		if(venue.checkAll(venue) == "All pass") {
-			model.addAttribute("error", "");
+	
 			venueService.save(venue);
-			return "redirect:/events";
-		}else {
-//			String errorMsg = venue.getErrorMsg();
-//			model.addAttribute("error", errorMsg);
-			return "venues/addVenue";
+			return "redirect:/venues";
+		
 
 //			venueService.save(venue);
 //			redirectAttrs.addFlashAttribute("ok_message", "Venue added");
 
 		//return "redirect:/venues";
-	}
 	}
 
 	
@@ -149,24 +143,26 @@ public class VenuesController {
 	
 	
 	@PostMapping("/edit/{id}")
-	public String updateById(Model model, @PathVariable("id") long id, @ModelAttribute Venue venue_in) {
-		model.addAttribute("venue_new", venue_in);
+	public String updateById(Model model, @PathVariable("id") long id, @Valid @ModelAttribute("venue_old") Venue venue_in,  BindingResult errors, 
+			RedirectAttributes redirectAttrs) {
+		
+		if (errors.hasErrors()) {
+			model.addAttribute("venue_old", venue_in);
+			return "venues/editVenue";
+		}
 		
 		Venue venueToEdit = venueService.findById(id).get();
-		if (venue_in.getName()!= null && venue_in.getName().length() <=256) {
 			venueToEdit.setName(venue_in.getName());
-		}
-		if (venue_in.getAddress() != null&&venue_in.getAddress().length() <=500) {
+		
 			venueToEdit.setAddress(venue_in.getAddress());
-		}
-		if (venue_in.getPostcode() != null&&venue_in.getPostcode().length() <=100) {
+		
+		
 			venueToEdit.setPostcode(venue_in.getPostcode());
-		}
+		
 		
 
-		if(venue_in.checkCapacity(venue_in)) {
 			venueToEdit.setCapacity(venue_in.getCapacity());
-		}
+		
 		
 	
 		venueService.save(venueToEdit);

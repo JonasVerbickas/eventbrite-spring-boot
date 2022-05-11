@@ -1,11 +1,13 @@
 package uk.ac.man.cs.eventlite.entities;
 
-import javax.persistence.Entity;
+import javax.persistence.Entity; 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -14,20 +16,21 @@ public class Venue {
     @GeneratedValue
     private long id;
 
-    @NotBlank(message = "the venue name cannot be empty!")
+    @NotBlank(message = "The venue name cannot be empty!")
     @Size(max=50, message="The venue name can not exceed 50 characters.")
     private String name;
 
-//    @NotBlank(message = "the venue capacity cannot be empty!")
-//    @Min(value=5, message="The venue can not have a capacity less than 5 people.")
+   @NotNull(message = "The venue capacity cannot be empty!")
+    @Min(value=1, message="The venue can not have a capacity less than 1 person.")
     private int capacity;
 
-    @NotBlank(message = "the venue address cannot be empty!")
+    @NotBlank(message = "The venue address cannot be empty!")
     @Size(max=500, message="The venue address can not exceed 500 characters.")
     private String address = "-";
 
-    @NotBlank(message = "the venue postcode cannot be empty!")
-    @Size(max=7, message="The venue postcode must be in the format XXX XXX.")
+    @NotBlank(message = "The venue postcode cannot be empty!")
+//    @Size(max=7, message="The venue postcode must be in the format XXX XXX.")
+    @Pattern(regexp ="^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([AZa-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])))) [0-9][A-Za-z]{2})$", message="The venue postcode must be in the format XXX XXX.")
     private String postcode;
 
     private double latitude;
