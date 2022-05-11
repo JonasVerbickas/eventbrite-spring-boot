@@ -8,28 +8,43 @@
   <div layout:fragment="content">
     <h1>Add a new event</h1>
     <form action="#" th:action="@{/events}" th:object="${event}" method="post">
+      
       <div class="form-group" th:classappend="${#fields.hasErrors('name')}? has-error">
         <label for="name">Event Name</label>
-        <input class="form-control" type="text" name="name" id="name" placeholder=" " autofocus="autofocus" maxlength = "256" required/>
+        
+        <input class="form-control" type="text" name="name" id="name" placeholder=" " autofocus="autofocus"/>
+        <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">errors</p>
+  	</div>
+  	
+  	<div class="form-group" th:classappend="${#fields.hasErrors('date')}? has-error">
+        
         <label for="date">Event Date</label>
-        <input class="form-control" type="date" name="date" id="date" placeholder=" " autofocus="autofocus" required/>
+        <input class="form-control" type="date" name="date" id="date" placeholder=" " />
+        <p class="text-danger" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">errors</p>
+  	</div>
+  	
+  	
+  	<div class="form-group" th:classappend="${#fields.hasErrors('time')}? has-error">
         <label for="time">Event Time</label>
-        <input class="form-control" type="time" name="time" id="time" placeholder=" " autofocus="autofocus" required/>
-			<div class="form-group">
+        <input class="form-control" type="time" name="time" id="time" placeholder=" " autofocus="autofocus" />
+		<p class="text-danger" th:if="${#fields.hasErrors('time')}" th:errors="*{time}">errors</p>
+  	</div>
+  	
+  	<div class="form-group" th:classappend="${#fields.hasErrors('venue')}? has-error">		
       	<label for="venue">Event Venue</label>
-	  	<select class="form-control" name="venue" id="venue"required>
-	  	<option value = "selectVenue">---select a venue---</option>
+	  	<select class="form-control" name="venue" id="venue">
+	  	<option th:value=0>---select a venue---</option>
     	<option  th:each="venue : ${venue}" th:value="${venue.getId()}" th:text="${venue.getName()}"></option>
 	  	</select>
-		</div>
+	  	<p class="text-danger" th:if="${#fields.hasErrors('venue')}" th:errors="*{venue}">errors</p>
+  	</div>
 				
-		<div class=" form-group">
+	<div class="form-group" th:classappend="${#fields.hasErrors('description')}? has-error">
 		<label for="eventTime">Event Description:</label>
-		<input type="text" class="form-control" th:field="*{description}" th:placeholder="${{event.description}}" maxlength = "500" required>
-		</div>
+		<input type="text" class="form-control" th:field="*{description}" th:placeholder="${{event.description}}"  >
+		<p class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">errors</p>
+  	</div>
 
-
-      </div>
     
       <button class="btn btn-primary" type="submit" ><i class="fas fa-bookmark" aria-hidden="true"></i> Save</button>
 

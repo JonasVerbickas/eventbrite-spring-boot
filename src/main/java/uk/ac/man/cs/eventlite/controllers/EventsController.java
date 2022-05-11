@@ -185,15 +185,8 @@ public class EventsController {
 			return "events/new";
 		}
 		
-		if(event.checkAll(event) == "All pass") {
-			model.addAttribute("error", "");
 			eventService.save(event);
 			return "redirect:/events";
-		}else {
-			String errorMsg = event.getErrorMsg();
-			model.addAttribute("error", errorMsg);
-			return "events/new";
-		}
 
 	}
 
