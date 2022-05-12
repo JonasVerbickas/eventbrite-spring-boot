@@ -32,6 +32,13 @@ public class VenuesController {
 	@Autowired
 	private VenueService venueService;
 	
+	public String venueNotFoundHandler(VenueNotFoundException ex, Model model) {
+		model.addAttribute("not_found_id", ex.getId());
+
+		return "venues/not_found";
+	}
+
+	
 	@GetMapping
 	public String getAllVenues(Model model) {
 
