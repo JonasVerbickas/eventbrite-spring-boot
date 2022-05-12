@@ -51,11 +51,11 @@ class VenuesControllerTest {
  @MockBean
  private EventService eventService;
  
-// @Test
-// public void getEventNotFound() throws Exception {
-//  mvc.perform(get("/venues/99").accept(MediaType.TEXT_HTML)).andExpect(status().isNotFound())
-//    .andExpect(view().name("venues/not_found")).andExpect(handler().methodName("getVenues"));
-// }
+ @Test
+ public void getEventNotFound() throws Exception {
+  mvc.perform(get("/venues/99").accept(MediaType.TEXT_HTML)).andExpect(status().isNotFound())
+    .andExpect(view().name("venues/not_found")).andExpect(handler().methodName("getVenues"));
+ }
 
  @Test
  public void newVenue() throws Exception {
@@ -83,6 +83,17 @@ class VenuesControllerTest {
     .andExpect(view().name("redirect:/venues")).andExpect(model().hasNoErrors());
   verify(venueService).save(arg.capture());
   assertThat("test", equalTo(arg.getValue().getName()));
+ }
+ 
+
+
+ @Test
+ public void editVenue() throws Exception {
+  when(venueService.findById(1)).thenReturn(Optional.of(venue));
+  mvc.perform(get("/venues/edit/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+    .accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
+    .andExpect(view().name("venues/editVenue")).andExpect(model().hasNoErrors())
+    .andExpect(handler().methodName("forDropDownVenuesinEdit"));
  }
 
 }
