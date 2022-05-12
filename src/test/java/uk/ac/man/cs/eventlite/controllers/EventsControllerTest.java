@@ -224,5 +224,14 @@ public class EventsControllerTest {
 	assertThat(2L, equalTo(arg.getValue().getVenue().getId()));
 	}
 	
+	@Test
+	public void createEventWithoutCSRFTest() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post("/events/new").with(user("tom").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.accept(MediaType.TEXT_HTML))
+				.andExpect(status().isForbidden());
+		verify(eventService, never()).save(event);
+	}
+	
 	
 }
