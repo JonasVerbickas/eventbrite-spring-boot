@@ -158,6 +158,7 @@ public class EventsController {
 		Event e = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
 		e.setDate(null);
 		e.setName(null);
+		e.setDescription(null);
 		e.setTime(null);
 		// this does not work e.setVenue(null);
 		eventService.save(e);
