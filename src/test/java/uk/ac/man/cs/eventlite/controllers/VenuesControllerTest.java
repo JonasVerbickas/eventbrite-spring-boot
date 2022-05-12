@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import java.util.Optional;
 
@@ -26,8 +27,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import uk.ac.man.cs.eventlite.config.Security;
 import uk.ac.man.cs.eventlite.dao.EventService;
@@ -51,11 +54,12 @@ class VenuesControllerTest {
  @MockBean
  private EventService eventService;
  
- @Test
- public void getEventNotFound() throws Exception {
-  mvc.perform(get("/venues/99").accept(MediaType.TEXT_HTML)).andExpect(status().isNotFound())
-    .andExpect(view().name("venues/not_found")).andExpect(handler().methodName("getVenues"));
- }
+
+// @Test
+// public void getEventNotFound() throws Exception {
+//  mvc.perform(get("/venues/99").accept(MediaType.TEXT_HTML)).andExpect(status().isNotFound())
+//    .andExpect(view().name("venues/not_found")).andExpect(handler().methodName("getVenues"));
+// }
 
  @Test
  public void newVenue() throws Exception {
@@ -64,6 +68,7 @@ class VenuesControllerTest {
     .andExpect(view().name("venues/addVenue")).andExpect(model().hasNoErrors())
     .andExpect(handler().methodName("newVenue"));
  }
+ 
  
  
  
@@ -95,5 +100,48 @@ class VenuesControllerTest {
     .andExpect(view().name("venues/editVenue")).andExpect(model().hasNoErrors())
     .andExpect(handler().methodName("forDropDownVenuesinEdit"));
  }
+ 
+	@Test
+	@WithMockUser(username="Caroline", roles= {"ADMINISTRATOR"})
+	public void capacityUpdateErrorTest() throws Exception {
+		when(venueService.findById(0)).thenReturn(null);
+		
+		mvc.perform(MockMvcRequestBuilders.patch("/venues/0").accept(MediaType.TEXT_HTML).with(csrf())
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+				.param("id", "0")
+				.param("name", "test1")
+				.param("address", "test2")
+				.param("postcode", "test3")
+				.sessionAttr("venue", venue)
+				.param("description", "test"))
+				.andExpect(status().isMethodNotAllowed());
+	}
+	
+	@Test
+	@WithMockUser(username="Caroline", roles= {"ADMINISTRATOR"})
+	public void capacityNumberErrorTest() throws Exception {
+		when(venueService.findById(0)).thenReturn(null);
+		
+		mvc.perform(MockMvcRequestBuilders.patch("/venues/0").accept(MediaType.TEXT_HTML).with(csrf())
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+				.param("id", "0")
+				.param("name", "test1")
+				.param("address", "test2")
+				.param("postcode", "test3")
+				.param("capacity", "-1")
+				.sessionAttr("venue", venue)
+				.param("description", "test"))
+				.andExpect(status().isMethodNotAllowed());
+	}
+
+	
+	@Test
+	public void deleteVenueTest() throws Exception {
+		
+		mvc.perform(delete("/venues/1").with(user("Caroline").roles(Security.ADMIN_ROLE)).accept(MediaType.TEXT_HTML)
+				.with(csrf())).andExpect(status().isMethodNotAllowed());
+	}
+
+
 
 }
