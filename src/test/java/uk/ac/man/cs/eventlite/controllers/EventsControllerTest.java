@@ -99,9 +99,9 @@ public class EventsControllerTest {
 				.perform(requestBuilder)
 				.andExpect(MockMvcResultMatchers.status().isFound())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/events/42"))
-				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"));
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"))
+				.andExpect(handler().methodName("deleteAllFields"));
 		verify(event, times(1)).setTime(null);
-		verify(event, times(1)).setName(null);
 		verify(event, times(1)).setDate(null);
 		verify(event, times(1)).setDescription(null);
 		verify(eventService, times(1)).save(event);
@@ -117,7 +117,8 @@ public class EventsControllerTest {
 				.perform(requestBuilder)
 				.andExpect(MockMvcResultMatchers.status().isFound())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/events"))
-				.andExpect(MockMvcResultMatchers.redirectedUrl("/events"));
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/events"))
+				.andExpect(handler().methodName("deleteById"));
 		verify(eventService, times(1)).deleteById(anyLong());
 	}
 
@@ -131,7 +132,8 @@ public class EventsControllerTest {
 		actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound())
 				.andExpect(MockMvcResultMatchers.model().attributeExists("not_found_id"))
 				.andExpect(MockMvcResultMatchers.view().name("events/not_found"))
-				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"));
+				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"))
+				.andExpect(handler().methodName("deleteById"));
 		verify(eventService, times(1)).deleteById(anyLong());
 	}
 
@@ -164,7 +166,8 @@ public class EventsControllerTest {
 				.perform(requestBuilder)
 				.andExpect(MockMvcResultMatchers.status().isFound())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/events/42"))
-				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"));
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"))
+				.andExpect(handler().methodName("deleteDate"));
 		verify(event, times(1)).setDate(null);
 		verify(eventService, times(1)).save(event);
 	}
@@ -180,7 +183,8 @@ public class EventsControllerTest {
 		actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound())
 				.andExpect(MockMvcResultMatchers.model().attributeExists("not_found_id"))
 				.andExpect(MockMvcResultMatchers.view().name("events/not_found"))
-				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"));
+				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"))
+				.andExpect(handler().methodName("deleteDate"));
 		verify(event, times(1)).setDate(null);
 		verify(eventService, times(1)).save(event);
 	}
@@ -197,7 +201,8 @@ public class EventsControllerTest {
 				.perform(requestBuilder)
 				.andExpect(MockMvcResultMatchers.status().isFound())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/events/42"))
-				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"));
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"))
+				.andExpect(handler().methodName("deleteTime"));
 		verify(event, times(1)).setTime(null);
 		verify(eventService, times(1)).save(event);
 	}
@@ -214,7 +219,8 @@ public class EventsControllerTest {
 				.andExpect(MockMvcResultMatchers.model().size(1))
 				.andExpect(MockMvcResultMatchers.model().attributeExists("not_found_id"))
 				.andExpect(MockMvcResultMatchers.view().name("events/not_found"))
-				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"));
+				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"))
+				.andExpect(handler().methodName("deleteTime"));
 		verify(event, times(1)).setTime(null);
 		verify(eventService, times(1)).save(event);
 	}
