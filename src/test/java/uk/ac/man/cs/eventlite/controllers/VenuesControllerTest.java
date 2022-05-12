@@ -51,11 +51,11 @@ class VenuesControllerTest {
  @MockBean
  private EventService eventService;
  
-//	@Test
-//	public void getEventNotFound() throws Exception {
-//		mvc.perform(get("/venues/99").accept(MediaType.TEXT_HTML)).andExpect(status().isNotFound())
-//				.andExpect(view().name("venues/not_found")).andExpect(handler().methodName("getVenues"));
-//	}
+// @Test
+// public void getEventNotFound() throws Exception {
+//  mvc.perform(get("/venues/99").accept(MediaType.TEXT_HTML)).andExpect(status().isNotFound())
+//    .andExpect(view().name("venues/not_found")).andExpect(handler().methodName("getVenues"));
+// }
 
  @Test
  public void newVenue() throws Exception {
@@ -63,6 +63,26 @@ class VenuesControllerTest {
     .accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isOk())
     .andExpect(view().name("venues/addVenue")).andExpect(model().hasNoErrors())
     .andExpect(handler().methodName("newVenue"));
+ }
+ 
+ 
+ 
+ @Test
+ public void addVenueTest() throws Exception {
+  ArgumentCaptor<Venue> arg = ArgumentCaptor.forClass(Venue.class);
+  when(venueService.save(any(Venue.class))).then(returnsFirstArg());
+  
+  mvc.perform(post("/venues").with(user("Caroline").roles(Security.ADMIN_ROLE))
+    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+    .param("id", "1")
+    .param("name", "test")
+    .param("capacity", "200")
+    .param("address", "my house")
+    .param("postcode", "M1 5PS")
+    .accept(MediaType.TEXT_HTML).with(csrf())).andExpect(status().isFound())
+    .andExpect(view().name("redirect:/venues")).andExpect(model().hasNoErrors());
+  verify(venueService).save(arg.capture());
+  assertThat("test", equalTo(arg.getValue().getName()));
  }
 
 }
