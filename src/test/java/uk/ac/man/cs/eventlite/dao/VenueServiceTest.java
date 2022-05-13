@@ -17,7 +17,7 @@ import uk.ac.man.cs.eventlite.EventLite;
 @ActiveProfiles("test")
 @Disabled
 public class VenueServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
-
+	
 	@Autowired
 	private VenueService venueService;
 

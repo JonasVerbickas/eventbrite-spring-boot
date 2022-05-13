@@ -1,19 +1,28 @@
 package uk.ac.man.cs.eventlite;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import javax.servlet.Filter;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import uk.ac.man.cs.eventlite.config.Security;
 
@@ -28,11 +37,23 @@ public class SecurityTest {
 
 	@Autowired
 	private MockMvc mvc;
+	
+	@Autowired
+	private WebApplicationContext context;
+
+	@Autowired
+	private Filter springSecurityFilterChain;
+
+	@BeforeEach
+	public void setup() {
+		mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity(springSecurityFilterChain)).build();
+	}
 
 	@Test
 	public void getSignInForm() throws Exception {
 		mvc.perform(get("/sign-in").accept(MediaType.TEXT_HTML)).andExpect(status().isOk());
 	}
+
 
 	@Test
 	public void postSignInNoData() throws Exception {
