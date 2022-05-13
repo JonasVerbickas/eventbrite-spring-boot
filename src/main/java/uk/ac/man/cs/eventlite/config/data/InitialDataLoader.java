@@ -73,6 +73,7 @@ public class InitialDataLoader {
 			} else {
 				Event eA = new Event();
 				eA.setName("Event A");
+				eA.setId(0L);
 				eA.setTime(LocalTime.of(12, 0, 0));
 				eA.setDate(LocalDate.of(2022, 8, 1));
 				eA.setVenue(vA);
@@ -87,6 +88,7 @@ public class InitialDataLoader {
 				
 				Event eC = new Event();
 				eC.setName("Event C");
+				
 				eC.setTime(LocalTime.of(22, 2, 52));
 				eC.setDate(LocalDate.of(2022, 8, 16));
 				eC.setVenue(vB);

@@ -22,13 +22,21 @@ public class Security extends WebSecurityConfigurerAdapter {
 
 	// List the mappings/methods for which no authorisation is required.
 	// By default we allow all GETs and full access to the H2 console.
-	private static final RequestMatcher[] NO_AUTH = { new AntPathRequestMatcher("/webjars/**", "GET"),
-			new AntPathRequestMatcher("/**", "GET"), new AntPathRequestMatcher("/h2-console/**") };
+
+	private static final RequestMatcher[] AUTH = { new AntPathRequestMatcher("/events/new", "GET"), 
+			new AntPathRequestMatcher("/events/edit/*", "GET"), new AntPathRequestMatcher("/venues/addVenue/*", "GET"),  
+			new AntPathRequestMatcher("/venues/edit/*", "GET"), 
+			new AntPathRequestMatcher("/**", "PUT"), new AntPathRequestMatcher("/**", "DELETE"), 
+			new AntPathRequestMatcher("/events", "POST"), 
+			new AntPathRequestMatcher("/venues", "POST"),
+			new AntPathRequestMatcher("/events/edit/*", "POST"),
+			new AntPathRequestMatcher("/venues/edit/*", "POST") };
+
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// By default, all requests are authenticated except our specific list.
-		http.authorizeRequests().requestMatchers(NO_AUTH).permitAll().anyRequest().hasRole(ADMIN_ROLE);
+		http.authorizeRequests().requestMatchers(AUTH).hasRole(ADMIN_ROLE).anyRequest().permitAll();
 
 		// Use form login/logout for the Web.
 		http.formLogin().loginPage("/sign-in").permitAll();
