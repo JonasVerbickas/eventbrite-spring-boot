@@ -1,7 +1,7 @@
 package uk.ac.man.cs.eventlite.controllers;
 
-import static org.mockito.Mockito.verify; 
-import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -15,7 +15,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 
 
-
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -27,12 +28,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.mockito.ArgumentCaptor;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.ArgumentMatchers.any;
-import static org.hamcrest.Matchers.equalTo;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import uk.ac.man.cs.eventlite.config.Security;
 import uk.ac.man.cs.eventlite.dao.EventService;
@@ -40,11 +43,23 @@ import uk.ac.man.cs.eventlite.dao.TwitterServiceImpl;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
+import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
+import org.mockito.ArgumentCaptor;
 
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.ArgumentMatchers.any;
+import static org.hamcrest.Matchers.equalTo;
+
+import javax.swing.text.html.Option;
+
+@ContextConfiguration(classes = {EventsController.class})
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(EventsController.class)
 @Import(Security.class)
 public class EventsControllerTest {
+
+	@Autowired
+	private EventsController eventsController;
 
 	@Autowired
 	private MockMvc mvc;
@@ -77,6 +92,54 @@ public class EventsControllerTest {
 	}
 
 	@Test
+	void testDeleteAllFieldsSuccess() throws Exception {
+		when(this.eventService.save((Event) org.mockito.Mockito.any())).thenReturn(event);
+		when(this.eventService.findById(anyLong())).thenReturn(Optional.ofNullable(event));
+		MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/events/{id}/delete/all_fields", 42L);
+		MockMvcBuilders.standaloneSetup(this.eventsController)
+				.build()
+				.perform(requestBuilder)
+				.andExpect(MockMvcResultMatchers.status().isFound())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/events/42"))
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"))
+				.andExpect(handler().methodName("deleteAllFields"));
+		verify(event, times(1)).setTime(null);
+		verify(event, times(1)).setDate(null);
+		verify(event, times(1)).setDescription(null);
+		verify(eventService, times(1)).save(event);
+	}
+
+
+	@Test
+	void testDeleteByIdSuccess() throws Exception {
+		doNothing().when(this.eventService).deleteById(anyLong());
+		MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/events/{id}/delete", 42L);
+		MockMvcBuilders.standaloneSetup(this.eventsController)
+				.build()
+				.perform(requestBuilder)
+				.andExpect(MockMvcResultMatchers.status().isFound())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/events"))
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/events"))
+				.andExpect(handler().methodName("deleteById"));
+		verify(eventService, times(1)).deleteById(anyLong());
+	}
+
+	@Test
+	void testDeleteByIdEventNotFound() throws Exception {
+		doThrow(new EventNotFoundException(42L)).when(this.eventService).deleteById(anyLong());
+		MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/events/{id}/delete", 42L);
+		ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.eventsController)
+				.build()
+				.perform(requestBuilder);
+		actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("not_found_id"))
+				.andExpect(MockMvcResultMatchers.view().name("events/not_found"))
+				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"))
+				.andExpect(handler().methodName("deleteById"));
+		verify(eventService, times(1)).deleteById(anyLong());
+	}
+
+	@Test
 	public void getIndexWithEvents() throws Exception {
 		// JavaScript map crashes with mocked Event/Venues
 		Event e = new Event();
@@ -92,32 +155,103 @@ public class EventsControllerTest {
 	public void getEventNotFound() throws Exception {
 		mvc.perform(get("/events/99").accept(MediaType.TEXT_HTML)).andExpect(status().isNotFound())
 				.andExpect(view().name("events/not_found")).andExpect(handler().methodName("getEvent"));
+		verify(eventService, times(1)).findById(99L);
 	}
-	
+
 	@Test
-	public void insertEventSuccessfulCheck() throws Exception{
-		ArgumentCaptor <Event> arg = ArgumentCaptor.forClass(Event.class);
+	void testDeleteDateSuccess() throws Exception {
+		when(this.eventService.save((Event) any())).thenReturn(event);
+		when(this.eventService.findById(anyLong())).thenReturn(Optional.ofNullable(event));
+		MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/events/{id}/delete/date", 42L);
+		MockMvcBuilders.standaloneSetup(this.eventsController)
+				.build()
+				.perform(requestBuilder)
+				.andExpect(MockMvcResultMatchers.status().isFound())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/events/42"))
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"))
+				.andExpect(handler().methodName("deleteDate"));
+		verify(event, times(1)).setDate(null);
+		verify(eventService, times(1)).save(event);
+	}
+
+	@Test
+	void testDeleteDateEventNotFound() throws Exception {
+		when(this.eventService.save((Event) any())).thenThrow(new EventNotFoundException(42L));
+		when(this.eventService.findById(anyLong())).thenReturn(Optional.ofNullable(event));
+		MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/events/{id}/delete/date", 42L);
+		ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.eventsController)
+				.build()
+				.perform(requestBuilder);
+		actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("not_found_id"))
+				.andExpect(MockMvcResultMatchers.view().name("events/not_found"))
+				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"))
+				.andExpect(handler().methodName("deleteDate"));
+		verify(event, times(1)).setDate(null);
+		verify(eventService, times(1)).save(event);
+	}
+
+
+	@Test
+	void testDeleteTimeSuccess() throws Exception {
+
+		when(this.eventService.save((Event) any())).thenReturn(event);
+		when(this.eventService.findById(anyLong())).thenReturn(Optional.ofNullable(event));
+		MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/events/{id}/delete/time", 42L);
+		MockMvcBuilders.standaloneSetup(this.eventsController)
+				.build()
+				.perform(requestBuilder)
+				.andExpect(MockMvcResultMatchers.status().isFound())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/events/42"))
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"))
+				.andExpect(handler().methodName("deleteTime"));
+		verify(event, times(1)).setTime(null);
+		verify(eventService, times(1)).save(event);
+	}
+
+	@Test
+	void testDeleteTimeEventNotFound() throws Exception {
+		when(this.eventService.save((Event) any())).thenThrow(new EventNotFoundException(42L));
+		when(this.eventService.findById(anyLong())).thenReturn(Optional.ofNullable(event));
+		MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/events/{id}/delete/time", 42L);
+		ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.eventsController)
+				.build()
+				.perform(requestBuilder);
+		actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound())
+				.andExpect(MockMvcResultMatchers.model().size(1))
+				.andExpect(MockMvcResultMatchers.model().attributeExists("not_found_id"))
+				.andExpect(MockMvcResultMatchers.view().name("events/not_found"))
+				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"))
+				.andExpect(handler().methodName("deleteTime"));
+		verify(event, times(1)).setTime(null);
+		verify(eventService, times(1)).save(event);
+	}
+
+	@Test
+	public void insertEventSuccessfulCheck() throws Exception {
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
 		when(eventService.save(any(Event.class))).then(returnsFirstArg());
 		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
 		when(venue.getId()).thenReturn(2L);
-		
+
 		mvc.perform(post("/events").accept(MediaType.TEXT_HTML)
-		.with(user("Tom").roles(Security.ADMIN_ROLE))
-		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-		.param("id", "1")
-		.param("name", "MockName")
-		.param("venue.id", "2")
-		.param("date", "2023-10-20")
-		.param("time", "12:30")
-		.param("description", "Boringg")
-		.accept(MediaType.TEXT_HTML).with(csrf()))
-		.andExpect(view().name("redirect:/events"))
-		.andExpect(handler().methodName("createEvent"));
-	verify(eventService).save(arg.capture());
-	assertThat("MockName", equalTo(arg.getValue().getName()));
-	assertThat(1L, equalTo(arg.getValue().getId()));
-	assertThat(2L, equalTo(arg.getValue().getVenue().getId()));
+						.with(user("Tom").roles(Security.ADMIN_ROLE))
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("id", "1")
+						.param("name", "MockName")
+						.param("venue.id", "2")
+						.param("date", "2023-10-20")
+						.param("time", "12:30")
+						.param("description", "Boringg")
+						.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("redirect:/events"))
+				.andExpect(handler().methodName("createEvent"));
+		verify(eventService).save(arg.capture());
+		assertThat("MockName", equalTo(arg.getValue().getName()));
+		assertThat(1L, equalTo(arg.getValue().getId()));
+		assertThat(2L, equalTo(arg.getValue().getVenue().getId()));
 	}
+
 	
 	@Test
 	public void editEventSucessfulCheck() throws Exception {
@@ -136,9 +270,9 @@ public class EventsControllerTest {
 				.param("id", "1")
 				.param("name", "MockNameUpdated")
 				.param("venue.id","2")
-				.param("date", "9999-10-23")
-				.param("time", "12:50")
-				.param("description", "AAA")
+				.param("date", "2023-10-23")
+				.param("time", "12:34")
+				.param("description", "Very Boringggg")
 				.accept(MediaType.TEXT_HTML).with(csrf()))
 				.andExpect(status().isFound())
 				.andExpect(view().name("redirect:/events"))
@@ -152,5 +286,5 @@ public class EventsControllerTest {
 		
 	}
 	
-	
+
 }

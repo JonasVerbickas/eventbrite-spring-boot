@@ -140,7 +140,6 @@ public class EventsController {
 	@PutMapping("/{id}/delete/time")
 	public String deleteTime(@PathVariable("id") long id) {
 		Event e = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
-		;
 		e.setTime(null);
 		eventService.save(e);
 		return "redirect:/events/" + id;
@@ -149,7 +148,6 @@ public class EventsController {
 	@PutMapping("/{id}/delete/date")
 	public String deleteDate(@PathVariable("id") long id) {
 		Event e = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
-		;
 		e.setDate(null);
 		eventService.save(e);
 		return "redirect:/events/" + id;
@@ -159,9 +157,8 @@ public class EventsController {
 	public String deleteAllFields(@PathVariable("id") long id) {
 		Event e = eventService.findById(id).orElseThrow(() -> new EventNotFoundException(id));
 		e.setDate(null);
-		e.setName(null);
+		e.setDescription(null);
 		e.setTime(null);
-		// this does not work e.setVenue(null);
 		eventService.save(e);
 		return "redirect:/events/" + id;
 	}
@@ -226,7 +223,7 @@ public class EventsController {
 //			model.addAttribute("error", errorMsg);
 //			return "events/edit";
 //		}
-	
+
 		eventService.save(eventToEdit);
 
 		return "redirect:/events";
