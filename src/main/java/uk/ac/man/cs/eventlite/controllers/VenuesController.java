@@ -1,6 +1,12 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
+=======
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+>>>>>>> origin/venueapi_test
 
 import javax.validation.Valid;
 
@@ -41,6 +47,7 @@ public class VenuesController {
 	@Autowired
 	private EventService eventService;
 	
+<<<<<<< HEAD
 	@ExceptionHandler(VenueNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	
@@ -51,6 +58,8 @@ public class VenuesController {
 	}
 
 	
+=======
+>>>>>>> origin/venueapi_test
 	@GetMapping
 	public String getAllVenues(Model model) {
 
@@ -64,6 +73,24 @@ public class VenuesController {
 
 		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
 
+		Collection<Event> collection = new ArrayList<Event>();
+		
+		int counter = 0;
+		
+		for (Event e: eventService.findAllByVenueOrderByDateAscNameAsc(venue)) {
+			
+			if (e.getDate().compareTo(LocalDate.now())>=0) {
+				collection.add(e);
+				counter = counter + 1;
+			}
+			
+			if (counter == 3) {
+				break;
+			}
+			
+		}
+		
+		model.addAttribute("events3", collection);
 
 		model.addAttribute("v", venue);
 
