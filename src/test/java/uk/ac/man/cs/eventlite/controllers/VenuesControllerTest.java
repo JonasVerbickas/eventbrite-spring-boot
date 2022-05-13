@@ -69,6 +69,7 @@ class VenuesControllerTest {
 //  mvc.perform(get("/venues/99").accept(MediaType.TEXT_HTML)).andExpect(status().isNotFound())
 //    .andExpect(view().name("venues/not_found")).andExpect(handler().methodName("getVenues"));
 // }
+ 
 
 	@Test
 	public void newVenue() throws Exception {

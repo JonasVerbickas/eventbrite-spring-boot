@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+
 import org.springframework.http.MediaType;
+
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
@@ -17,6 +19,11 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import uk.ac.man.cs.eventlite.EventLite;
+
+
+
+
+
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = EventLite.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -46,4 +53,6 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 					assertThat(result.getResponseBody(), containsString("99"));
 				});
 	}
+	
+	
 }
