@@ -658,8 +658,7 @@ public class EventsControllerTest {
 		
 	}
 	
-	
-	
+
 	
 
 }

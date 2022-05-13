@@ -70,4 +70,9 @@ public class EventServiceImpl implements EventService {
 	public Iterable<Event> findByNameContainingIgnoreCaseOrderByDateAscNameAsc(String name){
 		return eventRepository.findByNameContainingIgnoreCaseOrderByDateAscNameAsc(name);
 	}
+
+	@Override
+	public Event findOne(long id) {		
+		return eventRepository.findById(id).orElse(null);
+	}
 }

@@ -41,6 +41,8 @@ public class EventsControllerApiIntegrationTest extends AbstractTransactionalJUn
 				.contentType(MediaType.APPLICATION_JSON).expectBody().jsonPath("$._links.self.href")
 				.value(endsWith("/api/events")).jsonPath("$._embedded.events.length()").value(equalTo(3));
 	}
+	
+	
 
 	@Test
 	public void getEventNotFound() {
