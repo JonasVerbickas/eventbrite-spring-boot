@@ -312,7 +312,7 @@ public class EventsControllerTest {
 						.param("time", "12:30")
 						.param("description", "Boringg")
 						.accept(MediaType.TEXT_HTML).with(csrf()))
-				.andExpect(view().name("event/new"));
+				.andExpect(view().name("events/new"));
 		
 	}
 	
@@ -333,7 +333,7 @@ public class EventsControllerTest {
 						.param("time", "12:30")
 						.param("description", "")
 						.accept(MediaType.TEXT_HTML).with(csrf()))
-				.andExpect(view().name("event/new"));
+				.andExpect(view().name("events/new"));
 		
 	}
 	
@@ -355,7 +355,7 @@ public class EventsControllerTest {
 						//the lengh of the description is 1054
 						.param("description", "illegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllll")
 						.accept(MediaType.TEXT_HTML).with(csrf()))
-				.andExpect(view().name("event/new"));
+				.andExpect(view().name("events/new"));
 		
 	}
 	
@@ -376,7 +376,7 @@ public class EventsControllerTest {
 						.param("time", "12:30")
 						.param("description", "Boringg")
 						.accept(MediaType.TEXT_HTML).with(csrf()))
-				.andExpect(view().name("event/new"));
+				.andExpect(view().name("events/new"));
 		
 	}
 	
@@ -397,7 +397,7 @@ public class EventsControllerTest {
 						.param("time", "")
 						.param("description", "Borrrrrrrrrrrrring")
 						.accept(MediaType.TEXT_HTML).with(csrf()))
-				.andExpect(view().name("event/new"));
+				.andExpect(view().name("events/new"));
 		
 	}
 		
@@ -420,7 +420,7 @@ public class EventsControllerTest {
 						.param("time", "12:30")
 						.param("description", "Borrrrrrrrrrrrring")
 						.accept(MediaType.TEXT_HTML).with(csrf()))
-				.andExpect(view().name("event/new"));
+				.andExpect(view().name("events/new"));
 		
 	}
 
