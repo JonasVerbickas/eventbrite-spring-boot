@@ -338,6 +338,28 @@ public class EventsControllerTest {
 	}
 	
 	@Test
+	public void testAddIllegalDesEvent() throws Exception{
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+
+		mvc.perform(post("/events").accept(MediaType.TEXT_HTML)
+						.with(user("Tom").roles(Security.ADMIN_ROLE))
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("id", "1")
+						.param("name", "TestAddNoVenue")
+						.param("venue.id", "2")
+						.param("date", "2023-10-20")
+						.param("time", "12:30")
+						//the lengh of the description is 1054
+						.param("description", "illegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllll")
+						.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("event/new"));
+		
+	}
+	
+	@Test
 	public void testAddNoDateEvent() throws Exception{
 		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
 		when(eventService.save(any(Event.class))).then(returnsFirstArg());
