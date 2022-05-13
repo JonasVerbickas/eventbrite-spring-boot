@@ -1,5 +1,9 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;  
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
@@ -31,6 +36,9 @@ public class VenuesController {
 
 	@Autowired
 	private VenueService venueService;
+	
+	@Autowired
+	private EventService eventService;
 	
 	@GetMapping
 	public String getAllVenues(Model model) {
@@ -45,6 +53,24 @@ public class VenuesController {
 
 		Venue venue = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));
 
+		Collection<Event> collection = new ArrayList<Event>();
+		
+		int counter = 0;
+		
+		for (Event e: eventService.findAllByVenueOrderByDateAscNameAsc(venue)) {
+			
+			if (e.getDate().compareTo(LocalDate.now())>=0) {
+				collection.add(e);
+				counter = counter + 1;
+			}
+			
+			if (counter == 3) {
+				break;
+			}
+			
+		}
+		
+		model.addAttribute("events3", collection);
 
 		model.addAttribute("v", venue);
 
