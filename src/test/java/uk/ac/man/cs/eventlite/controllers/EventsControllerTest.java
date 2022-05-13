@@ -3,6 +3,7 @@ package uk.ac.man.cs.eventlite.controllers;
 import static org.mockito.Mockito.verify; 
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
@@ -11,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+
 
 
 
@@ -115,6 +117,39 @@ public class EventsControllerTest {
 	assertThat("MockName", equalTo(arg.getValue().getName()));
 	assertThat(1L, equalTo(arg.getValue().getId()));
 	assertThat(2L, equalTo(arg.getValue().getVenue().getId()));
+	}
+	
+	@Test
+	public void editEventSucessfulCheck() throws Exception {
+		
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		Event e = new Event();
+		e.setId(1);
+		e.setName("MockName");
+		e.setVenue(venue);
+		when(eventService.findById(1L)).thenReturn(Optional.of(e));
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		
+		mvc.perform(post("/events/edit/1").with(user("Tom").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", "1")
+				.param("name", "MockNameUpdated")
+				.param("venue.id","2")
+				.param("date", "9999-10-23")
+				.param("time", "12:50")
+				.param("description", "AAA")
+				.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(status().isFound())
+				.andExpect(view().name("redirect:/events"))
+				.andExpect(model().hasNoErrors())
+				.andExpect(handler().methodName("updateById"));
+		verify(eventService).save(arg.capture());
+		assertThat("MockNameUpdated", equalTo(arg.getValue().getName()));
+		assertThat(2L, equalTo(arg.getValue().getVenue().getId()));
+		assertThat(1L, equalTo(arg.getValue().getId()));
+		
+		
 	}
 	
 	
