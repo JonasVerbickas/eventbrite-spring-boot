@@ -28,17 +28,19 @@ public class Event {
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Future(message = "Date Has To Be In The Future")
-	
+	@NotNull(message = "Cannot be empty!")
 	private LocalDate date;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime time;
+	
+	
 	@NotBlank(message = "Cannot be empty!")
 	@Size(max = 256, message = "the length of the events name should not be more than 256 characters")
 	private String name;
 
-	
+	@NotBlank(message = "Cannot be empty!")
 	@Size(max = 500, message = "Description should not have more than 500 characters")
 	@Column(length = 100000)
 	private String description;

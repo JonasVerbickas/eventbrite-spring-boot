@@ -423,6 +423,8 @@ public class EventsControllerTest {
 				.andExpect(view().name("events/new"));
 		
 	}
+	
+	
 
 
 }
