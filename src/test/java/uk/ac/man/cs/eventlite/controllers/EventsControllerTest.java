@@ -17,6 +17,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -28,6 +29,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -656,6 +658,84 @@ public class EventsControllerTest {
 				.accept(MediaType.TEXT_HTML).with(csrf()))
 				.andExpect(view().name("events/edit"));
 		
+	}
+	
+	public void putEvent() throws Exception {
+		
+	    Venue v = new Venue();
+		v.setName("Venue");
+		v.setCapacity(1000);
+		venueService.save(v);
+		
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		
+		when(eventService.findOne(1)).thenReturn(event);
+
+		mvc.perform(MockMvcRequestBuilders.post("/events/update/1").with(user("Rob").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("name", "Test Event New")
+				.param("date", LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+				.param("venue", venue.getName())
+				.accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(status().isFound())
+		.andExpect(view().name("redirect:/events")).andExpect(model().hasNoErrors())
+		.andExpect(handler().methodName("putEvent"));
+
+		verify(eventService).save(arg.capture());
+	}
+	
+	@Test
+	@WithMockUser(username = "Mustafa", password = "Mustafa", roles= {"USER"})
+	public void putEventUnauthorisedUser() throws Exception {
+		when(eventService.findOne(1)).thenReturn(event);
+		
+		mvc.perform(MockMvcRequestBuilders.post("/events/update/{id}", 1)
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("name", "Test Event New")
+				.param("date", LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+				.param("venue", venue.getName())
+				.accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(status().isForbidden());
+	
+		verify(eventService, never()).save(event);
+	}
+	
+	@Test
+	@WithMockUser(username = "Mustafa", password = "Mustafa", roles= {"ADMINISTRATOR"})
+	public void putVenueNoCsrf() throws Exception {
+		when(eventService.findOne(1)).thenReturn(event);
+		
+		mvc.perform(MockMvcRequestBuilders.post("/events/update/{id}", 1)
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("name", "Test Event New")
+				.param("date", LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+				.param("venue", venue.getName())
+				.accept(MediaType.TEXT_HTML))
+		.andExpect(status().isForbidden());
+
+		
+		verify(eventService, never()).save(event);
+	}
+	@Test
+	@WithMockUser(username = "Mustafa", password = "Mustafa", roles= {"USER"})
+	public void deleteEventByNameUnauthorisedUser() throws Exception {
+		when(eventService.findOne(1)).thenReturn(event);
+	
+		mvc.perform(MockMvcRequestBuilders.delete("/events/delete/1").accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(status().isForbidden());
+	
+		verify(eventService, never()).deleteById(1);
+	}
+	
+	@Test
+	@WithMockUser(username = "Mustafa", password = "Mustafa", roles= {"ADMINISTRATOR"})
+	public void deleteEventByNameNoCsrf() throws Exception {
+		when(eventService.findOne(1)).thenReturn(event);
+	
+		mvc.perform(MockMvcRequestBuilders.delete("/events/delete/1").accept(MediaType.TEXT_HTML))
+		.andExpect(status().isForbidden());
+	
+		verify(eventService, never()).deleteById(1);
 	}
 	
 
