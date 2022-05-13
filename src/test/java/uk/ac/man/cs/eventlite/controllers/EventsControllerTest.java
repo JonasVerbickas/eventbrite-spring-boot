@@ -251,6 +251,182 @@ public class EventsControllerTest {
 		assertThat(1L, equalTo(arg.getValue().getId()));
 		assertThat(2L, equalTo(arg.getValue().getVenue().getId()));
 	}
+	
+
+	
+	@Test
+	public void testAddNoNameEvent() throws Exception{
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+
+		mvc.perform(post("/events").accept(MediaType.TEXT_HTML)
+						.with(user("Tom").roles(Security.ADMIN_ROLE))
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("id", "1")
+						.param("name", "")
+						.param("venue.id", "2")
+						.param("date", "2023-10-20")
+						.param("time", "12:30")
+						.param("description", "Boringg")
+						.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/new"));
+		
+	}
+	
+	@Test
+	public void testAddIllegalNameEvent() throws Exception{
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+
+		mvc.perform(post("/events").accept(MediaType.TEXT_HTML)
+						.with(user("Tom").roles(Security.ADMIN_ROLE))
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("id", "1")
+						//the length of the name is 290
+						.param("name", "Illegallllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll")
+						.param("venue.id", "2")
+						.param("date", "2023-10-20")
+						.param("time", "12:30")
+						.param("description", "Boringg")
+						.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/new"));
+		
+	}
+	
+	@Test
+	public void testAddNoVenueEvent() throws Exception{
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+
+		mvc.perform(post("/events").accept(MediaType.TEXT_HTML)
+						.with(user("Tom").roles(Security.ADMIN_ROLE))
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("id", "1")
+						.param("name", "TestAddNoVenue")
+						.param("venue.id", "")
+						.param("date", "2023-10-20")
+						.param("time", "12:30")
+						.param("description", "Boringg")
+						.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/new"));
+		
+	}
+	
+	@Test
+	public void testAddNoDesEvent() throws Exception{
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+
+		mvc.perform(post("/events").accept(MediaType.TEXT_HTML)
+						.with(user("Tom").roles(Security.ADMIN_ROLE))
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("id", "1")
+						.param("name", "TestAddNoVenue")
+						.param("venue.id", "2")
+						.param("date", "2023-10-20")
+						.param("time", "12:30")
+						.param("description", "")
+						.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/new"));
+		
+	}
+	
+	@Test
+	public void testAddIllegalDesEvent() throws Exception{
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+
+		mvc.perform(post("/events").accept(MediaType.TEXT_HTML)
+						.with(user("Tom").roles(Security.ADMIN_ROLE))
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("id", "1")
+						.param("name", "TestAddNoVenue")
+						.param("venue.id", "2")
+						.param("date", "2023-10-20")
+						.param("time", "12:30")
+						//the lengh of the description is 1054
+						.param("description", "illegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllll")
+						.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/new"));
+		
+	}
+	
+	@Test
+	public void testAddNoDateEvent() throws Exception{
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+
+		mvc.perform(post("/events").accept(MediaType.TEXT_HTML)
+						.with(user("Tom").roles(Security.ADMIN_ROLE))
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("id", "1")
+						.param("name", "TestAddNoVenue")
+						.param("venue.id", "2")
+						.param("date", "")
+						.param("time", "12:30")
+						.param("description", "Boringg")
+						.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/new"));
+		
+	}
+	
+//	@Test
+//	public void testAddNoTimeEvent() throws Exception{
+//		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+//		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+//		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+//		when(venue.getId()).thenReturn(2L);
+//
+//		mvc.perform(post("/events").accept(MediaType.TEXT_HTML)
+//						.with(user("Tom").roles(Security.ADMIN_ROLE))
+//						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+//						.param("id", "1")
+//						.param("name", "TestAddNoVenue")
+//						.param("venue.id", "2")
+//						.param("date", "2023-10-20")
+//						.param("time", "")
+//						.param("description", "Borrrrrrrrrrrrring")
+//						.accept(MediaType.TEXT_HTML).with(csrf()))
+//				.andExpect(view().name("events/new"));
+//		
+//	}
+		
+	
+	
+	@Test
+	public void testAddPastDateEvent() throws Exception{
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+
+		mvc.perform(post("/events").accept(MediaType.TEXT_HTML)
+						.with(user("Tom").roles(Security.ADMIN_ROLE))
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("id", "1")
+						.param("name", "TestAddNoVenue")
+						.param("venue.id", "2")
+						.param("date", "2020-10-20")
+						.param("time", "12:30")
+						.param("description", "Borrrrrrrrrrrrring")
+						.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/new"));
+		
+	}
+	
+	
 
 	
 	@Test
@@ -285,6 +461,184 @@ public class EventsControllerTest {
 		
 		
 	}
+	
+	@Test
+	public void editEventSucesswithNoName() throws Exception {
+		
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		Event e = new Event();
+		e.setId(1);
+		e.setName("MockName");
+		e.setVenue(venue);
+		when(eventService.findById(1L)).thenReturn(Optional.of(e));
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		
+		mvc.perform(post("/events/edit/1").with(user("Tom").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", "1")
+				.param("name", " ")
+				.param("venue.id","2")
+				.param("date", "2023-10-23")
+				.param("time", "12:34")
+				.param("description", "Very Boringggg")
+				.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/edit"));
+		
+	}
+	
+	@Test
+	public void editEventSucesswithBadName() throws Exception {
+		
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		Event e = new Event();
+		e.setId(1);
+		e.setName("MockName");
+		e.setVenue(venue);
+		when(eventService.findById(1L)).thenReturn(Optional.of(e));
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		
+		mvc.perform(post("/events/edit/1").with(user("Tom").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", "1")
+				.param("name", "Illegallllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll")
+				.param("venue.id","2")
+				.param("date", "2023-10-23")
+				.param("time", "12:34")
+				.param("description", "Very Boringggg")
+				.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/edit"));
+		
+	}
+	
+	@Test
+	public void editEventSucesswithNoVenue() throws Exception {
+		
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		Event e = new Event();
+		e.setId(1);
+		e.setName("MockName");
+		e.setVenue(venue);
+		when(eventService.findById(1L)).thenReturn(Optional.of(e));
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		
+		mvc.perform(post("/events/edit/1").with(user("Tom").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", "1")
+				.param("name", "TestName")
+				.param("venue.id","")
+				.param("date", "2023-10-23")
+				.param("time", "12:34")
+				.param("description", "Very Boringggg")
+				.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/edit"));
+		
+	}
+	
+	@Test
+	public void editEventSucesswithNoDes() throws Exception {
+		
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		Event e = new Event();
+		e.setId(1);
+		e.setName("MockName");
+		e.setVenue(venue);
+		when(eventService.findById(1L)).thenReturn(Optional.of(e));
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		
+		mvc.perform(post("/events/edit/1").with(user("Tom").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", "1")
+				.param("name", "TestName")
+				.param("venue.id","2")
+				.param("date", "2023-10-23")
+				.param("time", "12:34")
+				.param("description", " ")
+				.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/edit"));
+		
+	}
+	
+	@Test
+	public void editEventSucesswithBadDes() throws Exception {
+		
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		Event e = new Event();
+		e.setId(1);
+		e.setName("MockName");
+		e.setVenue(venue);
+		when(eventService.findById(1L)).thenReturn(Optional.of(e));
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		
+		mvc.perform(post("/events/edit/1").with(user("Tom").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", "1")
+				.param("name", "TestName")
+				.param("venue.id","2")
+				.param("date", "2023-10-23")
+				.param("time", "12:34")
+				.param("description", "illegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllll")
+				.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/edit"));
+		
+	}
+	
+	@Test
+	public void editEventSucesswithNoDate() throws Exception {
+		
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		Event e = new Event();
+		e.setId(1);
+		e.setName("MockName");
+		e.setVenue(venue);
+		when(eventService.findById(1L)).thenReturn(Optional.of(e));
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		
+		mvc.perform(post("/events/edit/1").with(user("Tom").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", "1")
+				.param("name", "TestName")
+				.param("venue.id","2")
+				.param("date", "")
+				.param("time", "12:34")
+				.param("description", "Boring stuff")
+				.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/edit"));
+		
+	}
+	
+	@Test
+	public void editEventSucesswithPastDate() throws Exception {
+		
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
+		when(eventService.save(any(Event.class))).then(returnsFirstArg());
+		Event e = new Event();
+		e.setId(1);
+		e.setName("MockName");
+		e.setVenue(venue);
+		when(eventService.findById(1L)).thenReturn(Optional.of(e));
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		
+		mvc.perform(post("/events/edit/1").with(user("Tom").roles(Security.ADMIN_ROLE))
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", "1")
+				.param("name", "TestName")
+				.param("venue.id","2")
+				.param("date", "2020-10-23")
+				.param("time", "12:34")
+				.param("description", "Boring stuff")
+				.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("events/edit"));
+		
+	}
+	
+	
+	
 	
 
 }
