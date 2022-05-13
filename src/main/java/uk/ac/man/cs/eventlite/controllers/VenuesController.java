@@ -1,12 +1,8 @@
 package uk.ac.man.cs.eventlite.controllers;
 
-<<<<<<< HEAD
-import java.util.ArrayList;
-=======
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
->>>>>>> origin/venueapi_test
 
 import javax.validation.Valid;
 
