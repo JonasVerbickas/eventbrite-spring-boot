@@ -1,6 +1,5 @@
 package uk.ac.man.cs.eventlite.controllers;
 
-
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
@@ -23,7 +22,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.ac.man.cs.eventlite.config.data.InitialDataLoader;
 import uk.ac.man.cs.eventlite.dao.EventService;
@@ -37,8 +35,6 @@ import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication;
 
-
-
 import uk.ac.man.cs.eventlite.EventLite;
 import uk.ac.man.cs.eventlite.entities.Venue;
 
@@ -46,7 +42,7 @@ import uk.ac.man.cs.eventlite.entities.Venue;
 @SpringBootTest(classes = EventLite.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("test")
-public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class VenuesControllerIntegrationTest extends AbstractTransactionalJUnit4SpringContextTests {
 
 	@LocalServerPort
 	private int port;
@@ -66,73 +62,52 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 	}
 
 	@Test
-	public void testGetAllEvents() {
-		client.get().uri("/events").accept(MediaType.TEXT_HTML).exchange().expectStatus().isOk();
-	}
-
-	@Test
-	public void getEventNotFound() {
-		client.get().uri("/events/99").accept(MediaType.TEXT_HTML).exchange().expectStatus().isNotFound().expectHeader()
-				.contentTypeCompatibleWith(MediaType.TEXT_HTML).expectBody(String.class).consumeWith(result -> {
-					assertThat(result.getResponseBody(), containsString("99"));
-				});
-	}
-
-	@Test
-	public void deleteEventNoLogin() {
+	public void deleteVenueNoLogin() {
 		long id = eventService.findAll().iterator().next().getId();
-		client.delete().uri("/events/" + id).accept(MediaType.TEXT_HTML).exchange().expectStatus().isFound()
+		client.delete().uri("/venue/" + id).accept(MediaType.TEXT_HTML).exchange().expectStatus().isFound()
 				.expectHeader().value("Location", endsWith("/sign-in"));
 	}
 
-	@Test
+@Test
 	public void getEditNoLogIn() {
-		long id = eventService.findAll().iterator().next().getId();
-		client.get().uri("/events/edit/"+id).accept(MediaType.TEXT_HTML).exchange().expectStatus().isFound()
+		long id = venueService.findAll().iterator().next().getId();
+		client.get().uri("/venues/edit/"+id).accept(MediaType.TEXT_HTML).exchange().expectStatus().isFound()
 				.expectHeader().value("Location", endsWith("/sign-in"));
 	}
 
 	@Test
 	public void getNewNoLogIn() {
-		client.delete().uri("/events/new").accept(MediaType.TEXT_HTML).exchange().expectStatus().isFound()
+		client.get().uri("/venues/addVenue").accept(MediaType.TEXT_HTML).exchange().expectStatus().isFound()
 				.expectHeader().value("Location", endsWith("/sign-in"));
-	}
+
+			}
+
 
 	@Test
-	public void getNewAuthorized() {
-		client.mutate().filter(basicAuthentication("Mustafa", "Mustafa"))
-				.build().delete().uri("/events/new").accept(MediaType.TEXT_HTML).exchange().expectStatus().isFound()
-				.expectHeader().value("Location", endsWith("/sign-in"));
-	}
-
-	@Test
-	public void getAllEventsPage() {
-		client.get().uri("/events").accept(MediaType.TEXT_HTML).exchange().expectStatus().isOk()
+	public void getAllVenuesPage() {
+		client.get().uri("/venues").accept(MediaType.TEXT_HTML).exchange().expectStatus().isOk()
 				.expectHeader().contentTypeCompatibleWith(MediaType.TEXT_HTML).expectBody(String.class)
 				.consumeWith(result -> {
-					for(Event e: eventService.findAll())
+					for(Venue v: venueService.findAll())
 					{
-						System.out.println(e.toString());
-						assertThat(result.getResponseBody(), containsString(e.getDate().toString()));
-						assertThat(result.getResponseBody(), containsString(e.getTime().toString()));
-						assertThat(result.getResponseBody(), containsString(e.getName()));
+						assertThat(result.getResponseBody(), containsString(v.getName()));
+						assertThat(result.getResponseBody(), containsString(""+v.getCapacity()));
+						assertThat(result.getResponseBody(), containsString(v.getAddress()));
 					}
 				});
 	}
 
 	@Test
-	public void getEventPage() {
-		Event e = eventService.findAll().iterator().next();
-		client.get().uri("/events/"+e.getId()).accept(MediaType.TEXT_HTML).exchange().expectStatus().isOk()
+	public void getVenuePage() {
+		Venue v = venueService.findAll().iterator().next();
+		client.get().uri("/venues/"+v.getId()).accept(MediaType.TEXT_HTML).exchange().expectStatus().isOk()
 				.expectHeader().contentTypeCompatibleWith(MediaType.TEXT_HTML).expectBody(String.class)
 				.consumeWith(result -> {
-						assertThat(result.getResponseBody(), containsString(e.getDate().toString()));
-						assertThat(result.getResponseBody(), containsString(e.getTime().toString()));
-						assertThat(result.getResponseBody(), containsString(e.getName()));
-					assertThat(result.getResponseBody(), containsString(e.getVenue().getName()));
-					assertThat(result.getResponseBody(), containsString(""+e.getVenue().getCapacity()));
+					assertThat(result.getResponseBody(), containsString(v.getName()));
+					assertThat(result.getResponseBody(), containsString(""+v.getCapacity()));
+					assertThat(result.getResponseBody(), containsString(v.getAddress()));
+					assertThat(result.getResponseBody(), containsString(v.getPostcode()));
 				});
 	}
-
 
 }

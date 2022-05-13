@@ -3,9 +3,11 @@ import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication;
 
 import java.util.Collections;
 
+import org.hamcrest.core.StringEndsWith;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +31,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import uk.ac.man.cs.eventlite.EventLite;
+import uk.ac.man.cs.eventlite.dao.VenueService;
+import uk.ac.man.cs.eventlite.entities.Event;
 
+import uk.ac.man.cs.eventlite.entities.Venue;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = EventLite.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
@@ -47,6 +52,9 @@ public class VenueControllerApiIntegrationTest extends AbstractTransactionalJUni
 	
 	@Autowired
 	private TestRestTemplate template;
+
+	@Autowired
+	private VenueService venueService;
 
 	private WebTestClient client;
 	
@@ -102,11 +110,10 @@ public class VenueControllerApiIntegrationTest extends AbstractTransactionalJUni
 
 		ResponseEntity<String> results = bad_example.exchange(base_url, HttpMethod.POST, post_venue, String.class);
 
-		assertThat(results.getStatusCode(), equalTo(HttpStatus.UNAUTHORIZED));
+		assertThat(results.getStatusCode(), equalTo(HttpStatus.FORBIDDEN));
 	}
-	
-	
-	
-	
+
+
+
 	
 }

@@ -24,7 +24,7 @@ public class Security extends WebSecurityConfigurerAdapter {
 	// By default we allow all GETs and full access to the H2 console.
 
 	private static final RequestMatcher[] AUTH = { new AntPathRequestMatcher("/events/new", "GET"), 
-			new AntPathRequestMatcher("/events/edit/*", "GET"), new AntPathRequestMatcher("/venues/addVenue/*", "GET"),  
+			new AntPathRequestMatcher("/events/edit/*", "GET"), new AntPathRequestMatcher("/venues/addVenue", "GET"),  
 			new AntPathRequestMatcher("/venues/edit/*", "GET"), 
 			new AntPathRequestMatcher("/**", "PUT"), new AntPathRequestMatcher("/**", "DELETE"), 
 			new AntPathRequestMatcher("/events", "POST"), 
