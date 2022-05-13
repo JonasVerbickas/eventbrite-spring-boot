@@ -1,5 +1,7 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+import java.util.ArrayList;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
@@ -34,6 +37,9 @@ public class VenuesController {
 
 	@Autowired
 	private VenueService venueService;
+	
+	@Autowired
+	private EventService eventService;
 	
 	@ExceptionHandler(VenueNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
@@ -78,6 +84,12 @@ public class VenuesController {
 	@DeleteMapping("/{id}/delete")
 	public String deleteById(@PathVariable("id") long id)
 	{
+		for(Event e: eventService.findAll()) {
+			if(e.getVenue().getId() == id) {
+				return "redirect:/venues/"+id;
+			}
+			
+		}
 		venueService.deleteById(id);
 		return "redirect:/venues";
 	}
@@ -109,6 +121,7 @@ public class VenuesController {
 	@PutMapping("/{id}/delete/all_fields")
 	public String deleteAllFields(@PathVariable("id") long id) {
 		Venue v = venueService.findById(id).orElseThrow(() -> new VenueNotFoundException(id));;
+//		if()
 		v.setCapacity(0);
 		v.setName(null);
 		v.setAddress(null);
