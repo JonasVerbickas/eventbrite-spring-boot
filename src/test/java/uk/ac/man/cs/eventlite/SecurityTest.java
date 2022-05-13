@@ -47,6 +47,7 @@ public class SecurityTest {
 	@BeforeEach
 	public void setup() {
 		mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity(springSecurityFilterChain)).build();
+	
 	}
 
 	@Test
