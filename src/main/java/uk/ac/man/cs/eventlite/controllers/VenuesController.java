@@ -43,7 +43,6 @@ public class VenuesController {
 	@Autowired
 	private EventService eventService;
 	
-<<<<<<< HEAD
 	@ExceptionHandler(VenueNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	
@@ -54,8 +53,6 @@ public class VenuesController {
 	}
 
 	
-=======
->>>>>>> origin/venueapi_test
 	@GetMapping
 	public String getAllVenues(Model model) {
 
