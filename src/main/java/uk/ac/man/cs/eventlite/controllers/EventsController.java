@@ -124,7 +124,7 @@ public class EventsController {
 		return "redirect:/events";
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/")
+	@RequestMapping(method = RequestMethod.GET, value = "/search")
 	public String getSearchedEvent(Model model, @RequestParam(value = "search", required = true) String search_value){
 		model.addAttribute("search_value", search_value);
 		// Event stuff

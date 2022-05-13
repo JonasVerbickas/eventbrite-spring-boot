@@ -286,5 +286,27 @@ public class EventsControllerTest {
 		
 	}
 	
+	@Test 
+	public void getEventByNameSearchTest() throws Exception{ 
+		Event eventByname = new Event(); 
+		Venue venue_local = new Venue();
+		eventByname.setName("Lab"); 
+		eventByname.setVenue(venue_local); 
+		eventByname.setDescription("Come onn");
+		eventByname.setId(1);
+		eventByname.setDate(LocalDate.of(2023, 2, 12));
+		eventByname.setTime(LocalTime.of(15, 1, 15));
+		when(eventService.findByNameContainingIgnoreCaseOrderByDateAscNameAsc("Lab")).thenReturn(Collections.<Event>singletonList(eventByname)); 
+		
+		mvc.perform(get("/events/search?search=Lab") 
+				.accept(MediaType.TEXT_HTML))
+				.andExpect(status().is2xxSuccessful())		
+				.andExpect(view().name("events/index"))
+				.andExpect(handler().methodName("getSearchedEvent")); 
+		verify(eventService).findByNameContainingIgnoreCaseOrderByDateAscNameAsc("Lab"); 
+		}
+	
+	
+	
 
 }
