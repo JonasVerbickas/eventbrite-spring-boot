@@ -9,10 +9,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -78,4 +80,21 @@ public class EventsControllerApiTest {
 				.andExpect(jsonPath("$.error", containsString("event 99"))).andExpect(jsonPath("$.id", equalTo(99)))
 				.andExpect(handler().methodName("getEvent"));
 	}
+	
+	@Test
+	public void getOneEventTest() throws Exception {
+		int id = 0;
+		Event e = new Event();
+		e.setId(id);
+		when(eventService.findById(id)).thenReturn(Optional.of(e));
+
+		mvc.perform(get("/api/events/{id}", id).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(handler().methodName("getEvent")).andExpect(jsonPath("$.length()", equalTo(8)))
+				.andExpect(jsonPath("$._links.self.href", endsWith("/events/"+ id)))
+				.andExpect(jsonPath("$._links.events.href", endsWith("/events")))
+				.andExpect(jsonPath("$._links.venue.href", endsWith("/events/"+ id + "/venue")));
+		
+		verify(eventService).findById(id);
+	}
 }
+
