@@ -99,7 +99,8 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 
 	@Test
 	public void deleteEventNoLogin() {
-		client.delete().uri("/events/99").accept(MediaType.TEXT_HTML).exchange().expectStatus().isFound()
+		long id = eventService.findAll().iterator().next().getId();
+		client.delete().uri("/events/" + id).accept(MediaType.TEXT_HTML).exchange().expectStatus().isFound()
 				.expectHeader().value("Location", endsWith("/sign-in"));
 	}
 
@@ -117,7 +118,14 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 	}
 
 	@Test
-	public void getEventPage() {
+	public void getNewAuthorized() {
+		client.mutate().filter(basicAuthentication("Mustafa", "Mustafa"))
+				.build().delete().uri("/events/new").accept(MediaType.TEXT_HTML).exchange().expectStatus().isFound()
+				.expectHeader().value("Location", endsWith("/sign-in"));
+	}
+
+	@Test
+	public void getAllEventsPage() {
 		client.get().uri("/events").accept(MediaType.TEXT_HTML).exchange().expectStatus().isOk()
 				.expectHeader().contentTypeCompatibleWith(MediaType.TEXT_HTML).expectBody(String.class)
 				.consumeWith(result -> {
@@ -128,8 +136,21 @@ public class EventsControllerIntegrationTest extends AbstractTransactionalJUnit4
 						assertThat(result.getResponseBody(), containsString(e.getTime().toString()));
 						assertThat(result.getResponseBody(), containsString(e.getName()));
 					}
-					assertThat(result.getResponseBody(), containsString("Upcoming events"));
-					assertThat(result.getResponseBody(), containsString("Previous events"));
+				});
+	}
+
+	@Test
+	public void getEventPage() {
+
+		Event e = eventService.findAll().iterator().next();
+		client.get().uri("/events/"+e.getId()).accept(MediaType.TEXT_HTML).exchange().expectStatus().isOk()
+				.expectHeader().contentTypeCompatibleWith(MediaType.TEXT_HTML).expectBody(String.class)
+				.consumeWith(result -> {
+						assertThat(result.getResponseBody(), containsString(e.getDate().toString()));
+						assertThat(result.getResponseBody(), containsString(e.getTime().toString()));
+						assertThat(result.getResponseBody(), containsString(e.getName()));
+					assertThat(result.getResponseBody(), containsString(e.getVenue().getName()));
+					assertThat(result.getResponseBody(), containsString(""+e.getVenue().getCapacity()));
 				});
 	}
 
