@@ -1,6 +1,8 @@
 package uk.ac.man.cs.eventlite.controllers;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
@@ -9,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-
 
 
 import java.time.LocalDate;
@@ -42,6 +43,7 @@ import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 import org.mockito.ArgumentCaptor;
+
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.hamcrest.Matchers.equalTo;
@@ -87,6 +89,24 @@ public class EventsControllerTest {
 		verifyNoInteractions(venue);
 	}
 
+	@Test
+	void testDeleteAllFieldsSuccess() throws Exception {
+		when(this.eventService.save((Event) org.mockito.Mockito.any())).thenReturn(event);
+		when(this.eventService.findById(anyLong())).thenReturn(Optional.ofNullable(event));
+		MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/events/{id}/delete/all_fields", 42L);
+		MockMvcBuilders.standaloneSetup(this.eventsController)
+				.build()
+				.perform(requestBuilder)
+				.andExpect(MockMvcResultMatchers.status().isFound())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/events/42"))
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"))
+				.andExpect(handler().methodName("deleteAllFields"));
+		verify(event, times(1)).setTime(null);
+		verify(event, times(1)).setDate(null);
+		verify(event, times(1)).setDescription(null);
+		verify(eventService, times(1)).save(event);
+	}
+
 
 	@Test
 	void testDeleteByIdSuccess() throws Exception {
@@ -97,7 +117,8 @@ public class EventsControllerTest {
 				.perform(requestBuilder)
 				.andExpect(MockMvcResultMatchers.status().isFound())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/events"))
-				.andExpect(MockMvcResultMatchers.redirectedUrl("/events"));
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/events"))
+				.andExpect(handler().methodName("deleteById"));
 		verify(eventService, times(1)).deleteById(anyLong());
 	}
 
@@ -111,7 +132,8 @@ public class EventsControllerTest {
 		actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound())
 				.andExpect(MockMvcResultMatchers.model().attributeExists("not_found_id"))
 				.andExpect(MockMvcResultMatchers.view().name("events/not_found"))
-				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"));
+				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"))
+				.andExpect(handler().methodName("deleteById"));
 		verify(eventService, times(1)).deleteById(anyLong());
 	}
 
@@ -144,7 +166,8 @@ public class EventsControllerTest {
 				.perform(requestBuilder)
 				.andExpect(MockMvcResultMatchers.status().isFound())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/events/42"))
-				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"));
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"))
+				.andExpect(handler().methodName("deleteDate"));
 		verify(event, times(1)).setDate(null);
 		verify(eventService, times(1)).save(event);
 	}
@@ -160,7 +183,8 @@ public class EventsControllerTest {
 		actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound())
 				.andExpect(MockMvcResultMatchers.model().attributeExists("not_found_id"))
 				.andExpect(MockMvcResultMatchers.view().name("events/not_found"))
-				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"));
+				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"))
+				.andExpect(handler().methodName("deleteDate"));
 		verify(event, times(1)).setDate(null);
 		verify(eventService, times(1)).save(event);
 	}
@@ -177,7 +201,8 @@ public class EventsControllerTest {
 				.perform(requestBuilder)
 				.andExpect(MockMvcResultMatchers.status().isFound())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/events/42"))
-				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"));
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/events/42"))
+				.andExpect(handler().methodName("deleteTime"));
 		verify(event, times(1)).setTime(null);
 		verify(eventService, times(1)).save(event);
 	}
@@ -194,44 +219,36 @@ public class EventsControllerTest {
 				.andExpect(MockMvcResultMatchers.model().size(1))
 				.andExpect(MockMvcResultMatchers.model().attributeExists("not_found_id"))
 				.andExpect(MockMvcResultMatchers.view().name("events/not_found"))
-				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"));
+				.andExpect(MockMvcResultMatchers.forwardedUrl("events/not_found"))
+				.andExpect(handler().methodName("deleteTime"));
 		verify(event, times(1)).setTime(null);
 		verify(eventService, times(1)).save(event);
 	}
-	
+
 	@Test
-	public void insertEventSuccessfulCheck() throws Exception{
-		ArgumentCaptor <Event> arg = ArgumentCaptor.forClass(Event.class);
+	public void insertEventSuccessfulCheck() throws Exception {
+		ArgumentCaptor<Event> arg = ArgumentCaptor.forClass(Event.class);
 		when(eventService.save(any(Event.class))).then(returnsFirstArg());
 		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
 		when(venue.getId()).thenReturn(2L);
-		
+
 		mvc.perform(post("/events").accept(MediaType.TEXT_HTML)
-		.with(user("Tom").roles(Security.ADMIN_ROLE))
-		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-		.param("id", "1")
-		.param("name", "MockName")
-		.param("venue.id", "2")
-		.param("date", "2023-10-20")
-		.param("time", "12:30")
-		.param("description", "Boringg")
-		.accept(MediaType.TEXT_HTML).with(csrf()))
-		.andExpect(view().name("redirect:/events"))
-		.andExpect(handler().methodName("createEvent"));
-	verify(eventService).save(arg.capture());
-	assertThat("MockName", equalTo(arg.getValue().getName()));
-	assertThat(1L, equalTo(arg.getValue().getId()));
-	assertThat(2L, equalTo(arg.getValue().getVenue().getId()));
+						.with(user("Tom").roles(Security.ADMIN_ROLE))
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+						.param("id", "1")
+						.param("name", "MockName")
+						.param("venue.id", "2")
+						.param("date", "2023-10-20")
+						.param("time", "12:30")
+						.param("description", "Boringg")
+						.accept(MediaType.TEXT_HTML).with(csrf()))
+				.andExpect(view().name("redirect:/events"))
+				.andExpect(handler().methodName("createEvent"));
+		verify(eventService).save(arg.capture());
+		assertThat("MockName", equalTo(arg.getValue().getName()));
+		assertThat(1L, equalTo(arg.getValue().getId()));
+		assertThat(2L, equalTo(arg.getValue().getVenue().getId()));
 	}
-	
-	@Test
-	public void createEventWithoutCSRFTest() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.post("/events/new").with(user("tom").roles(Security.ADMIN_ROLE))
-				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-				.accept(MediaType.TEXT_HTML))
-				.andExpect(status().isForbidden());
-		verify(eventService, never()).save(event);
-	}
-	
-	
+
+
 }
