@@ -46,6 +46,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.ac.man.cs.eventlite.config.Security;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
+import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.exceptions.VenueNotFoundException;
 
@@ -301,6 +302,134 @@ class VenuesControllerTest {
 	}
 	
 	@Test
+	public void insertVenueWithNoName() throws Exception{
+		ArgumentCaptor <Venue> arg = ArgumentCaptor.forClass(Venue.class);
+		when(venueService.save(any(Venue.class))).then(returnsFirstArg());
+		
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+		
+		mvc.perform(post("/venues").accept(MediaType.TEXT_HTML)
+		.with(user("Tom").roles(Security.ADMIN_ROLE))
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		.param("id", "1")
+		.param("name", "")
+		
+		.param("capacity", "200")
+		.param("address", "MockAddress")
+		.param("postcode", "M1 7JQ")
+		.accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(view().name("venues/addVenue"));
+	}
+	
+	@Test
+	public void insertVenueWithIllegalName() throws Exception{
+		ArgumentCaptor <Venue> arg = ArgumentCaptor.forClass(Venue.class);
+		when(venueService.save(any(Venue.class))).then(returnsFirstArg());
+		
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+		
+		mvc.perform(post("/venues").accept(MediaType.TEXT_HTML)
+		.with(user("Tom").roles(Security.ADMIN_ROLE))
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		.param("id", "1")
+		.param("name", "Illegallllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll")
+	
+		.param("capacity", "200")
+		.param("address", "MockAddress")
+		.param("postcode", "M1 7JQ")
+		.accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(view().name("venues/addVenue"));
+	}
+	
+	@Test
+	public void insertVenueWithbadCapacity() throws Exception{
+		ArgumentCaptor <Venue> arg = ArgumentCaptor.forClass(Venue.class);
+		when(venueService.save(any(Venue.class))).then(returnsFirstArg());
+		
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+		
+		mvc.perform(post("/venues").accept(MediaType.TEXT_HTML)
+		.with(user("Tom").roles(Security.ADMIN_ROLE))
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		.param("id", "1")
+		.param("name", "test name")
+	
+		.param("capacity", "-1")
+		.param("address", "MockAddress")
+		.param("postcode", "M1 7JQ")
+		.accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(view().name("venues/addVenue"));
+	}
+	
+	@Test
+	public void insertVenueWithNoaddress() throws Exception{
+		ArgumentCaptor <Venue> arg = ArgumentCaptor.forClass(Venue.class);
+		when(venueService.save(any(Venue.class))).then(returnsFirstArg());
+		
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+		
+		mvc.perform(post("/venues").accept(MediaType.TEXT_HTML)
+		.with(user("Tom").roles(Security.ADMIN_ROLE))
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		.param("id", "1")
+		.param("name", "normal")
+	
+		.param("capacity", "200")
+		.param("address", "")
+		.param("postcode", "M1 7JQ")
+		.accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(view().name("venues/addVenue"));
+	}
+	
+	@Test
+	public void insertVenueWithBadaddress() throws Exception{
+		ArgumentCaptor <Venue> arg = ArgumentCaptor.forClass(Venue.class);
+		when(venueService.save(any(Venue.class))).then(returnsFirstArg());
+		
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+		
+		mvc.perform(post("/venues").accept(MediaType.TEXT_HTML)
+		.with(user("Tom").roles(Security.ADMIN_ROLE))
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		.param("id", "1")
+		.param("name", "normal")
+	
+		.param("capacity", "100")
+		.param("address", "illegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllllillegallllllllllllllllllllllllllll")
+		.param("postcode", "M1 7JQ")
+		.accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(view().name("venues/addVenue"));
+	}
+	
+	@Test
+	public void insertVenueWithNoZip() throws Exception{
+		ArgumentCaptor <Venue> arg = ArgumentCaptor.forClass(Venue.class);
+		when(venueService.save(any(Venue.class))).then(returnsFirstArg());
+		
+		when(venueService.findById(2L)).thenReturn(Optional.of(venue));
+		when(venue.getId()).thenReturn(2L);
+		
+		mvc.perform(post("/venues").accept(MediaType.TEXT_HTML)
+		.with(user("Tom").roles(Security.ADMIN_ROLE))
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		.param("id", "1")
+		.param("name", "normal")
+	
+		.param("capacity", "100")
+		.param("address", "testAddress")
+		.param("postcode", "")
+		.accept(MediaType.TEXT_HTML).with(csrf()))
+		.andExpect(view().name("venues/addVenue"));
+	}
+	
+	
+	
+	@Test
 	public void createVenueWithoutCSRFTest() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.post("/venues/new").with(user("tom").roles(Security.ADMIN_ROLE))
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -396,6 +525,16 @@ class VenuesControllerTest {
 				.andExpect(MockMvcResultMatchers.view().name("venues/index"))
 				.andExpect(MockMvcResultMatchers.forwardedUrl("venues/index"));
 	}
+	
+	
+	
+	
+	
+
+	
+
+	
+	
 
 
 }
